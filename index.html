@@ -12,6 +12,10 @@
   <h1>Custom Interval Timer</h1>
 
   <form id="timerConfigForm" onsubmit="event.preventDefault();">
+    <label>Timer name:</label>
+    <input type="text" id="timerName">
+    <br>
+
     <label>Number of Rounds:</label>
     <input type="number" id="numRounds" min="1" value="1">
     <br>
@@ -40,6 +44,23 @@
   <button id="installButton" style="display: none;">Install App</button>
 
   <script>
+    function resetTimer() {
+      // Reset the input fields to default values
+      document.getElementById('numRounds').value = 1;
+      document.getElementById('countdownTime').value = 5;
+      document.getElementById('timerName').value = '';
+
+      const intervalsContainer = document.getElementById('intervals');
+      while (intervalsContainer.firstChild) {
+        intervalsContainer.removeChild(intervalsContainer.lastChild);
+      }
+      addIntervalElement();  // Add a default interval
+
+      // Reset the URL to the original without any parameters
+      const baseURL = `${window.location.origin}${window.location.pathname}`;
+      history.pushState({}, null, baseURL);
+    }
+
 
     function addIntervalElement(name = '', time = '', color = '#FFFFFF') {
       const intervalDiv = document.createElement('div');
@@ -69,12 +90,12 @@
       document.getElementById('intervals').appendChild(intervalDiv);
     }
 
-    function loadTimerFromURL() {
-      console.log('loading intervals')
 
+    function loadTimerFromURL() {
       const urlParams = new URLSearchParams(window.location.search);
-      document.getElementById('numRounds').value = urlParams.get('numRounds') || 1;
-      document.getElementById('countdownTime').value = urlParams.get('countdownTime') || 5;
+      document.getElementById('timerName').value = decodeURIComponent(urlParams.get('timerName') || 'Unnamed Timer');
+      document.getElementById('numRounds').value = urlParams.get('nR') || 1;
+      document.getElementById('countdownTime').value = urlParams.get('cT') || 5;
 
       // Clear existing intervals
       const intervalsContainer = document.getElementById('intervals');
@@ -84,12 +105,11 @@
 
       // Extract intervals from URL and create them dynamically
       let index = 0;
-      while (urlParams.has(`intervalName${index}`)) {
-        const intervalName = urlParams.get(`intervalName${index}`);
-        const intervalTime = urlParams.get(`intervalTime${index}`);
-        const intervalColor = urlParams.get(`intervalColor${index}`);
+      while (urlParams.has(`iN${index}`)) {
+        const intervalName = decodeURIComponent(urlParams.get(`iN${index}`));
+        const intervalTime = urlParams.get(`iT${index}`);
+        const intervalColor = urlParams.get(`iC${index}`);
 
-        console.log('adding interval')
         addIntervalElement(intervalName, intervalTime, intervalColor);
         index++;
       }
@@ -99,23 +119,26 @@
         addIntervalElement();
       }
     }
+
     function saveTimerToURL() {
-      const numRounds = document.getElementById('numRounds').value;
-      const countdownTime = document.getElementById('countdownTime').value;
+      const timerName = encodeURIComponent(document.getElementById('timerName').value || 'Unnamed Timer');
+      const nR = document.getElementById('numRounds').value;
+      const cT = document.getElementById('countdownTime').value;
       const intervals = document.querySelectorAll('.interval');
       let intervalParams = '';
 
       intervals.forEach((interval, index) => {
-        const intervalName = encodeURIComponent(interval.querySelector('.interval-name').value);
-        const intervalTime = encodeURIComponent(interval.querySelector('.interval-time').value);
-        const intervalColor = encodeURIComponent(interval.querySelector('.interval-color').value);
+        const iN = encodeURIComponent(interval.querySelector('.interval-name').value);
+        const iT = encodeURIComponent(interval.querySelector('.interval-time').value);
+        const iC = encodeURIComponent(interval.querySelector('.interval-color').value);
 
-        intervalParams += `&intervalName${index}=${intervalName}&intervalTime${index}=${intervalTime}&intervalColor${index}=${intervalColor}`;
+        intervalParams += `&iN${index}=${iN}&iT${index}=${iT}&iC${index}=${iC}`;
       });
 
-      const timerURL = `${window.location.origin}${window.location.pathname}?numRounds=${numRounds}&countdownTime=${countdownTime}${intervalParams}`;
+      const timerURL = `${window.location.origin}${window.location.pathname}?timerName=${timerName}&nR=${nR}&cT=${cT}${intervalParams}`;
       history.pushState({}, null, timerURL);
     }
+
 
     window.addEventListener('load', loadTimerFromURL);
 
@@ -164,21 +187,6 @@
     let timer;
     let remainingTime = 0;
     let countdownRemaining = 0;
-
-    function resetTimer() {
-      // Reset the input fields to default values
-      document.getElementById('numRounds').value = 1;
-      document.getElementById('countdownTime').value = 5;
-      const intervalsContainer = document.getElementById('intervals');
-      while (intervalsContainer.firstChild) {
-        intervalsContainer.removeChild(intervalsContainer.lastChild);
-      }
-      addIntervalElement();  // Add a default interval
-
-      // Reset the URL to the original without any parameters
-      const baseURL = `${window.location.origin}${window.location.pathname}`;
-      history.pushState({}, null, baseURL);
-    }
 
 
     function addInterval() {
