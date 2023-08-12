@@ -31,7 +31,7 @@
     <button type="button" onclick="addInterval()">Add Interval</button>
     <button type="button" onclick="startTimer()">Start</button>
     <button type="button" onclick="stopTimer()">Stop</button>
-    <button type="button" onclick="saveTimerConfig()">Save Timer</button>
+    <button type="button" onclick="saveTimerToURL()">Save Timer</button>
     <button type="button" onclick="deleteTimerConfig()">Delete Timer</button>
   </form>
 
@@ -40,8 +40,87 @@
   <button id="installButton" style="display: none;">Install App</button>
 
   <script>
+
+function addIntervalElement(name='', time='', color='#FFFFFF') {
+    const intervalDiv = document.createElement('div');
+    intervalDiv.className = 'interval';
+    
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.placeholder = 'Interval Name';
+    nameInput.className = 'interval-name';
+    nameInput.value = name;
+
+    const timeInput = document.createElement('input');
+    timeInput.type = 'number';
+    timeInput.placeholder = 'Interval (seconds)';
+    timeInput.className = 'interval-time';
+    timeInput.value = time;
+
+    const colorInput = document.createElement('input');
+    colorInput.type = 'color';
+    colorInput.className = 'interval-color';
+    colorInput.value = color;
+
+    intervalDiv.appendChild(nameInput);
+    intervalDiv.appendChild(timeInput);
+    intervalDiv.appendChild(colorInput);
+
+    document.getElementById('intervals').appendChild(intervalDiv);
+}
+
+function loadTimerFromURL() {
+    console.log('loading intervals')
+
+    const urlParams = new URLSearchParams(window.location.search);
+    document.getElementById('numRounds').value = urlParams.get('numRounds') || 1;
+    document.getElementById('countdownTime').value = urlParams.get('countdownTime') || 5;
+    
+    // Clear existing intervals
+    const intervalsContainer = document.getElementById('intervals');
+    while (intervalsContainer.firstChild) {
+        intervalsContainer.removeChild(intervalsContainer.lastChild);
+    }
+    
+    // Extract intervals from URL and create them dynamically
+    let index = 0;
+    while (urlParams.has(`intervalName${index}`)) {
+        const intervalName = urlParams.get(`intervalName${index}`);
+        const intervalTime = urlParams.get(`intervalTime${index}`);
+        const intervalColor = urlParams.get(`intervalColor${index}`);
+        
+        console.log('adding interval')
+        addIntervalElement(intervalName, intervalTime, intervalColor);
+        index++;
+    }
+    
+    // If no intervals were loaded from the URL, add one default interval
+    if (index === 0) {
+        addIntervalElement();
+    }
+}
+function saveTimerToURL() {
+    const numRounds = document.getElementById('numRounds').value;
+    const countdownTime = document.getElementById('countdownTime').value;
+    const intervals = document.querySelectorAll('.interval');
+    let intervalParams = '';
+    
+    intervals.forEach((interval, index) => {
+        const intervalName = encodeURIComponent(interval.querySelector('.interval-name').value);
+        const intervalTime = encodeURIComponent(interval.querySelector('.interval-time').value);
+        const intervalColor = encodeURIComponent(interval.querySelector('.interval-color').value);
+        
+        intervalParams += `&intervalName${index}=${intervalName}&intervalTime${index}=${intervalTime}&intervalColor${index}=${intervalColor}`;
+    });
+
+    const timerURL = `${window.location.origin}${window.location.pathname}?numRounds=${numRounds}&countdownTime=${countdownTime}${intervalParams}`;
+    history.pushState({}, null, timerURL);
+}
+
+window.addEventListener('load', loadTimerFromURL); 
+
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
+ window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').then(reg => {
           console.log('Service worker registered.', reg);
         }).catch(err => {
@@ -182,63 +261,6 @@
       document.getElementById('currentInterval').textContent = '';
       document.body.style.backgroundColor = "#FFFFFF"; // Reset background color to white (or any default color you prefer)
     }
-
-
-    function saveTimerConfig() {
-      const intervalNames = document.querySelectorAll('.interval-name');
-      const intervalTimes = document.querySelectorAll('.interval-time');
-      const intervalColors = document.querySelectorAll('.interval-color');
-
-      const savedIntervals = [];
-      for (let i = 0; i < intervalNames.length; i++) {
-        savedIntervals.push({
-          name: intervalNames[i].value,
-          time: intervalTimes[i].value,
-          color: intervalColors[i].value
-        });
-      }
-
-      const savedConfig = {
-        rounds: document.getElementById('numRounds').value,
-        countdown: document.getElementById('countdownTime').value,  // Save countdown time
-        intervals: savedIntervals
-      };
-
-      localStorage.setItem('customIntervalTimer', JSON.stringify(savedConfig));
-    }
-
-    // Load timer configuration from localStorage and render it
-    function loadTimerConfig() {
-      const savedConfig = JSON.parse(localStorage.getItem('customIntervalTimer'));
-
-      if (savedConfig) {
-        document.getElementById('numRounds').value = savedConfig.rounds;
-        document.getElementById('countdownTime').value = savedConfig.countdown || 5;  // Load countdown time
-
-        const intervalContainer = document.getElementById('intervals');
-        intervalContainer.innerHTML = ""; // clear any existing intervals
-        for (let i = 0; i < savedConfig.intervals.length; i++) {
-          const interval = savedConfig.intervals[i];
-          const newInterval = document.createElement('div');
-          newInterval.classList.add('interval');
-          newInterval.innerHTML = `
-                <input type="text" value="${interval.name}" placeholder="Interval Name" class="interval-name">
-                <input type="number" value="${interval.time}" placeholder="Interval (seconds)" class="interval-time">
-                <input type="color" value="${interval.color}" class="interval-color">
-            `;
-          intervalContainer.appendChild(newInterval);
-        }
-      }
-    }
-
-    // Delete the saved timer configuration from localStorage and refresh the page
-    function deleteTimerConfig() {
-      localStorage.removeItem('customIntervalTimer');
-      location.reload(); // reload the page
-    }
-
-    // Load the saved timer configuration on page load
-    window.onload = loadTimerConfig;
 
   </script>
 </body>
