@@ -4,7 +4,8 @@ const cacheName = 'v1';
 // List of files to be cached
 const cacheAssets = [
   './',
-  'index.html'
+  'index.html',
+  'timer.mp3'
 ];
 
 // Call Install event
