@@ -97,6 +97,12 @@
   html {
     font-family: sans-serif;
   }
+
+  #currentInterval {
+    font-size: 1.5em;
+    text-align: center;
+    margin: 1em 0;
+  }
 </style>
 
 <body>
@@ -104,8 +110,10 @@
   <form id="timerConfigForm" onsubmit="event.preventDefault();">
     <label class="nameLabel">Timer name:</label>
     <input class="name" id="timerName" type="text" />
+    <br />
     <label class="roundsLabel">Number of Rounds:</label>
     <input class="rounds" id="numRounds" min="1" type="number" value="1" />
+    <br />
     <label class="countdownLabel">Countdown Before Start (seconds):</label>
     <input class="countdown" id="countdownTime" type="number" value="5" />
     <br />
@@ -338,7 +346,7 @@
       const seconds = Math.floor(countdownRemaining / 1000);
       const milliseconds = countdownRemaining % 1000;
 
-      document.getElementById('currentInterval').textContent = `Starting in ${seconds}.${milliseconds} seconds`;
+      document.getElementById('currentInterval').innerHTML = `<p>Starting in ${seconds}.${milliseconds} seconds</p>`;
     }
 
 
@@ -359,16 +367,16 @@
       const seconds = Math.floor(remainingTime / 1000);
       const milliseconds = remainingTime % 1000;
 
-      document.getElementById('currentInterval').textContent = `${currentIntervalName}: ${seconds}.${milliseconds} seconds remaining. Round: ${currentRound + 1}/${totalRounds}`;
+      document.getElementById('currentInterval').innerHTML = `<p>${currentIntervalName}: ${seconds}.${milliseconds} <br /> Round: ${currentRound + 1}/${totalRounds}</p>`;
     }
 
     function stopTimer() {
-      clearInterval(timer);
+      clearInterval(timer);https://stackoverflow.com/questions/9980416/how-can-i-insert-new-line-carriage-returns-into-an-element-textcontent
       currentIntervalIndex = 0;
       currentRound = 0;
       remainingTime = 0;
       countdownRemaining = 0;
-      document.getElementById('currentInterval').textContent = '';
+      document.getElementById('currentInterval').innerHTML = '';
       document.body.style.backgroundColor = "#FFFFFF"; // Reset background color to white (or any default color you prefer)
     }
 
