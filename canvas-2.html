@@ -268,16 +268,16 @@
         result => {
           logs.innerHTML += 'found QR code:';
           logs.innerHTML += JSON.stringify(result);
-
+          const data = JSON.parse(result.data);
           // // document.getElementById('qroutput').innerHTML = JSON.stringify(result)
-          // intervals = result.data.intervals;
-          // logs.innerHTML += `setting intervals to: ${result.data.intervals}`;
+          intervals = data.intervals;
+          logs.innerHTML += `setting intervals to: ${data.intervals}`;
 
-          // rounds = result.data.rounds;
-          // logs.innerHTML += `setting rounds to: ${result.data.rounds}`;
-          // countdownDuration = result.data.countdownDuration;
-          // logs.innerHTML += `setting countdownDuration to: ${result.data.countdownDuration}`;
-          // loadFromSettings();
+          rounds = data.rounds;
+          logs.innerHTML += `setting rounds to: ${data.rounds}`;
+          countdownDuration = data.countdownDuration;
+          logs.innerHTML += `setting countdownDuration to: ${data.countdownDuration}`;
+          loadFromSettings();
         },
         {  returnDetailedScanResult: true },
     );
