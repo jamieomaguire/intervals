@@ -263,7 +263,9 @@
       const qrScanner = new QrScanner(
         videoElement,
         result => {
+          console.log(result)
           const data = JSON.parse(result.data);
+          console.log(data);
           intervals = data.intervals;
           rounds = data.rounds;
           countdownDuration = data.countdownDuration;
