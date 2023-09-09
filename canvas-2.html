@@ -264,7 +264,11 @@
       const qrScanner = new QrScanner(
         videoElement,
         result => {
-          document.getElementById('qroutput').innerHTML = JSON.stringify(result)
+          // document.getElementById('qroutput').innerHTML = JSON.stringify(result)
+          intervals = result.intervals;
+          rounds = result.rounds;
+          countdownDuration = result.countdownDuration;
+          loadFromSettings();
         },
         {  returnDetailedScanResult: true },
     );
@@ -274,11 +278,11 @@
       // const scanner = new Instascan.Scanner({ video: videoElement });
       
       // scanner.addListener('scan', function(content) {
-      //     const settings = JSON.parse(content);
-      //     intervals = settings.intervals;
-      //     rounds = settings.rounds;
-      //     countdownDuration = settings.countdownDuration;
-      //     loadFromSettings();
+          // const settings = JSON.parse(content);
+          // intervals = settings.intervals;
+          // rounds = settings.rounds;
+          // countdownDuration = settings.countdownDuration;
+          // loadFromSettings();
       // });
       
       // Instascan.Camera.getCameras().then(function(cameras) {
