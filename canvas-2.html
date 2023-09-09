@@ -283,26 +283,6 @@
     );
 
     qrScanner.start();
-      // // Use instascan library to scan QR code and get content
-      // const scanner = new Instascan.Scanner({ video: videoElement });
-      
-      // scanner.addListener('scan', function(content) {
-          // const settings = JSON.parse(content);
-          // intervals = settings.intervals;
-          // rounds = settings.rounds;
-          // countdownDuration = settings.countdownDuration;
-          // loadFromSettings();
-      // });
-      
-      // Instascan.Camera.getCameras().then(function(cameras) {
-      //     if (cameras.length > 0) {
-      //         scanner.start(cameras[0]);
-      //     } else {
-      //         console.error('No cameras found.');
-      //     }
-      // }).catch(function(e) {
-      //     console.error(e);
-      // });
     }
 
     function loadFromSettings() {
@@ -318,15 +298,15 @@
       // { name: '', duration: 5000, color: '#fffff' }
       intervals.forEach(interval => {
         const container = document.getElementById('intervalContainer');
-      const newInterval = document.createElement('fieldset');
-      newInterval.className = 'intervalFieldset';
-      newInterval.innerHTML = `
-                <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-                <input type="text" placeholder="Interval Name" class="interval-name" value="${interval.name}">
-                <input type="number" placeholder="Duration (seconds)" class="interval-duration" value="${interval.duration}">
-                <input type="color" class="interval-color" value="${interval.color}">
-            `;
-      container.appendChild(newInterval);
+        const newInterval = document.createElement('fieldset');
+        newInterval.className = 'intervalFieldset';
+        newInterval.innerHTML = `
+                  <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
+                  <input type="text" placeholder="Interval Name" class="interval-name" value="${interval.name}">
+                  <input type="number" placeholder="Duration (seconds)" class="interval-duration" value="${interval.duration / 1000}">
+                  <input type="color" class="interval-color" value="${interval.color}">
+              `;
+        container.appendChild(newInterval);
       });
     }
 
