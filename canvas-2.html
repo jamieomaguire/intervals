@@ -264,7 +264,7 @@
       const qrScanner = new QrScanner(
         videoElement,
         result => {
-          document.getElementById('qroutput').innerHTML = result
+          document.getElementById('qroutput').innerHTML = JSON.stringify(result)
         },
         {  returnDetailedScanResult: true },
     );
