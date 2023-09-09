@@ -255,8 +255,12 @@
       };
       const serialized = JSON.stringify(settings);
 
-      // Generate QR code using qrcodejs library
       const qrCodeEl = document.getElementById('qrCode');
+      
+      // delete previous QR code
+      qrCodeEl.innerHTML = '';
+
+      // Generate QR code using qrcodejs library
       new QRCode(qrCodeEl, serialized);
     }
 
@@ -272,6 +276,8 @@
           rounds = data.rounds;
           countdownDuration = data.countdownDuration;
           loadFromSettings();
+          console.log(qrScanner)
+          qrScanner.stop();
         },
         { returnDetailedScanResult: true },
       );
