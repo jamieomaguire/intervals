@@ -35,14 +35,18 @@
   <button id="stopTimer">Stop</button>
 
   <hr>
-  <button id="saveToQR">Save</button>
-  <button id="scanQR">Scan QR</button>
+  <button id="createURL">Save as URL</button>
+  <button id="saveToQR">Save as QR</button>
+  <br>
   <input type="file" id="uploadQR" accept="image/*" style="display: none;">
   <label for="uploadQR" style="cursor: pointer;">Upload QR Code</label>
+  <br>
+  <button id="scanQR">Scan QR</button>
   <div id="qrCode"></div>
   <video id="preview"></video>
   <div id="qroutput"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
 
   <script type="module">
     import QrScanner from './qr-scanner.min.js';
@@ -87,7 +91,23 @@
     document.getElementById('stopTimer').addEventListener('click', stopTimer);
     document.getElementById('saveToQR').addEventListener('click', saveToQR);
     document.getElementById('scanQR').addEventListener('click', scanQR);
+    document.getElementById('createURL').addEventListener('click', saveToURL);
 
+    // When the app loads, check for config in URL and apply if present
+    window.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const config = urlParams.get('config');
+
+      if (config) {
+        const decompressed = LZString.decompressFromEncodedURIComponent(config);
+        const data = JSON.parse(decompressed);
+
+        intervals = data.intervals;
+        rounds = data.rounds;
+        countdownDuration = data.countdownDuration;
+        loadFromSettings();
+      }
+    });
 
     /**
      * Draws the given time on the canvas
@@ -245,6 +265,28 @@
       container.appendChild(newInterval);
     }
 
+    function saveToURL() {
+      captureInputs();
+      const settings = {
+        intervals: intervals,
+        rounds: rounds,
+        countdownDuration: countdownDuration
+      };
+      const serialized = JSON.stringify(settings);
+      const compressed = LZString.compressToEncodedURIComponent(serialized);
+
+      if (compressed.length <= 2000) {
+        // Update the URL with the compressed string
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('config', compressed);
+        window.history.pushState(null, '', newUrl);
+      } else {
+        console.warn('URL character length is above 2000. Saving as QR code instead.');
+        // If compressed data is too long, revert to using QR code
+        saveToQR();
+      }
+    }
+
     // EXPERIMENTAL - QR CODE FUNCTIONALITY
     function saveToQR() {
       captureInputs();
@@ -255,13 +297,18 @@
       };
       const serialized = JSON.stringify(settings);
 
+      console.log(serialized.length)
+
       const qrCodeEl = document.getElementById('qrCode');
-      
+
       // delete previous QR code
       qrCodeEl.innerHTML = '';
 
       // Generate QR code using qrcodejs library
-      new QRCode(qrCodeEl, serialized);
+      new QRCode(qrCodeEl, {
+        text: serialized,
+        correctLevel: QRCode.CorrectLevel.L
+      });
     }
 
     function scanQR() {
@@ -309,7 +356,7 @@
     }
 
     // QR code upload event listener
-    document.getElementById('uploadQR').addEventListener('change', async function() {
+    document.getElementById('uploadQR').addEventListener('change', async function () {
       const file = this.files[0];
       if (file) {
         try {
