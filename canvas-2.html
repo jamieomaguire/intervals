@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Canvas-based Timer</title>
+</head>
+
+<body>
+  <h1>Custom Interval Timer</h1>
+  <form id="timerConfigForm" onsubmit="return false;">
+    <label for="nameLabel">Timer name:</label>
+    <input type="text" name="nameLabel" id="nameLabel">
+    <label for="roundsLabel">Number of Rounds:</label>
+    <input type="number" name="roundsLabel" id="numRounds">
+    <label for="countdownLabel">Countdown Before Start (seconds):</label>
+    <input type="number" name="countdownLabel" id="countdownTime">
+    <button type="button" onclick="addInterval()">+ Add interval</button>
+    <div id="intervals"></div>
+
+  </form>
+  <canvas id="timerCanvas"></canvas>
+  <button onclick="startAppTimer()">Start</button>
+  <button onclick="stopAppTimer()">Stop</button>
+  <button onclick="deleteTimer()">Delete</button>
+  <script>
+    function addInterval() {
+      const intervalsDiv = document.getElementById('intervals');
+
+      // Creating elements for interval name, duration, and color
+      const intervalName = document.createElement('input');
+      intervalName.type = 'text';
+      intervalName.placeholder = 'Interval name';
+
+      const intervalDuration = document.createElement('input');
+      intervalDuration.type = 'number';
+      intervalDuration.min = 1;
+      intervalDuration.placeholder = 'Duration in seconds';
+
+      const intervalColor = document.createElement('input');
+      intervalColor.type = 'color';
+
+      const deleteButton = document.createElement('button');
+      deleteButton.innerText = 'Delete';
+      deleteButton.onclick = function () {
+        intervalsDiv.removeChild(intervalDiv);
+      };
+
+      // Wrapping in a div
+      const intervalDiv = document.createElement('div');
+      intervalDiv.appendChild(intervalName);
+      intervalDiv.appendChild(intervalDuration);
+      intervalDiv.appendChild(intervalColor);
+      intervalDiv.appendChild(deleteButton);
+
+      intervalsDiv.appendChild(intervalDiv);
+    }
+
+    let appTimer;
+    let appIntervals = [];
+    let currentRound = 0;
+    let currentInterval = 0;
+    let countdown;
+    const audio = document.getElementById('intervalAudio');
+
+    function startAppTimer() {
+      const numRounds = document.getElementById('numRounds').value || 1;
+      const countdownTime = document.getElementById('countdownTime').value || 5;
+
+      // Extract intervals
+      const intervalsDiv = document.getElementById('intervals');
+      const intervalDivs = intervalsDiv.getElementsByTagName('div');
+      appIntervals = [];
+      for (let i = 0; i < intervalDivs.length; i++) {
+        const nameInput = intervalDivs[i].getElementsByTagName('input')[0];
+        const durationInput = intervalDivs[i].getElementsByTagName('input')[1];
+        const colorInput = intervalDivs[i].getElementsByTagName('input')[2];
+
+        appIntervals.push({
+          name: nameInput.value,
+          duration: durationInput.value * 1000, // in milliseconds
+          color: colorInput.value
+        });
+      }
+
+      if (!appIntervals.length) {
+        alert('Please add at least one interval before starting.');
+        return;
+      }
+
+      currentRound = 0;
+      currentInterval = 0;
+
+      // Start countdown
+      countdown = countdownTime;
+      updateCanvasWithCountdown();
+      appTimer = setInterval(function () {
+        countdown -= 1;
+        updateCanvasWithCountdown();
+        if (countdown <= 0) {
+          clearInterval(appTimer);
+          startInterval();
+        }
+      }, 1000);
+    }
+
+    function updateCanvasWithCountdown() {
+      const canvas = document.getElementById('timerCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillText(countdown.toString(), canvas.width / 2, canvas.height / 2);
+    }
+
+    function startInterval() {
+      // Logic to handle interval switching and round switching will be added here
+      // For now, this function will just switch between intervals and rounds
+      if (currentInterval >= appIntervals.length) {
+        currentInterval = 0;
+        currentRound += 1;
+        if (currentRound >= document.getElementById('numRounds').value) {
+          stopAppTimer();
+          return;
+        }
+      }
+
+      const interval = appIntervals[currentInterval];
+      document.getElementById('timerCanvas').style.backgroundColor = interval.color;
+
+      audio.play();
+
+      currentInterval += 1;
+
+      setTimeout(startInterval, interval.duration);
+    }
+
+    function stopAppTimer() {
+      clearInterval(appTimer);
+      const canvas = document.getElementById('timerCanvas');
+      canvas.style.backgroundColor = 'white';
+    }
+
+    function deleteTimer() {
+      stopAppTimer();
+      const intervalsDiv = document.getElementById('intervals');
+      while (intervalsDiv.firstChild) {
+        intervalsDiv.removeChild(intervalsDiv.lastChild);
+      }
+    }
+  </script>
+<audio id="intervalAudio" src="timer.mp3" preload="auto"></audio>
+
+</body>
+
+</html>
