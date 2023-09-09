@@ -29,14 +29,14 @@
   </div>
 
   <!-- Buttons to add intervals and control the timer -->
-  <button onclick="addInterval()">Add Interval</button>
+  <button id="addInterval">Add Interval</button>
   <canvas id="timerCanvas"></canvas>
-  <button onclick="startTimer()">Start</button>
-  <button onclick="stopTimer()">Stop</button>
+  <button id="startTimer">Start</button>
+  <button id="stopTimer">Stop</button>
 
   <hr>
-  <button onclick="saveToQR()">Save</button>
-  <button onclick="scanQR()">Scan QR</button>
+  <button id="saveToQR">Save</button>
+  <button id="scanQR">Scan QR</button>
   <div id="qrCode"></div>
   <video id="preview"></video>
   <div id="qroutput"></div>
@@ -78,6 +78,14 @@
 
     const x = size / 2;
     const y = size / 2;
+
+    // Event Listeners
+    document.getElementById('addInterval').addEventListener('click', addInterval);
+    document.getElementById('startTimer').addEventListener('click', startTimer);
+    document.getElementById('stopTimer').addEventListener('click', stopTimer);
+    document.getElementById('saveToQR').addEventListener('click', saveToQR);
+    document.getElementById('scanQR').addEventListener('click', scanQR);
+
 
     /**
      * Draws the given time on the canvas
