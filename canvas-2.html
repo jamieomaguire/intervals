@@ -38,7 +38,6 @@
   <button id="saveToQR">Save</button>
   <button id="scanQR">Scan QR</button>
   <div id="qrCode"></div>
-  <div id="logs"></div>
   <video id="preview"></video>
   <div id="qroutput"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -259,7 +258,6 @@
       new QRCode(qrCodeEl, serialized);
     }
 
-    const logs = document.getElementById('logs');
     function scanQR() {
       const videoElement = document.getElementById('preview');
       const qrScanner = new QrScanner(
