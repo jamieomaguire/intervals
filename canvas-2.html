@@ -267,7 +267,7 @@
         videoElement,
         result => {
           logs.innerHTML += 'found QR code:';
-          logs.innerHTML += JSON.stringify(result.data);
+          logs.innerHTML += JSON.stringify(result);
           data = JSON.parse(result.data);
           logs.innerHTML += result.data.rounds;
           // document.getElementById('qroutput').innerHTML = JSON.stringify(result)
