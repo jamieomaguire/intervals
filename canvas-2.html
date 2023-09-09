@@ -1,156 +1,205 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Canvas-based Timer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas-based Timer with Intervals</title>
 </head>
 
 <body>
-  <h1>Custom Interval Timer</h1>
-  <form id="timerConfigForm" onsubmit="return false;">
-    <label for="nameLabel">Timer name:</label>
-    <input type="text" name="nameLabel" id="nameLabel">
-    <label for="roundsLabel">Number of Rounds:</label>
-    <input type="number" name="roundsLabel" id="numRounds">
-    <label for="countdownLabel">Countdown Before Start (seconds):</label>
-    <input type="number" name="countdownLabel" id="countdownTime">
-    <button type="button" onclick="addInterval()">+ Add interval</button>
-    <div id="intervals"></div>
+  <fieldset>
+    <label for="countdown">Countdown before start (seconds):</label>
+    <input type="number" name="countdown" id="countdown" value="0">
+</fieldset>
+<fieldset>
+    <label for="rounds">Rounds:</label>
+    <input type="number" name="rounds" id="rounds" value="1">
+</fieldset>
 
-  </form>
-  <canvas id="timerCanvas"></canvas>
-  <button onclick="startAppTimer()">Start</button>
-  <button onclick="stopAppTimer()">Stop</button>
-  <button onclick="deleteTimer()">Delete</button>
-  <script>
-    function addInterval() {
-      const intervalsDiv = document.getElementById('intervals');
+<div id="intervalContainer">
+    <fieldset class="intervalFieldset">
+        <label>Interval 1: </label>
+        <input type="text" placeholder="Interval Name" class="interval-name">
+        <input type="number" placeholder="Duration (seconds)" class="interval-duration">
+        <input type="color" class="interval-color">
+    </fieldset>
+</div>
 
-      // Creating elements for interval name, duration, and color
-      const intervalName = document.createElement('input');
-      intervalName.type = 'text';
-      intervalName.placeholder = 'Interval name';
+<button onclick="addInterval()">Add Interval</button>
+<canvas id="timerCanvas"></canvas>
+<button onclick="startTimer()">Start</button>
+<button onclick="stopTimer()">Stop</button>
 
-      const intervalDuration = document.createElement('input');
-      intervalDuration.type = 'number';
-      intervalDuration.min = 1;
-      intervalDuration.placeholder = 'Duration in seconds';
 
-      const intervalColor = document.createElement('input');
-      intervalColor.type = 'color';
+    <script>
+        let startTime;
+        let elapsed;
+        let timerStopped = true;
+        let intervals = [];
+        let currentIntervalIndex = 0;
+        let rounds;
+        let currentRound = 1;
+        let countdownDuration = 0;
+        let inCountdown = false;
 
-      const deleteButton = document.createElement('button');
-      deleteButton.innerText = 'Delete';
-      deleteButton.onclick = function () {
-        intervalsDiv.removeChild(intervalDiv);
-      };
+        const canvas = document.getElementById('timerCanvas');
+        canvas.style.border = '1px dashed purple';
+        const ctx = canvas.getContext('2d');
 
-      // Wrapping in a div
-      const intervalDiv = document.createElement('div');
-      intervalDiv.appendChild(intervalName);
-      intervalDiv.appendChild(intervalDuration);
-      intervalDiv.appendChild(intervalColor);
-      intervalDiv.appendChild(deleteButton);
+        window.devicePixelRatio = 2;
+        const size = 250;
 
-      intervalsDiv.appendChild(intervalDiv);
-    }
+        canvas.style.width = size + "px";
+        canvas.style.height = size + "px";
 
-    let appTimer;
-    let appIntervals = [];
-    let currentRound = 0;
-    let currentInterval = 0;
-    let countdown;
-    const audio = document.getElementById('intervalAudio');
+        const scale = window.devicePixelRatio;
+        canvas.width = size * scale;
+        canvas.height = size * scale;
 
-    function startAppTimer() {
-      const numRounds = document.getElementById('numRounds').value || 1;
-      const countdownTime = document.getElementById('countdownTime').value || 5;
+        ctx.scale(scale, scale);
+        ctx.font = '30px Arial';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'left';
 
-      // Extract intervals
-      const intervalsDiv = document.getElementById('intervals');
-      const intervalDivs = intervalsDiv.getElementsByTagName('div');
-      appIntervals = [];
-      for (let i = 0; i < intervalDivs.length; i++) {
-        const nameInput = intervalDivs[i].getElementsByTagName('input')[0];
-        const durationInput = intervalDivs[i].getElementsByTagName('input')[1];
-        const colorInput = intervalDivs[i].getElementsByTagName('input')[2];
+        const x = size / 2;
+        const y = size / 2;
 
-        appIntervals.push({
-          name: nameInput.value,
-          duration: durationInput.value * 1000, // in milliseconds
-          color: colorInput.value
-        });
-      }
+        function drawTime(time, intervalName = '', displayRound = true) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
 
-      if (!appIntervals.length) {
-        alert('Please add at least one interval before starting.');
-        return;
-      }
+            const minutes = Math.floor(time / 60000);
+            const seconds = Math.floor((time % 60000) / 1000);
+            const milliseconds = time % 1000;
 
-      currentRound = 0;
-      currentInterval = 0;
+            const minutesText = `${minutes}:`;
+            const secondsText = `${seconds.toString().padStart(2, '0')}.`;
+            const milliText = milliseconds.toString().slice(0, 2);
 
-      // Start countdown
-      countdown = countdownTime;
-      updateCanvasWithCountdown();
-      appTimer = setInterval(function () {
-        countdown -= 1;
-        updateCanvasWithCountdown();
-        if (countdown <= 0) {
-          clearInterval(appTimer);
-          startInterval();
+            const minutesMetrics = ctx.measureText(minutesText);
+            const secondsMetrics = ctx.measureText(secondsText);
+
+            ctx.fillText(minutesText, x - minutesMetrics.width - secondsMetrics.width, y - 30);
+            ctx.fillText(secondsText, x - secondsMetrics.width, y - 30);
+            ctx.fillText(milliText, x, y - 30);
+
+            if (displayRound) {
+                ctx.fillText(`${currentRound}/${rounds}`, x - (ctx.measureText(`On ${currentRound}/${rounds}`).width / 2), y);
+            }
+            
+            ctx.fillText(intervalName, x - (ctx.measureText(intervalName).width / 2), y + 30);
         }
-      }, 1000);
-    }
 
-    function updateCanvasWithCountdown() {
-      const canvas = document.getElementById('timerCanvas');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillText(countdown.toString(), canvas.width / 2, canvas.height / 2);
-    }
 
-    function startInterval() {
-      // Logic to handle interval switching and round switching will be added here
-      // For now, this function will just switch between intervals and rounds
-      if (currentInterval >= appIntervals.length) {
-        currentInterval = 0;
-        currentRound += 1;
-        if (currentRound >= document.getElementById('numRounds').value) {
-          stopAppTimer();
-          return;
+        function animate(currentTime) {
+            if (!startTime) {
+                startTime = currentTime;
+            }
+
+            elapsed = currentTime - startTime;
+
+            if (inCountdown) {
+                let remainingTime = countdownDuration - elapsed;
+                if (remainingTime <= 0) {
+                    inCountdown = false;
+                    document.body.style.backgroundColor = intervals[0].color;
+                    startTime = null;
+                    animate(currentTime);
+                    return;
+                }
+                drawTime(remainingTime, 'Countdown', false);
+            } else {
+                let currentInterval = intervals[currentIntervalIndex];
+                let remainingTime = currentInterval.duration - elapsed;
+
+                if (remainingTime <= 0) {
+                    currentIntervalIndex++;
+
+                    if (currentIntervalIndex >= intervals.length) {
+                        currentRound++;
+                        currentIntervalIndex = 0;
+                    }
+
+                    if (currentRound > rounds) {
+                        timerStopped = true;
+                        currentIntervalIndex = intervals.length - 1;
+                        document.body.style.backgroundColor = 'white';
+                        currentRound = rounds; // Correcting the round display
+                        drawTime(0);
+                        return;
+                    }
+
+                    currentInterval = intervals[currentIntervalIndex];
+                    document.body.style.backgroundColor = currentInterval.color;
+                    startTime = null;
+                    elapsed = 0;
+                    remainingTime = currentInterval.duration;
+                }
+
+                drawTime(remainingTime, currentInterval.name);
+            }
+
+            if (!timerStopped) {
+                requestAnimationFrame(animate);
+            } else {
+                console.log('timer stopped');
+            }
         }
-      }
 
-      const interval = appIntervals[currentInterval];
-      document.getElementById('timerCanvas').style.backgroundColor = interval.color;
+        function startTimer() {
+            captureInputs();
+            if (timerStopped && intervals.length > 0) {
+                timerStopped = false;
+                currentIntervalIndex = 0;
+                currentRound = 1;
+                if (countdownDuration > 0) {
+                    inCountdown = true;
+                } else {
+                    document.body.style.backgroundColor = intervals[0].color;
+                }
+                startTime = null;
+                requestAnimationFrame(animate);
+            }
+        }
 
-      audio.play();
+        function stopTimer() {
+            timerStopped = true;
+            currentIntervalIndex = 0;
+            inCountdown = false;
+            document.body.style.backgroundColor = 'white';
+        }
 
-      currentInterval += 1;
+        function captureInputs() {
+            const intervalEls = document.querySelectorAll('.intervalFieldset');
+            intervals = [];
 
-      setTimeout(startInterval, interval.duration);
-    }
+            intervalEls.forEach(intervalEl => {
+                const name = intervalEl.querySelector('.interval-name').value;
+                const duration = parseInt(intervalEl.querySelector('.interval-duration').value) * 1000;
+                const color = intervalEl.querySelector('.interval-color').value;
 
-    function stopAppTimer() {
-      clearInterval(appTimer);
-      const canvas = document.getElementById('timerCanvas');
-      canvas.style.backgroundColor = 'white';
-    }
+                if (name && duration) {
+                    intervals.push({ name, duration, color });
+                }
+            });
 
-    function deleteTimer() {
-      stopAppTimer();
-      const intervalsDiv = document.getElementById('intervals');
-      while (intervalsDiv.firstChild) {
-        intervalsDiv.removeChild(intervalsDiv.lastChild);
-      }
-    }
-  </script>
-<audio id="intervalAudio" src="timer.mp3" preload="auto"></audio>
+            countdownDuration = parseInt(document.getElementById('countdown').value) * 1000;
+            rounds = parseInt(document.getElementById('rounds').value) || 1;
+        }
 
+        function addInterval() {
+            const container = document.getElementById('intervalContainer');
+            const newInterval = document.createElement('fieldset');
+            newInterval.className = 'intervalFieldset';
+            newInterval.innerHTML = `
+                <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
+                <input type="text" placeholder="Interval Name" class="interval-name">
+                <input type="number" placeholder="Duration (seconds)" class="interval-duration">
+                <input type="color" class="interval-color">
+            `;
+            container.appendChild(newInterval);
+        }
+    </script>
 </body>
 
 </html>
