@@ -248,54 +248,43 @@
     function saveToQR() {
       captureInputs();
       const settings = {
-          intervals: intervals,
-          rounds: rounds,
-          countdownDuration: countdownDuration
+        intervals: intervals,
+        rounds: rounds,
+        countdownDuration: countdownDuration
       };
       const serialized = JSON.stringify(settings);
-      
+
       // Generate QR code using qrcodejs library
       const qrCodeEl = document.getElementById('qrCode');
       new QRCode(qrCodeEl, serialized);
     }
-    
+
     const logs = document.getElementById('logs');
     function scanQR() {
       const videoElement = document.getElementById('preview');
-      logs.innerHTML += 'created video el';
       const qrScanner = new QrScanner(
         videoElement,
         result => {
-          logs.innerHTML += 'found QR code:';
-          logs.innerHTML += JSON.stringify(result);
           const data = JSON.parse(result.data);
-          // // document.getElementById('qroutput').innerHTML = JSON.stringify(result)
           intervals = data.intervals;
-          logs.innerHTML += `setting intervals to: ${data.intervals}`;
-
           rounds = data.rounds;
-          logs.innerHTML += `setting rounds to: ${data.rounds}`;
           countdownDuration = data.countdownDuration;
-          logs.innerHTML += `setting countdownDuration to: ${data.countdownDuration}`;
           loadFromSettings();
         },
-        {  returnDetailedScanResult: true },
-    );
+        { returnDetailedScanResult: true },
+      );
 
-    qrScanner.start();
+      qrScanner.start();
     }
 
     function loadFromSettings() {
       // Populate the fields on the page based on the scanned settings
       document.getElementById('countdown').value = countdownDuration / 1000;
       document.getElementById('rounds').value = rounds;
-      
-      // Handle intervals - this will require more logic to repopulate the interval fields
-      // For simplicity, here's a basic idea:
-      const container = document.getElementById('intervalContainer');
-      container.innerHTML = ''; // clear existing intervals
 
-      // { name: '', duration: 5000, color: '#fffff' }
+      const container = document.getElementById('intervalContainer');
+      container.innerHTML = '';
+
       intervals.forEach(interval => {
         const container = document.getElementById('intervalContainer');
         const newInterval = document.createElement('fieldset');
@@ -306,6 +295,7 @@
                   <input type="number" placeholder="Duration (seconds)" class="interval-duration" value="${interval.duration / 1000}">
                   <input type="color" class="interval-color" value="${interval.color}">
               `;
+
         container.appendChild(newInterval);
       });
     }
