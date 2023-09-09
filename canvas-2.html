@@ -34,8 +34,17 @@
   <button onclick="startTimer()">Start</button>
   <button onclick="stopTimer()">Stop</button>
 
+  <hr>
+  <button onclick="saveToQR()">Save</button>
+  <button onclick="scanQR()">Scan QR</button>
+  <div id="qrCode"></div>
+  <video id="preview"></video>
+  <div id="qroutput"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-  <script>
+  <script type="module">
+    import QrScanner from './qr-scanner.min.js';
+
     /** Global variables */
     let startTime;
     let elapsed;
@@ -225,6 +234,81 @@
             `;
       container.appendChild(newInterval);
     }
+
+    // EXPERIMENTAL - QR CODE FUNCTIONALITY
+    function saveToQR() {
+      captureInputs();
+      const settings = {
+          intervals: intervals,
+          rounds: rounds,
+          countdownDuration: countdownDuration
+      };
+      const serialized = JSON.stringify(settings);
+      
+      // Generate QR code using qrcodejs library
+      const qrCodeEl = document.getElementById('qrCode');
+      new QRCode(qrCodeEl, serialized);
+    }
+
+    function scanQR() {
+      const videoElement = document.getElementById('preview');
+      
+      const qrScanner = new QrScanner(
+        videoElement,
+        result => {
+          document.getElementById('qroutput').innerHTML = result
+        },
+        {  returnDetailedScanResult: true },
+    );
+
+    qrScanner.start();
+      // // Use instascan library to scan QR code and get content
+      // const scanner = new Instascan.Scanner({ video: videoElement });
+      
+      // scanner.addListener('scan', function(content) {
+      //     const settings = JSON.parse(content);
+      //     intervals = settings.intervals;
+      //     rounds = settings.rounds;
+      //     countdownDuration = settings.countdownDuration;
+      //     loadFromSettings();
+      // });
+      
+      // Instascan.Camera.getCameras().then(function(cameras) {
+      //     if (cameras.length > 0) {
+      //         scanner.start(cameras[0]);
+      //     } else {
+      //         console.error('No cameras found.');
+      //     }
+      // }).catch(function(e) {
+      //     console.error(e);
+      // });
+    }
+
+    function loadFromSettings() {
+      // Populate the fields on the page based on the scanned settings
+      document.getElementById('countdown').value = countdownDuration / 1000;
+      document.getElementById('rounds').value = rounds;
+      
+      // Handle intervals - this will require more logic to repopulate the interval fields
+      // For simplicity, here's a basic idea:
+      const container = document.getElementById('intervalContainer');
+      container.innerHTML = ''; // clear existing intervals
+
+      // { name: '', duration: 5000, color: '#fffff' }
+      intervals.forEach(interval => {
+        const container = document.getElementById('intervalContainer');
+      const newInterval = document.createElement('fieldset');
+      newInterval.className = 'intervalFieldset';
+      newInterval.innerHTML = `
+                <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
+                <input type="text" placeholder="Interval Name" class="interval-name" value="${interval.name}">
+                <input type="number" placeholder="Duration (seconds)" class="interval-duration" value="${interval.duration}">
+                <input type="color" class="interval-color" value="${interval.color}">
+            `;
+      container.appendChild(newInterval);
+      });
+    }
+
   </script>
 </body>
 
