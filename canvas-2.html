@@ -269,15 +269,15 @@
           logs.innerHTML += 'found QR code:';
           logs.innerHTML += JSON.stringify(result);
 
-          // // document.getElementById('qroutput').innerHTML = JSON.stringify(result)
-          // intervals = result.data.intervals;
-          // logs.innerHTML += `setting intervals to: ${result.data.intervals}`;
+          // document.getElementById('qroutput').innerHTML = JSON.stringify(result)
+          intervals = result.data.intervals;
+          logs.innerHTML += `setting intervals to: ${result.data.intervals}`;
 
-          // rounds = result.data.rounds;
-          // logs.innerHTML += `setting rounds to: ${result.data.rounds}`;
-          // countdownDuration = result.data.countdownDuration;
-          // logs.innerHTML += `setting countdownDuration to: ${result.data.countdownDuration}`;
-          // loadFromSettings();
+          rounds = result.data.rounds;
+          logs.innerHTML += `setting rounds to: ${result.data.rounds}`;
+          countdownDuration = result.data.countdownDuration;
+          logs.innerHTML += `setting countdownDuration to: ${result.data.countdownDuration}`;
+          loadFromSettings();
         },
         {  returnDetailedScanResult: true },
     );
