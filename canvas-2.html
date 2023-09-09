@@ -37,6 +37,8 @@
   <hr>
   <button id="saveToQR">Save</button>
   <button id="scanQR">Scan QR</button>
+  <input type="file" id="uploadQR" accept="image/*" style="display: none;">
+  <label for="uploadQR" style="cursor: pointer;">Upload QR Code</label>
   <div id="qrCode"></div>
   <video id="preview"></video>
   <div id="qroutput"></div>
@@ -299,6 +301,25 @@
         container.appendChild(newInterval);
       });
     }
+
+    // QR code upload event listener
+    document.getElementById('uploadQR').addEventListener('change', async function() {
+      const file = this.files[0];
+      if (file) {
+        try {
+          const result = await QrScanner.scanImage(file);
+          console.log(result);
+          const data = JSON.parse(result);
+          intervals = data.intervals;
+          rounds = data.rounds;
+          countdownDuration = data.countdownDuration;
+          loadFromSettings();
+        } catch (err) {
+          console.error('Failed to decode QR code from image:', err);
+        }
+      }
+    });
+
 
   </script>
 </body>
