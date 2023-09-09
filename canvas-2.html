@@ -41,7 +41,7 @@
   <video id="preview"></video>
   <div id="qroutput"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+
   <script type="module">
     import QrScanner from './qr-scanner.min.js';
 
@@ -251,9 +251,7 @@
         rounds: rounds,
         countdownDuration: countdownDuration
       };
-
-      const serialized = getCompressedConfigURL(settings);
-      console.log(serialized)
+      const serialized = JSON.stringify(settings);
 
       // Generate QR code using qrcodejs library
       const qrCodeEl = document.getElementById('qrCode');
@@ -301,33 +299,6 @@
         container.appendChild(newInterval);
       });
     }
-
-
-    // Function to compress the configuration and return a URL
-    function getCompressedConfigURL(config) {
-      const compressedConfig = LZString.compressToEncodedURIComponent(JSON.stringify(config));
-      return `${window.location.origin}${window.location.pathname}?config=${compressedConfig}`;
-    }
-
-    // Function to decompress the configuration from the URL
-    function decompressConfigFromURL() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const compressedConfig = urlParams.get('config');
-
-      if (compressedConfig) {
-        const decompressedConfig = LZString.decompressFromEncodedURIComponent(compressedConfig);
-        return JSON.parse(decompressedConfig);
-      }
-      return null;
-    }
-
-    // Load the configuration if present in the URL when the page loads
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const config = decompressConfigFromURL();
-      if (config) {
-        loadConfigurationFromData(config);
-      }
-    });
 
   </script>
 </body>
