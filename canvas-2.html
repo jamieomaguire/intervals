@@ -38,6 +38,7 @@
   <button id="saveToQR">Save</button>
   <button id="scanQR">Scan QR</button>
   <div id="qrCode"></div>
+  <div id="logs"></div>
   <video id="preview"></video>
   <div id="qroutput"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -257,17 +258,25 @@
       const qrCodeEl = document.getElementById('qrCode');
       new QRCode(qrCodeEl, serialized);
     }
-
+    
+    const logs = document.getElementById('logs');
     function scanQR() {
       const videoElement = document.getElementById('preview');
-      
+      logs.innerHTML += 'created video el';
       const qrScanner = new QrScanner(
         videoElement,
         result => {
+          logs.innerHTML += 'found QR code:';
+          logs.innerHTML += JSON.stringify(result);
+
           // document.getElementById('qroutput').innerHTML = JSON.stringify(result)
           intervals = result.intervals;
+          logs.innerHTML += `setting intervals to: ${result.intervals}`;
+
           rounds = result.rounds;
+          logs.innerHTML += `setting rounds to: ${result.rounds}`;
           countdownDuration = result.countdownDuration;
+          logs.innerHTML += `setting countdownDuration to: ${result.countdownDuration}`;
           loadFromSettings();
         },
         {  returnDetailedScanResult: true },
