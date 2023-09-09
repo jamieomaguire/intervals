@@ -321,6 +321,43 @@
       return null;
     }
 
+    // Function to load configuration data into the input fields
+    function loadConfigurationFromData(data) {
+      document.getElementById('countdown').value = data.countdownDuration / 1000;
+      document.getElementById('rounds').value = data.rounds;
+
+      const intervalContainer = document.getElementById('intervalContainer');
+      const existingIntervals = intervalContainer.querySelectorAll('.intervalFieldset');
+
+      data.intervals.forEach((interval, index) => {
+        let intervalFieldset;
+        if (index < existingIntervals.length) {
+          intervalFieldset = existingIntervals[index];
+        } else {
+          // Create a new interval fieldset if needed
+          intervalFieldset = document.createElement('fieldset');
+          intervalFieldset.className = 'intervalFieldset';
+          intervalFieldset.innerHTML = `
+                <label>Interval ${index + 1}: </label>
+                <input type="text" placeholder="Interval Name" class="interval-name">
+                <input type="number" placeholder="Duration (seconds)" class="interval-duration">
+                <input type="color" class="interval-color">
+            `;
+          intervalContainer.appendChild(intervalFieldset);
+        }
+
+        // Set the values from the configuration data
+        intervalFieldset.querySelector('.interval-name').value = interval.name;
+        intervalFieldset.querySelector('.interval-duration').value = interval.duration / 1000;
+        intervalFieldset.querySelector('.interval-color').value = interval.color;
+      });
+
+      // Remove any extra interval fieldsets
+      while (intervalContainer.children.length > data.intervals.length) {
+        intervalContainer.removeChild(intervalContainer.lastChild);
+      }
+    }
+
     // Load the configuration if present in the URL when the page loads
     document.addEventListener('DOMContentLoaded', (event) => {
       const config = decompressConfigFromURL();
