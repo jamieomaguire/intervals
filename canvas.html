@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas-based Timer</title>
+</head>
+<body>
+    <canvas id="timerCanvas"></canvas>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="stopTimer()">Stop</button>
+
+    <script>
+        let startTime;
+        let elapsed;
+
+        const canvas = document.getElementById('timerCanvas');
+        const ctx = canvas.getContext('2d');
+
+        window.devicePixelRatio = 2; 
+        const size = 250;
+
+        canvas.style.width = size + "px";
+        canvas.style.height = size + "px";
+
+        const scale = window.devicePixelRatio; 
+        canvas.width = size * scale;
+        canvas.height = size * scale;
+
+        ctx.scale(scale, scale);
+        ctx.font = '30px Arial';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'left'; // default to left
+
+        const x = size / 2;
+        const y = size / 2;
+
+        function drawTime(time) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear the canvas
+
+            const minutes = Math.floor(time / 60000);
+            const seconds = Math.floor((time % 60000) / 1000);
+            const milliseconds = time % 1000;
+
+            const minutesText = `${minutes}:`;
+            const secondsText = `${seconds.toString().padStart(2, '0')}.`;
+            const milliText = milliseconds.toString().slice(0, 2);
+
+            const minutesMetrics = ctx.measureText(minutesText);
+            const secondsMetrics = ctx.measureText(secondsText);
+
+            // Draw minutes
+            ctx.fillText(minutesText, x - minutesMetrics.width - secondsMetrics.width, y);
+            
+            // Draw seconds
+            ctx.fillText(secondsText, x - secondsMetrics.width, y);
+
+            // Draw milliseconds
+            ctx.fillText(milliText, x, y);
+        }
+
+        function animate(currentTime) {
+            if (!startTime) {
+                startTime = currentTime;
+            }
+
+            elapsed = currentTime - startTime;
+            drawTime(elapsed);
+
+            if (!timerStopped) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        let timerStopped = true;
+
+        function startTimer() {
+            if(timerStopped) {
+                startTime = null;
+                timerStopped = false;
+                requestAnimationFrame(animate);
+            }
+        }
+
+        function stopTimer() {
+            timerStopped = true;
+        }
+
+    </script>
+</body>
+</html>
