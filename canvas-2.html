@@ -324,7 +324,7 @@
       newInterval.innerHTML = `
                 <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
                 <input type="text" placeholder="Interval Name" class="interval-name" value="${interval.name}">
-                <input type="number" placeholder="Duration (seconds)" class="interval-duration" value="${interval.duration / 1000}">
+                <input type="number" placeholder="Duration (seconds)" class="interval-duration" value="${interval.duration}">
                 <input type="color" class="interval-color" value="${interval.color}">
             `;
       container.appendChild(newInterval);
