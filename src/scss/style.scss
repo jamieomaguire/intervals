@@ -15,9 +15,6 @@
 
 .timer__canvas {
   grid-area: timer;
-  // width: 100%;
-  // max-width: 400px;
-  // max-height: 300px;
 }
 
 .timer__start {
@@ -26,4 +23,67 @@
 
 .timer__stop {
   grid-area: stop;
+}
+
+
+details {
+  // background: pink;
+}
+
+summary {
+  // background: green;
+  padding: 1em;
+}
+
+summary ~ * {
+  margin-inline-start: 1.8em;
+}
+
+summary ~ * + * {
+  margin-top: 1em;
+}
+
+fieldset {
+  padding: 0;
+  border: none;
+}
+
+summary ~ fieldset {
+  display: flex;
+  flex-direction: column;
+}
+
+summary ~ fieldset > input {
+  width: min-content;
+}
+
+.intervals > * + * {
+  margin-top: 1em;
+}
+
+.intervals fieldset {
+  display: grid;
+  grid-template-areas: 
+  'label . .'
+  'name duration color';
+
+  grid-template-columns: repeat(3, minmax(min-content, 100px));
+
+  gap: 0.25em;
+}
+
+.intervals fieldset input {
+  max-width: 80px;
+}
+
+.interval-name {
+  grid-area: name;
+}
+
+.interval-duration {
+  grid-area: duration;
+}
+
+.interval-color {
+  grid-area: color;
 }

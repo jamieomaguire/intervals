@@ -21,33 +21,41 @@ const ctx = canvas.getContext('2d');
 /** Initial canvas setup */
 window.devicePixelRatio = 2;
 
-let viewportWidth = window.innerWidth;
+// Declare canvasWidth and canvasHeight outside of the resizeCanvas function
 let canvasWidth, canvasHeight;
 
-// Check if the device is mobile
-if (viewportWidth <= 768) {  // Assuming 768px as the breakpoint for mobile
-    canvasWidth = viewportWidth;
-} else {
-    canvasWidth = Math.min(0.7 * viewportWidth, viewportWidth);
+function resizeCanvas() {
+    let viewportWidth = window.innerWidth;
+
+    // Check if the device is mobile
+    if (viewportWidth <= 768) {  // Assuming 768px as the breakpoint for mobile
+        canvasWidth = viewportWidth;
+    } else {
+        canvasWidth = Math.min(0.7 * viewportWidth, viewportWidth);
+    }
+
+    canvasHeight = (3/4) * canvasWidth;
+
+    canvas.style.width = canvasWidth + "px";
+    canvas.style.height = canvasHeight + "px";
+
+    const scale = window.devicePixelRatio;
+    canvas.width = canvasWidth * scale;
+    canvas.height = canvasHeight * scale;
+
+    ctx.scale(scale, scale);
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+
+    // Update the x and y values based on the new canvas dimensions
+    window.x = canvasWidth / 2;
+    window.y = canvasHeight / 2;
 }
 
-canvasHeight = (3/4) * canvasWidth;
-
-canvas.style.width = canvasWidth + "px";
-canvas.style.height = canvasHeight + "px";
-
-const scale = window.devicePixelRatio;
-canvas.width = canvasWidth * scale;
-canvas.height = canvasHeight * scale;
-
-ctx.scale(scale, scale);
-ctx.textBaseline = 'middle';
-ctx.textAlign = 'center';
-
-const x = canvasWidth / 2;
-const y = canvasHeight / 2;
+resizeCanvas();
 
 // Event Listeners
+window.addEventListener('resize', resizeCanvas);
 document.getElementById('addInterval').addEventListener('click', addInterval);
 document.getElementById('startTimer').addEventListener('click', startTimer);
 document.getElementById('stopTimer').addEventListener('click', stopTimer);
@@ -110,16 +118,16 @@ function drawTime(time, intervalName = '', displayRound = true) {
   const maxMinutesWidth = ctx.measureText("59:").width;
   const maxSecondsWidth = ctx.measureText("59.").width;
 
-  const startX = x - (maxMinutesWidth + maxSecondsWidth + ctx.measureText("99").width) / 2;
+  const startX = window.x - (maxMinutesWidth + maxSecondsWidth + ctx.measureText("99").width) / 2;
 
   ctx.fillText(minutesText, startX, y);
-  ctx.fillText(secondsText, startX + maxMinutesWidth, y);
-  ctx.fillText(milliText, startX + maxMinutesWidth + maxSecondsWidth, y);
+  ctx.fillText(secondsText, startX + maxMinutesWidth, window.y);
+  ctx.fillText(milliText, startX + maxMinutesWidth + maxSecondsWidth, window.y);
 
   const bottomTextFontSize = 1.2 * baseFontSize;
   const bottomTextMargin = 10;   
 
-  // Display interval name on bottom left
+  // Display Name on bottom left
   ctx.font = `${bottomTextFontSize}px Arial`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'bottom';
@@ -253,8 +261,8 @@ function addInterval() {
   newInterval.className = 'intervalFieldset';
   newInterval.innerHTML = `
                 <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-                <input type="text" placeholder="Interval Name" class="interval-name">
-                <input type="number" placeholder="Duration (seconds)" class="interval-duration">
+                <input type="text" placeholder="Name" class="interval-name">
+                <input type="number" placeholder="Seconds" class="interval-duration">
                 <input type="color" class="interval-color">
             `;
   container.appendChild(newInterval);
@@ -341,8 +349,8 @@ function loadFromSettings() {
     newInterval.className = 'intervalFieldset';
     newInterval.innerHTML = `
                   <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-                  <input type="text" placeholder="Interval Name" class="interval-name" value="${interval.name}">
-                  <input type="number" placeholder="Duration (seconds)" class="interval-duration" value="${interval.duration / 1000}">
+                  <input type="text" placeholder="Name" class="interval-name" value="${interval.name}">
+                  <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}">
                   <input type="color" class="interval-color" value="${interval.color}">
               `;
 
