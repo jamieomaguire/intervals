@@ -19,3 +19,28 @@ html {
 *:after {
   box-sizing: inherit;
 }
+
+
+.timer {
+  margin-top: 2em;
+  display: grid;
+  grid-template-areas: 
+  'timer timer'
+  'start stop';
+  grid-template-rows: 1fr min-content;
+  grid-template-columns: min-content min-content;
+  gap: 1em;
+  justify-content: center;
+}
+
+.timer__canvas {
+  grid-area: timer;
+}
+
+.timer__start {
+  grid-area: start;
+}
+
+.timer__stop {
+  grid-area: stop;
+}
