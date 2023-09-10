@@ -1,3 +1,4 @@
+import './style.scss';
 import QrScanner from 'qr-scanner';
 import { QRCode } from './src/qrcode';
 import LZString from 'lz-string';
