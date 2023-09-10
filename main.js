@@ -75,6 +75,8 @@ window.addEventListener('DOMContentLoaded', function () {
     rounds = data.rounds;
     countdownDuration = data.countdownDuration;
     loadFromSettings();
+    document.getElementById('output').innerHTML = 'Timer loaded from URL. (See "Create timer" for settings)';
+    drawTime(countdownDuration, '', false);
   }
 });
 
@@ -102,7 +104,7 @@ function drawTime(time, intervalName = '', displayRound = true) {
   // Pad minutes to be at least two digits
   const minutesText = `${minutes.toString().padStart(2, '0')}:`;
   const secondsText = `${seconds.toString().padStart(2, '0')}.`;
-  const milliText = milliseconds.toString().slice(0, 2);
+  const milliText = milliseconds.toString().slice(0, 2).padStart(2, '0');
 
   const baseFontSize = canvasWidth * 0.1; 
   const maxFontSize = 1.8 * baseFontSize; 
@@ -326,6 +328,8 @@ function scanQR() {
       rounds = data.rounds;
       countdownDuration = data.countdownDuration;
       loadFromSettings();
+      document.getElementById('output').innerHTML = 'Timer loaded from QR scan. (See "Create timer" for settings)';
+    drawTime(countdownDuration, '', false);
       console.log(qrScanner)
       qrScanner.stop();
     },
@@ -370,6 +374,8 @@ document.getElementById('uploadQR').addEventListener('change', async function ()
       rounds = data.rounds;
       countdownDuration = data.countdownDuration;
       loadFromSettings();
+      document.getElementById('output').innerHTML = 'Timer loaded from QR upload. (See "Create timer" for settings)';
+    drawTime(countdownDuration, '', false);
     } catch (err) {
       console.error('Failed to decode QR code from image:', err);
     }
