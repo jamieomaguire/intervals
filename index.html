@@ -13,7 +13,7 @@
     <summary>Create timer</summary>
     <!-- Input fields for countdown and rounds -->
     <fieldset>
-      <label for="countdown">Countdown before start (seconds):</label>
+      <label for="countdown">Start countdown (seconds):</label>
       <input type="number" name="countdown" id="countdown" value="0">
     </fieldset>
     <fieldset>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Buttons to add intervals and control the timer -->
-    <button id="addInterval">Add Interval</button>
+    <button id="addInterval">+ Add Interval</button>
   </details>
 
   <!-- Load timer -->
@@ -40,16 +40,21 @@
     <summary>
       Load timer
     </summary>
+    <p>You can load a timer either by scanning a QR code using your camera, or directly uploading one you've saved!</p>
+    <p>Note: Scanning QR codes displayed on a screen can be inconsistent depending on camera quality and lighting.</p>
+    <br>
     <input type="file" id="uploadQR" accept="image/*" style="display: none;">
     <label for="uploadQR" style="cursor: pointer;">Upload QR Code</label>
     <br>
     <button id="scanQR">Scan QR</button>
-    <video id="preview"></video>
+    <video style="display: none;" id="preview"></video>
   </details>
 
   <!-- Save and share -->
   <details>
     <summary>Save and share your timer</summary>
+    <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to get immediate access!</p>
+    <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p>
     <button id="createURL">Save as URL</button>
     <button id="saveToQR">Save as QR</button>
     <div id="qrCode"></div>

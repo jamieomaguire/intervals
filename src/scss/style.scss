@@ -1,5 +1,8 @@
 @use './reset';
 
+body {
+  font-family: sans-serif;
+}
 
 .timer {
   margin-top: 2em;
@@ -9,12 +12,13 @@
   'start stop';
   grid-template-rows: 1fr min-content;
   grid-template-columns: min-content min-content;
-  gap: 1em;
+  gap: 2em;
   justify-content: center;
 }
 
 .timer__canvas {
   grid-area: timer;
+  box-shadow:  0px 8px 8px 0px rgba(0, 0, 0, 0.04),0px 8px 20px -3px rgba(0, 0, 0, 0.1),0px 4px 8px -2px rgba(0, 0, 0, 0.06);
 }
 
 .timer__start {
@@ -25,18 +29,15 @@
   grid-area: stop;
 }
 
-
-details {
-  // background: pink;
-}
-
 summary {
+  font-size: 1.5em;
   // background: green;
   padding: 1em;
 }
 
 summary ~ * {
   margin-inline-start: 1.8em;
+  padding-inline-end: 1em;
 }
 
 summary ~ * + * {

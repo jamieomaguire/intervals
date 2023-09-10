@@ -15,7 +15,6 @@ let countdownDuration = 0;
 let inCountdown = false;
 
 const canvas = document.getElementById('timerCanvas');
-canvas.style.border = '1px dashed purple';
 const ctx = canvas.getContext('2d');
 
 /** Initial canvas setup */
@@ -29,7 +28,7 @@ function resizeCanvas() {
 
     // Check if the device is mobile
     if (viewportWidth <= 768) {  // Assuming 768px as the breakpoint for mobile
-        canvasWidth = viewportWidth;
+        canvasWidth = viewportWidth - 16;
     } else {
         canvasWidth = Math.min(0.7 * viewportWidth, viewportWidth);
     }
@@ -156,7 +155,7 @@ function animate(currentTime) {
     let remainingTime = countdownDuration - elapsed;
     if (remainingTime <= 0) {
       inCountdown = false;
-      document.body.style.backgroundColor = intervals[0].color;
+      canvas.style.backgroundColor = intervals[0].color;
       startTime = null;
       animate(currentTime);
       return;
@@ -177,14 +176,14 @@ function animate(currentTime) {
       if (currentRound > rounds) {
         timerStopped = true;
         currentIntervalIndex = intervals.length - 1;
-        document.body.style.backgroundColor = 'white';
+        canvas.style.backgroundColor = 'white';
         currentRound = rounds; // Correcting the round display
         drawTime(0, '', false);
         return;
       }
 
       currentInterval = intervals[currentIntervalIndex];
-      document.body.style.backgroundColor = currentInterval.color;
+      canvas.style.backgroundColor = currentInterval.color;
       startTime = null;
       elapsed = 0;
       remainingTime = currentInterval.duration;
@@ -197,7 +196,7 @@ function animate(currentTime) {
     requestAnimationFrame(animate);
   } else {
     console.log('timer stopped');
-    document.body.style.backgroundColor = 'white';
+    canvas.style.backgroundColor = 'white';
     drawTime(0, '', false);
   }
 }
@@ -214,7 +213,7 @@ function startTimer() {
     if (countdownDuration > 0) {
       inCountdown = true;
     } else {
-      document.body.style.backgroundColor = intervals[0].color;
+      canvas.style.backgroundColor = intervals[0].color;
     }
     startTime = null;
     requestAnimationFrame(animate);
@@ -228,7 +227,7 @@ function stopTimer() {
   timerStopped = true;
   currentIntervalIndex = 0;
   inCountdown = false;
-  document.body.style.backgroundColor = 'white';
+  canvas.style.backgroundColor = 'white';
 }
 
 /** 
@@ -316,6 +315,7 @@ function saveToQR() {
 
 function scanQR() {
   const videoElement = document.getElementById('preview');
+  videoElement.style.display = 'block';
   const qrScanner = new QrScanner(
     videoElement,
     result => {
