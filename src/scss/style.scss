@@ -1,0 +1,95 @@
+@use './reset';
+
+body {
+  font-family: sans-serif;
+}
+
+.timer {
+  margin-top: 2em;
+  display: grid;
+  grid-template-areas: 
+  'timer timer'
+  'start stop';
+  grid-template-rows: 1fr min-content;
+  grid-template-columns: min-content min-content;
+  gap: 2em;
+  justify-content: center;
+}
+
+.timer__canvas {
+  grid-area: timer;
+  box-shadow:  0px 8px 8px 0px rgba(0, 0, 0, 0.04),0px 8px 20px -3px rgba(0, 0, 0, 0.1),0px 4px 8px -2px rgba(0, 0, 0, 0.06);
+}
+
+.timer__start {
+  grid-area: start;
+}
+
+.timer__stop {
+  grid-area: stop;
+}
+
+summary {
+  font-size: 1.5em;
+  // background: green;
+  padding: 1em;
+}
+
+summary ~ * {
+  margin-inline-start: 1.8em;
+  padding-inline-end: 1em;
+}
+
+summary ~ * + * {
+  margin-top: 1em;
+}
+
+fieldset {
+  padding: 0;
+  border: none;
+}
+
+summary ~ fieldset {
+  display: flex;
+  flex-direction: column;
+}
+
+summary ~ fieldset > input {
+  width: min-content;
+}
+
+.intervals > * + * {
+  margin-top: 1em;
+}
+
+.intervals fieldset {
+  display: grid;
+  grid-template-areas: 
+  'label . .'
+  'name duration color';
+
+  grid-template-columns: repeat(3, minmax(min-content, 100px));
+
+  gap: 0.25em;
+}
+
+.intervals fieldset input {
+  max-width: 80px;
+}
+
+.interval-name {
+  grid-area: name;
+}
+
+.interval-duration {
+  grid-area: duration;
+}
+
+.interval-color {
+  grid-area: color;
+}
+
+#output {
+  padding-inline-start: 1em;
+  padding-inline-end: 1em;
+}

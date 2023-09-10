@@ -1,0 +1,26 @@
+{
+  "name": "intervals",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "sass": "^1.66.1",
+    "vite": "4.4.9"
+  },
+  "dependencies": {
+    "lz-string": "1.5.0",
+    "qr-scanner": "1.4.2"
+  },
+  "description": "",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamieomaguire/intervals.git"
+  },
+  "author": "Jamie Maguire",
+  "license": "ISC"
+}

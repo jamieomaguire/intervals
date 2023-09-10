@@ -1,388 +1,75 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <link href="manifest.json" rel="manifest" />
-  <title>Custom Interval Timer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas-based Timer with Intervals</title>
 </head>
-<script>
-  window.addEventListener('DOMContentLoaded', (event) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const timerName = urlParams.get('timerName');
-
-    if (timerName) {
-      document.querySelector('h1').textContent = timerName;
-    }
-  });
-</script>
-<style>
-  /* Box sizing rules */
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
-
-  /* Remove default margin */
-  body,
-  h1,
-  h2,
-  h3,
-  h4,
-  p,
-  figure,
-  blockquote,
-  dl,
-  dd {
-    margin: 0;
-  }
-
-  /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
-  ul[role='list'],
-  ol[role='list'] {
-    list-style: none;
-  }
-
-  /* Set core root defaults */
-  html:focus-within {
-    scroll-behavior: smooth;
-  }
-
-  /* Set core body defaults */
-  body {
-    min-height: 100vh;
-    text-rendering: optimizeSpeed;
-    line-height: 1.5;
-  }
-
-  /* A elements that don't have a class get default styles */
-  a:not([class]) {
-    text-decoration-skip-ink: auto;
-  }
-
-  /* Make images easier to work with */
-  img,
-  picture {
-    max-width: 100%;
-    display: block;
-  }
-
-  /* Inherit fonts for inputs and buttons */
-  input,
-  button,
-  textarea,
-  select {
-    font: inherit;
-  }
-
-  /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
-  @media (prefers-reduced-motion: reduce) {
-    html:focus-within {
-      scroll-behavior: auto;
-    }
-
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
-
-  html {
-    font-family: sans-serif;
-  }
-
-  #currentInterval {
-    font-size: 1.5em;
-    text-align: center;
-    margin: 1em 0;
-  }
-</style>
 
 <body>
-  <h1>Custom Interval Timer</h1>
-  <form id="timerConfigForm" onsubmit="event.preventDefault();">
-    <label class="nameLabel">Timer name:</label>
-    <input class="name" id="timerName" type="text" />
-    <br />
-    <label class="roundsLabel">Number of Rounds:</label>
-    <input class="rounds" id="numRounds" min="1" type="number" value="1" />
-    <br />
-    <label class="countdownLabel">Countdown Before Start (seconds):</label>
-    <input class="countdown" id="countdownTime" type="number" value="5" />
-    <br />
-    <div class="intervals" id="intervals">
+  <!-- Timer customisation -->
+  <details>
+    <summary>Create timer</summary>
+    <!-- Input fields for countdown and rounds -->
+    <fieldset>
+      <label for="countdown">Start countdown (seconds):</label>
+      <input type="number" name="countdown" id="countdown" value="0">
+    </fieldset>
+    <fieldset>
+      <label for="rounds">Rounds:</label>
+      <input type="number" name="rounds" id="rounds" value="1">
+    </fieldset>
+
+    <!-- Container to hold interval input fields -->
+    <div class="intervals" id="intervalContainer">
+      <fieldset class="intervalFieldset">
+        <label>Interval 1: </label>
+        <input type="text" placeholder="Name" class="interval-name">
+        <input type="number" placeholder="Seconds" class="interval-duration">
+        <input type="color" class="interval-color">
+      </fieldset>
     </div>
-    <div class="controls">
-      <button onclick="addInterval()" type="button">+ Add Interval</button>
-      <button onclick="startTimer()" type="button">Start</button>
-      <button onclick="stopTimer()" type="button">Stop</button>
-      <button onclick="saveTimerToURL()" type="button">Save Timer</button>
-      <button onclick="resetTimer()" type="button">Delete Timer</button>
-    </div>
-  </form>
-  <div id="currentInterval"></div>
-  <button id="installButton" style="display: none;">Install App</button>
-  <script>
 
-    function resetTimer() {
-      // Reset the input fields to default values
-      document.getElementById('numRounds').value = 1;
-      document.getElementById('countdownTime').value = 5;
-      document.getElementById('timerName').value = '';
+    <!-- Buttons to add intervals and control the timer -->
+    <button id="addInterval">+ Add Interval</button>
+  </details>
 
-      const intervalsContainer = document.getElementById('intervals');
-      while (intervalsContainer.firstChild) {
-        intervalsContainer.removeChild(intervalsContainer.lastChild);
-      }
-      addIntervalElement();  // Add a default interval
+  <!-- Load timer -->
+  <details>
+    <summary>
+      Load timer
+    </summary>
+    <p>You can load a timer either by scanning a QR code using your camera, or directly uploading one you've saved!</p>
+    <p>Note: Scanning QR codes displayed on a screen can be inconsistent depending on camera quality and lighting.</p>
+    <br>
+    <input type="file" id="uploadQR" accept="image/*" style="display: none;">
+    <label for="uploadQR" style="cursor: pointer;">Upload QR Code</label>
+    <br>
+    <button id="scanQR">Scan QR</button>
+    <video style="display: none;" id="preview"></video>
+  </details>
 
-      // Reset the URL to the original without any parameters
-      const baseURL = `${window.location.origin}${window.location.pathname}`;
-      history.pushState({}, null, baseURL);
-    }
+  <!-- Save and share -->
+  <details>
+    <summary>Save and share your timer</summary>
+    <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to get immediate access!</p>
+    <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p>
+    <button id="createURL">Save as URL</button>
+    <button id="saveToQR">Save as QR</button>
+    <div id="qrCode"></div>
+  </details>
 
+  <p id="output"></p>
 
-    function addIntervalElement(name = '', time = '', color = '#FFFFFF') {
-      const intervalDiv = document.createElement('div');
-      intervalDiv.className = 'interval';
+  <!-- Timer -->
+  <div class="timer">
+    <canvas class="timer__canvas" id="timerCanvas"></canvas>
+    <button class="timer__start" id="startTimer">Start</button>
+    <button class="timer__stop" id="stopTimer">Stop</button>
+  </div>
 
-      const nameInput = document.createElement('input');
-      nameInput.type = 'text';
-      nameInput.placeholder = 'Interval Name';
-      nameInput.className = 'interval-name';
-      nameInput.value = name;
-
-      const timeInput = document.createElement('input');
-      timeInput.type = 'number';
-      timeInput.placeholder = 'Interval (seconds)';
-      timeInput.className = 'interval-time';
-      timeInput.value = time;
-
-      const colorInput = document.createElement('input');
-      colorInput.type = 'color';
-      colorInput.className = 'interval-color';
-      colorInput.value = color;
-
-      intervalDiv.appendChild(nameInput);
-      intervalDiv.appendChild(timeInput);
-      intervalDiv.appendChild(colorInput);
-
-      document.getElementById('intervals').appendChild(intervalDiv);
-    }
-
-
-    function loadTimerFromURL() {
-      const urlParams = new URLSearchParams(window.location.search);
-      document.getElementById('timerName').value = decodeURIComponent(urlParams.get('timerName') || 'Unnamed Timer');
-      document.getElementById('numRounds').value = urlParams.get('nR') || 1;
-      document.getElementById('countdownTime').value = urlParams.get('cT') || 5;
-
-      // Clear existing intervals
-      const intervalsContainer = document.getElementById('intervals');
-      while (intervalsContainer.firstChild) {
-        intervalsContainer.removeChild(intervalsContainer.lastChild);
-      }
-
-      // Extract intervals from URL and create them dynamically
-      let index = 0;
-      while (urlParams.has(`iN${index}`)) {
-        const intervalName = decodeURIComponent(urlParams.get(`iN${index}`));
-        const intervalTime = urlParams.get(`iT${index}`);
-        const intervalColor = urlParams.get(`iC${index}`);
-
-        addIntervalElement(intervalName, intervalTime, intervalColor);
-        index++;
-      }
-
-      // If no intervals were loaded from the URL, add one default interval
-      if (index === 0) {
-        addIntervalElement();
-      }
-    }
-
-    function saveTimerToURL() {
-      const timerName = encodeURIComponent(document.getElementById('timerName').value || 'Unnamed Timer');
-      const nR = document.getElementById('numRounds').value;
-      const cT = document.getElementById('countdownTime').value;
-      const intervals = document.querySelectorAll('.interval');
-      let intervalParams = '';
-
-      intervals.forEach((interval, index) => {
-        const iN = encodeURIComponent(interval.querySelector('.interval-name').value);
-        const iT = encodeURIComponent(interval.querySelector('.interval-time').value);
-        const iC = encodeURIComponent(interval.querySelector('.interval-color').value);
-
-        intervalParams += `&iN${index}=${iN}&iT${index}=${iT}&iC${index}=${iC}`;
-      });
-
-      const timerURL = `${window.location.origin}${window.location.pathname}?timerName=${timerName}&nR=${nR}&cT=${cT}${intervalParams}`;
-      history.pushState({}, null, timerURL);
-    }
-
-
-    window.addEventListener('load', loadTimerFromURL);
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(reg => {
-          console.log('Service worker registered.', reg);
-        }).catch(err => {
-          console.log('Service worker registration failed:', err);
-        });
-      });
-    }
-
-    let deferredPrompt;
-
-    window.addEventListener('beforeinstallprompt', (event) => {
-      // Prevent Chrome 67 and earlier from automatically showing the prompt
-      event.preventDefault();
-      // Save the event for later use
-      deferredPrompt = event;
-      // Show the install button
-      document.getElementById('installButton').style.display = 'block';
-    });
-
-    document.getElementById('installButton').addEventListener('click', (event) => {
-      // Hide the install button
-      document.getElementById('installButton').style.display = 'none';
-      // Show the prompt
-      deferredPrompt.prompt();
-      // Wait for the user to respond to the prompt
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-        deferredPrompt = null;
-      });
-    });
-
-
-
-    let currentIntervalIndex = 0;
-    let currentRound = 0;
-    let totalRounds = 0;
-    let timer;
-    let remainingTime = 0;
-    let countdownRemaining = 0;
-
-
-    function addInterval() {
-      const newInterval = document.createElement('div');
-      newInterval.classList.add('interval');
-      newInterval.innerHTML = `
-        <input type="text" placeholder="Interval Name" class="interval-name">
-        <input type="number" placeholder="Interval (seconds)" class="interval-time">
-        <input type="color" class="interval-color" value="#FFFFFF">
-    `;
-      document.getElementById('intervals').appendChild(newInterval);
-    }
-
-    function startTimer() {
-      const intervals = document.querySelectorAll('.interval-time');
-      const rounds = document.getElementById('numRounds').value;
-
-      if (intervals.length === 0 || !rounds) {
-        alert('Please set intervals and rounds.');
-        return;
-      }
-
-      totalRounds = rounds;
-
-      if (timer) clearInterval(timer);
-
-      // Start with countdown
-      countdownRemaining = (document.getElementById('countdownTime').value || 5) * 1000;
-      updateCountdownDisplay();
-
-      timer = setInterval(() => {
-        if (countdownRemaining > 0) {
-          countdownRemaining -= 10;
-          updateCountdownDisplay();
-          if (countdownRemaining <= 0) {
-            // Countdown ended, start the interval timer
-            
-          // Play the audio for new interval start
-          document.getElementById('intervalAudio').play();
-          setNextIntervalTime();
-
-            updateDisplay();
-          }
-        } else {
-          // Interval timer logic
-          remainingTime -= 10;
-          updateDisplay();
-
-          if (remainingTime <= 0) {
-            currentIntervalIndex++;
-            if (currentIntervalIndex >= intervals.length) {
-              currentIntervalIndex = 0;
-              currentRound++;
-              if (currentRound >= totalRounds) {
-                stopTimer();
-                return;
-              }
-            }
-            
-          // Play the audio for new interval start
-          document.getElementById('intervalAudio').play();
-          setNextIntervalTime();
-
-          }
-        }
-      }, 10);
-    }
-
-    function updateCountdownDisplay() {
-      const seconds = Math.floor(countdownRemaining / 1000);
-      const milliseconds = countdownRemaining % 1000;
-
-      document.getElementById('currentInterval').innerHTML = `<p>Starting in ${seconds}.${milliseconds} seconds</p>`;
-    }
-
-
-    function setNextIntervalTime() {
-      const intervals = document.querySelectorAll('.interval-time');
-      remainingTime = intervals[currentIntervalIndex].value * 1000;
-    }
-
-    function updateDisplay() {
-      const intervalNames = document.querySelectorAll('.interval-name');
-      const intervalColors = document.querySelectorAll('.interval-color');
-
-      const currentIntervalName = intervalNames[currentIntervalIndex].value || `Interval ${currentIntervalIndex + 1}`;
-      const currentIntervalColor = intervalColors[currentIntervalIndex].value || "#FFFFFF"; // default to white if no color is set
-
-      document.body.style.backgroundColor = currentIntervalColor; // set background color
-
-      const seconds = Math.floor(remainingTime / 1000);
-      const milliseconds = remainingTime % 1000;
-
-      document.getElementById('currentInterval').innerHTML = `<p>${currentIntervalName}: ${seconds}.${milliseconds} <br /> Round: ${currentRound + 1}/${totalRounds}</p>`;
-    }
-
-    function stopTimer() {
-      clearInterval(timer);https://stackoverflow.com/questions/9980416/how-can-i-insert-new-line-carriage-returns-into-an-element-textcontent
-      currentIntervalIndex = 0;
-      currentRound = 0;
-      remainingTime = 0;
-      countdownRemaining = 0;
-      document.getElementById('currentInterval').innerHTML = '';
-      document.body.style.backgroundColor = "#FFFFFF"; // Reset background color to white (or any default color you prefer)
-    }
-
-  </script>
-
-<audio id="intervalAudio" src="timer.mp3" preload="auto"></audio>
+  <script type="module" src="/main.js"></script>
 </body>
 
 </html>
