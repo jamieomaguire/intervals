@@ -130,7 +130,7 @@ function animate(currentTime) {
         currentIntervalIndex = intervals.length - 1;
         document.body.style.backgroundColor = 'white';
         currentRound = rounds; // Correcting the round display
-        drawTime(0);
+        drawTime(0, '', false);
         return;
       }
 
@@ -148,6 +148,8 @@ function animate(currentTime) {
     requestAnimationFrame(animate);
   } else {
     console.log('timer stopped');
+    document.body.style.backgroundColor = 'white';
+    drawTime(0, '', false);
   }
 }
 
