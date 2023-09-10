@@ -8,43 +8,58 @@
 </head>
 
 <body>
-  <!-- Input fields for countdown and rounds -->
-  <fieldset>
-    <label for="countdown">Countdown before start (seconds):</label>
-    <input type="number" name="countdown" id="countdown" value="0">
-  </fieldset>
-  <fieldset>
-    <label for="rounds">Rounds:</label>
-    <input type="number" name="rounds" id="rounds" value="1">
-  </fieldset>
-
-  <!-- Container to hold interval input fields -->
-  <div id="intervalContainer">
-    <fieldset class="intervalFieldset">
-      <label>Interval 1: </label>
-      <input type="text" placeholder="Interval Name" class="interval-name">
-      <input type="number" placeholder="Duration (seconds)" class="interval-duration">
-      <input type="color" class="interval-color">
+  <!-- Timer customisation -->
+  <details>
+    <summary>Create timer</summary>
+    <!-- Input fields for countdown and rounds -->
+    <fieldset>
+      <label for="countdown">Countdown before start (seconds):</label>
+      <input type="number" name="countdown" id="countdown" value="0">
     </fieldset>
-  </div>
+    <fieldset>
+      <label for="rounds">Rounds:</label>
+      <input type="number" name="rounds" id="rounds" value="1">
+    </fieldset>
 
-  <!-- Buttons to add intervals and control the timer -->
-  <button id="addInterval">Add Interval</button>
+    <!-- Container to hold interval input fields -->
+    <div id="intervalContainer">
+      <fieldset class="intervalFieldset">
+        <label>Interval 1: </label>
+        <input type="text" placeholder="Interval Name" class="interval-name">
+        <input type="number" placeholder="Duration (seconds)" class="interval-duration">
+        <input type="color" class="interval-color">
+      </fieldset>
+    </div>
+
+    <!-- Buttons to add intervals and control the timer -->
+    <button id="addInterval">Add Interval</button>
+  </details>
+
+  <!-- Load timer -->
+  <details>
+    <summary>
+      Load timer
+    </summary>
+    <input type="file" id="uploadQR" accept="image/*" style="display: none;">
+    <label for="uploadQR" style="cursor: pointer;">Upload QR Code</label>
+    <br>
+    <button id="scanQR">Scan QR</button>
+    <div id="qrCode"></div>
+    <video id="preview"></video>
+    <div id="qroutput"></div>
+  </details>
+
+  <!-- Save and share -->
+  <details>
+    <summary>Save and share your timer</summary>
+    <button id="createURL">Save as URL</button>
+    <button id="saveToQR">Save as QR</button>
+  </details>
+
+  <!-- Timer -->
   <canvas id="timerCanvas"></canvas>
   <button id="startTimer">Start</button>
   <button id="stopTimer">Stop</button>
-
-  <hr>
-  <button id="createURL">Save as URL</button>
-  <button id="saveToQR">Save as QR</button>
-  <br>
-  <input type="file" id="uploadQR" accept="image/*" style="display: none;">
-  <label for="uploadQR" style="cursor: pointer;">Upload QR Code</label>
-  <br>
-  <button id="scanQR">Scan QR</button>
-  <div id="qrCode"></div>
-  <video id="preview"></video>
-  <div id="qroutput"></div>
 
   <script type="module" src="/main.js"></script>
 </body>
