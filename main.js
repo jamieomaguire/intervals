@@ -30,9 +30,8 @@ canvas.width = size * scale;
 canvas.height = size * scale;
 
 ctx.scale(scale, scale);
-ctx.font = '30px Arial';
 ctx.textBaseline = 'middle';
-ctx.textAlign = 'left';
+ctx.textAlign = 'center';
 
 const x = size / 2;
 const y = size / 2;
@@ -61,15 +60,23 @@ window.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-/**
- * Draws the given time on the canvas
- * @param {number} time - Time in milliseconds
- * @param {string} [intervalName=''] - Name of the current interval
- * @param {boolean} [displayRound=true] - Flag to display the current round
- */
+function adjustFontSize(ctx, maxFontSize, textArray, maxWidth) {
+  let fontSize = maxFontSize;
+  ctx.font = `${fontSize}px Arial`;
+  
+  const combinedWidth = textArray.reduce((acc, text) => acc + ctx.measureText(text).width, 0);
+  
+  while (combinedWidth > maxWidth && fontSize > 10) {
+      fontSize--;
+      ctx.font = `${fontSize}px Arial`;
+  }
+  
+  return fontSize;
+}
+
 function drawTime(time, intervalName = '', displayRound = true) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  
   const minutes = Math.floor(time / 60000);
   const seconds = Math.floor((time % 60000) / 1000);
   const milliseconds = time % 1000;
@@ -78,18 +85,32 @@ function drawTime(time, intervalName = '', displayRound = true) {
   const secondsText = `${seconds.toString().padStart(2, '0')}.`;
   const milliText = milliseconds.toString().slice(0, 2);
 
-  const minutesMetrics = ctx.measureText(minutesText);
-  const secondsMetrics = ctx.measureText(secondsText);
+  const maxFontSize = 30;
+  const fontSize = adjustFontSize(ctx, maxFontSize, [minutesText, secondsText, milliText], size);
+  
+  // Set alignment for timer text
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  
+  ctx.fillText(minutesText, x - (ctx.measureText(minutesText + secondsText).width / 2), y);
+  ctx.fillText(secondsText, x, y);
+  ctx.fillText(milliText, x + (ctx.measureText(secondsText + milliText).width / 2), y);
 
-  ctx.fillText(minutesText, x - minutesMetrics.width - secondsMetrics.width, y - 30);
-  ctx.fillText(secondsText, x - secondsMetrics.width, y - 30);
-  ctx.fillText(milliText, x, y - 30);
+  const bottomTextFontSize = 20;  // Adjust this value as needed.
+  const bottomTextMargin = 10;   // Margin from the bottom edge.
 
+  // Display interval name on bottom left
+  ctx.font = `${bottomTextFontSize}px Arial`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText(intervalName, bottomTextMargin, size - bottomTextMargin);
+  
+  // Display current round on bottom right
   if (displayRound) {
-    ctx.fillText(`${currentRound}/${rounds}`, x - (ctx.measureText(`On ${currentRound}/${rounds}`).width / 2), y);
+      ctx.textAlign = 'right';
+      const roundText = `${currentRound}/${rounds}`;
+      ctx.fillText(roundText, size - bottomTextMargin, size - bottomTextMargin);
   }
-
-  ctx.fillText(intervalName, x - (ctx.measureText(intervalName).width / 2), y + 30);
 }
 
 /** 
@@ -112,7 +133,7 @@ function animate(currentTime) {
       animate(currentTime);
       return;
     }
-    drawTime(remainingTime, 'Countdown', false);
+    drawTime(remainingTime, '', false);
   } else {
     let currentInterval = intervals[currentIntervalIndex];
     let remainingTime = currentInterval.duration - elapsed;
