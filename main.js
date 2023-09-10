@@ -1,4 +1,4 @@
-import './style.scss';
+import './src/scss/style.scss';
 import QrScanner from 'qr-scanner';
 import { QRCode } from './src/qrcode';
 import LZString from 'lz-string';
@@ -20,21 +20,32 @@ const ctx = canvas.getContext('2d');
 
 /** Initial canvas setup */
 window.devicePixelRatio = 2;
-const size = 250;
 
-canvas.style.width = size + "px";
-canvas.style.height = size + "px";
+let viewportWidth = window.innerWidth;
+let canvasWidth, canvasHeight;
+
+// Check if the device is mobile
+if (viewportWidth <= 768) {  // Assuming 768px as the breakpoint for mobile
+    canvasWidth = viewportWidth;
+} else {
+    canvasWidth = Math.min(0.7 * viewportWidth, viewportWidth);
+}
+
+canvasHeight = (3/4) * canvasWidth;
+
+canvas.style.width = canvasWidth + "px";
+canvas.style.height = canvasHeight + "px";
 
 const scale = window.devicePixelRatio;
-canvas.width = size * scale;
-canvas.height = size * scale;
+canvas.width = canvasWidth * scale;
+canvas.height = canvasHeight * scale;
 
 ctx.scale(scale, scale);
 ctx.textBaseline = 'middle';
 ctx.textAlign = 'center';
 
-const x = size / 2;
-const y = size / 2;
+const x = canvasWidth / 2;
+const y = canvasHeight / 2;
 
 // Event Listeners
 document.getElementById('addInterval').addEventListener('click', addInterval);
@@ -81,35 +92,44 @@ function drawTime(time, intervalName = '', displayRound = true) {
   const seconds = Math.floor((time % 60000) / 1000);
   const milliseconds = time % 1000;
 
-  const minutesText = `${minutes}:`;
+  // Pad minutes to be at least two digits
+  const minutesText = `${minutes.toString().padStart(2, '0')}:`;
   const secondsText = `${seconds.toString().padStart(2, '0')}.`;
   const milliText = milliseconds.toString().slice(0, 2);
 
-  const maxFontSize = 30;
-  const fontSize = adjustFontSize(ctx, maxFontSize, [minutesText, secondsText, milliText], size);
+  const baseFontSize = canvasWidth * 0.1; 
+  const maxFontSize = 1.8 * baseFontSize; 
+
+  const fontSize = adjustFontSize(ctx, maxFontSize, [minutesText, secondsText, milliText], canvasWidth);
   
   // Set alignment for timer text
-  ctx.textAlign = 'center';
+  ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
   
-  ctx.fillText(minutesText, x - (ctx.measureText(minutesText + secondsText).width / 2), y);
-  ctx.fillText(secondsText, x, y);
-  ctx.fillText(milliText, x + (ctx.measureText(secondsText + milliText).width / 2), y);
+  // Calculate the maximum widths for positioning
+  const maxMinutesWidth = ctx.measureText("59:").width;
+  const maxSecondsWidth = ctx.measureText("59.").width;
 
-  const bottomTextFontSize = 20;  // Adjust this value as needed.
-  const bottomTextMargin = 10;   // Margin from the bottom edge.
+  const startX = x - (maxMinutesWidth + maxSecondsWidth + ctx.measureText("99").width) / 2;
+
+  ctx.fillText(minutesText, startX, y);
+  ctx.fillText(secondsText, startX + maxMinutesWidth, y);
+  ctx.fillText(milliText, startX + maxMinutesWidth + maxSecondsWidth, y);
+
+  const bottomTextFontSize = 1.2 * baseFontSize;
+  const bottomTextMargin = 10;   
 
   // Display interval name on bottom left
   ctx.font = `${bottomTextFontSize}px Arial`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'bottom';
-  ctx.fillText(intervalName, bottomTextMargin, size - bottomTextMargin);
+  ctx.fillText(intervalName, bottomTextMargin, canvasHeight - bottomTextMargin);
   
   // Display current round on bottom right
   if (displayRound) {
       ctx.textAlign = 'right';
       const roundText = `${currentRound}/${rounds}`;
-      ctx.fillText(roundText, size - bottomTextMargin, size - bottomTextMargin);
+      ctx.fillText(roundText, canvasWidth - bottomTextMargin, canvasHeight - bottomTextMargin);
   }
 }
 
