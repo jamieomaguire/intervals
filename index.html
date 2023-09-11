@@ -8,9 +8,22 @@
 </head>
 
 <body>
+  <header>
+    <p class="logo">Beta spaff</p>
+  </header>
+
+  <!-- Timer -->
+  <div class="timer">
+    <canvas class="timer__canvas" id="timerCanvas"></canvas>
+    <button class="timer__start" id="startTimer">Start</button>
+    <button class="timer__stop" id="stopTimer">Stop</button>
+  </div>
+
+  <p id="output" class="output"></p>
+
   <!-- Timer customisation -->
-  <details>
-    <summary>Create timer</summary>
+  <details id="customise">
+    <summary>Customise timer</summary>
     <!-- Sets and rest between -->
     <fieldset>
       <label for="sets">Sets:</label>
@@ -20,7 +33,7 @@
       <label for="restBetweenSets">Rest between sets (seconds):</label>
       <input type="number" name="restBetweenSets" id="restBetweenSets" value="0">
     </fieldset>
-    
+
     <!-- Input fields for countdown and rounds -->
     <fieldset>
       <label for="countdown">Countdown (seconds):</label>
@@ -63,21 +76,14 @@
   <!-- Save and share -->
   <details>
     <summary>Save and share your timer</summary>
-    <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to get immediate access!</p>
-    <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p>
+    <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to
+      get immediate access!</p>
+    <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
+      upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p>
     <button id="createURL">Save as URL</button>
     <button id="saveToQR">Save as QR</button>
     <div id="qrCode"></div>
   </details>
-
-  <p id="output"></p>
-
-  <!-- Timer -->
-  <div class="timer">
-    <canvas class="timer__canvas" id="timerCanvas"></canvas>
-    <button class="timer__start" id="startTimer">Start</button>
-    <button class="timer__stop" id="stopTimer">Stop</button>
-  </div>
 
   <script type="module" src="/main.js"></script>
 </body>
