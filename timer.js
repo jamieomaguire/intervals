@@ -147,8 +147,7 @@ export class Timer {
     if (this.inCountdown) {
       let remainingTime = this.countdownDuration - this.elapsed;
       if (remainingTime <= 0) {
-        this.audio.currentTime = 0;
-        this.audio.play();
+        this.playAudio();
         this.inCountdown = false;
         this.canvas.style.backgroundColor = this.intervals[0].color;
         this.startTime = null;
@@ -159,8 +158,7 @@ export class Timer {
     } else if (this.inRestBetweenSets) {
       let remainingRestTime = this.restBetweenSetsDuration - this.elapsed;
       if (remainingRestTime <= 0) {
-        this.audio.currentTime = 0;
-        this.audio.play();
+        this.playAudio();
         this.inRestBetweenSets = false;
         this.currentIntervalIndex = 0;  // Reset the interval index
         this.canvas.style.backgroundColor = this.intervals[0].color;
@@ -175,8 +173,7 @@ export class Timer {
       let remainingTime = currentInterval.duration - this.elapsed;
 
       if (remainingTime <= 0) {
-        this.audio.currentTime = 0;
-        this.audio.play();
+        this.playAudio();
         this.currentIntervalIndex++;
 
         if (this.currentIntervalIndex >= this.intervals.length) {
@@ -281,6 +278,16 @@ export class Timer {
 
     this.canvas.style.backgroundColor = 'white';
     this.drawTime(0, '', false);
+  }
+
+  playAudio() {
+    if (this.audio.paused) {
+      this.audio.play();
+    } else {
+      this.audio.pause();
+      this.audio.currentTime = 0;
+      this.audio.play();
+    }
   }
 }
 
