@@ -214,7 +214,7 @@ export class Timer {
 
             if (this.restBetweenSetsDuration > 0) {
               this.inRestBetweenSets = true;
-              this.canvas.style.backgroundColor = 'grey'; // Or any color to indicate rest
+              this.canvas.style.backgroundColor = '#bbb'; // Or any color to indicate rest
               this.startTime = null;
               this.elapsed = 0;
               this.animate(currentTime);
