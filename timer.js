@@ -1,3 +1,5 @@
+import audioSrc from './src/timer.mp3';
+
 export class Timer {
   constructor(configManager) {
     this.configManager = configManager;
@@ -17,7 +19,7 @@ export class Timer {
     this.x = 0;
     this.y = 0;
 
-    this.audio = new Audio('timer.mp3');
+    this.audio = new Audio(audioSrc);
     this.audio.preload = 'auto';
 
 
