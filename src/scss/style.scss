@@ -25,9 +25,10 @@ button, label[for="uploadQR"] {
   border-radius: 9999px;
   background: none;
   padding: 0.5em 1em;
-  border: 1px solid #222;
+  border: none;
   cursor: pointer;
-  color: #222;
+  color: #eee;
+  background-color: #222;
 }
 
 .output {
