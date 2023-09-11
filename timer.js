@@ -24,11 +24,16 @@ export class Timer {
 
     this.resizeCanvas();
 
-    window.addEventListener('scroll', () => {
-      if (window.scrollY === 0) {
-        // Top of the page reached, trigger canvas redraw
+    document.addEventListener('touchstart', () => {
+      this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
+    });
+    
+    document.addEventListener('touchend', () => {
         this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
-      }
+    });
+    
+    document.addEventListener('touchcancel', () => {
+        this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
     });
 
     window.addEventListener('resize', this.resizeCanvas.bind(this));
