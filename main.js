@@ -137,19 +137,35 @@ function drawTime(time, intervalName = '', displayRound = true) {
   ctx.textBaseline = 'bottom';
   ctx.fillText(intervalName, bottomTextMargin, canvasHeight - bottomTextMargin);
 
-  // Display current round on bottom right
-  if (displayRound) {
-    ctx.textAlign = 'right';
-    const roundText = `${currentRound}/${rounds}`;
-    ctx.fillText(roundText, canvasWidth - bottomTextMargin, canvasHeight - bottomTextMargin);
+  // If the timer is not running or in countdown mode, skip rendering the set information
+  if (!timerStopped && !inCountdown) {
+      // If resting, display "Up next: set x" in the top left
+      if (inRestBetweenSets) {
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'top';
+          ctx.font = `${0.7 * baseFontSize}px Arial`;
+          const setText = `Up next: set ${currentSet}`;
+          ctx.fillText(setText, bottomTextMargin, bottomTextMargin);
+          displayRound = false;  // Do not display the current round during resting
+      } else {
+          // Display current set in the top left
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'top';
+          ctx.font = `${0.7 * baseFontSize}px Arial`;
+          const setText = `Set: ${currentSet}/${sets}`;
+          ctx.fillText(setText, bottomTextMargin, bottomTextMargin);
+      }
   }
 
-  // Display current set in the top left
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
-  ctx.font = `${0.7 * baseFontSize}px Arial`;  // Adjust font size for set display as needed
-  const setText = `Set: ${currentSet}/${sets}`;
-  ctx.fillText(setText, bottomTextMargin, bottomTextMargin);  // Display set text in the top left corner
+  // Restore baseline for the 'currentRound' text
+  ctx.textBaseline = 'bottom';
+
+  // Display current round on bottom right
+  if (displayRound) {
+      ctx.textAlign = 'right';
+      const roundText = `${currentRound}/${rounds}`;
+      ctx.fillText(roundText, canvasWidth - bottomTextMargin, canvasHeight - bottomTextMargin);
+  }
 }
 
 
