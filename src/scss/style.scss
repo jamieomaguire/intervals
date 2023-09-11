@@ -5,20 +5,14 @@ body {
   background-color: #eee;
 }
 
-@font-face {
-  font-family: 'Brand';
-  src: url('./TheBattleContinuez-vAVA.ttf');
-}
-
-.logo {
-  font-family: 'Brand';
-  font-size: 2rem;
-}
-
 header {
   padding: 1em;
   border-bottom: 1px solid #ccc;
   background: white;
+}
+
+header img {
+  display: block;
 }
 
 .output {
