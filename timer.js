@@ -17,11 +17,6 @@ export class Timer {
     this.x = 0;
     this.y = 0;
 
-    this.audio = new Audio('./timer.mp3');
-    this.audio.setAttribute('playsinline', '');
-    this.audio.preload = 'auto';
-
-
     this.canvas = document.getElementById('timerCanvas');
     this.ctx = this.canvas.getContext('2d');
 
@@ -232,6 +227,10 @@ export class Timer {
   }
 
   startTimer() {
+    this.audio = new Audio('./timer.mp3');
+    this.audio.setAttribute('playsinline', '');
+    this.audio.preload = 'auto';
+    
     // Capture the latest form input values
     this.configManager.captureInputs();
 
