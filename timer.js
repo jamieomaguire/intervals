@@ -24,6 +24,13 @@ export class Timer {
 
     this.resizeCanvas();
 
+    window.addEventListener('scroll', () => {
+      if (window.scrollY === 0) {
+        // Top of the page reached, trigger canvas redraw
+        this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
+      }
+    });
+
     window.addEventListener('resize', this.resizeCanvas.bind(this));
 
     // Render the initial time on the canvas
