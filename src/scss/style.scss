@@ -1,8 +1,9 @@
 @use './reset';
 
-html {
-  overscroll-behavior: none;
+body {
+  overscroll-behavior-y: contain;
 }
+
 
 body {
   font-family: sans-serif;
