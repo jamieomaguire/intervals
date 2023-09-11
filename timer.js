@@ -188,9 +188,17 @@ export class Timer {
 
             if (this.currentSet > this.sets) {
               this.timerStopped = true;
-              this.currentIntervalIndex = this.intervals.length - 1;
+
+              this.startTime = null;
+              this.elapsed = null;
+              this.timerStopped = true;
+              this.currentIntervalIndex = 0;
+              this.currentRound = 1;
+              this.inCountdown = false;
+              this.currentSet = 1;
+              this.inRestBetweenSets = false;
+
               this.canvas.style.backgroundColor = 'white';
-              this.currentSet = this.sets; // Correcting the set display
               this.drawTime(0, '', false);
               return;
             }
@@ -230,7 +238,7 @@ export class Timer {
     this.audio = new Audio('./timer.mp3');
     this.audio.setAttribute('playsinline', '');
     this.audio.preload = 'auto';
-    
+
     // Capture the latest form input values
     this.configManager.captureInputs();
 
