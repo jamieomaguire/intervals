@@ -24,23 +24,17 @@ export class Timer {
 
     this.resizeCanvas();
 
-    // document.addEventListener('touchstart', () => {
-    //   this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
-    // });
+    document.addEventListener('touchstart', () => {
+      this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
+    });
     
-    // document.addEventListener('touchend', () => {
-    //     this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
-    // });
-    
-    // document.addEventListener('touchcancel', () => {
-    //     this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
-    // });
-
-    window.addEventListener('pageshow', () => {
-      setTimeout(() => {
+    document.addEventListener('touchend', () => {
         this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
-    }, 100); // Adjust the delay as needed
-  });
+    });
+    
+    document.addEventListener('touchcancel', () => {
+        this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
+    });
 
     window.addEventListener('resize', this.resizeCanvas.bind(this));
 
