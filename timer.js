@@ -18,6 +18,7 @@ export class Timer {
     this.y = 0;
 
     this.audio = new Audio('./timer.mp3');
+    this.audio.setAttribute('playsinline', '');
     this.audio.preload = 'auto';
 
 
