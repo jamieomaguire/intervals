@@ -17,6 +17,9 @@ export class Timer {
     this.x = 0;
     this.y = 0;
 
+    this.audio = new Audio('timer.mp3');
+    this.audio.preload = 'auto';
+
 
     this.canvas = document.getElementById('timerCanvas');
     this.ctx = this.canvas.getContext('2d');
@@ -148,6 +151,8 @@ export class Timer {
     if (this.inCountdown) {
       let remainingTime = this.countdownDuration - this.elapsed;
       if (remainingTime <= 0) {
+        this.audio.currentTime = 0;
+        this.audio.play();
         this.inCountdown = false;
         this.canvas.style.backgroundColor = this.intervals[0].color;
         this.startTime = null;
@@ -158,6 +163,8 @@ export class Timer {
     } else if (this.inRestBetweenSets) {
       let remainingRestTime = this.restBetweenSetsDuration - this.elapsed;
       if (remainingRestTime <= 0) {
+        this.audio.currentTime = 0;
+        this.audio.play();
         this.inRestBetweenSets = false;
         this.currentIntervalIndex = 0;  // Reset the interval index
         this.canvas.style.backgroundColor = this.intervals[0].color;
@@ -172,6 +179,8 @@ export class Timer {
       let remainingTime = currentInterval.duration - this.elapsed;
 
       if (remainingTime <= 0) {
+        this.audio.currentTime = 0;
+        this.audio.play();
         this.currentIntervalIndex++;
 
         if (this.currentIntervalIndex >= this.intervals.length) {
@@ -222,6 +231,9 @@ export class Timer {
   }
 
   startTimer() {
+    // Capture the latest form input values
+    this.configManager.captureInputs();
+
     this.timerStopped = true;
     this.currentIntervalIndex = 0;
     this.currentRound = 1;
