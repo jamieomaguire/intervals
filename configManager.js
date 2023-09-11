@@ -79,7 +79,7 @@ export class ConfigManager {
       this.sets = data.sets;
       this.restBetweenSetsDuration = data.restBetweenSetsDuration;
       this.populateFields();
-      document.getElementById('output').innerHTML = 'Timer loaded from URL. (See "Create timer" for settings)';
+      document.getElementById('output').innerHTML = 'Timer loaded from URL. (See "Customise timer" for settings)';
       document.getElementById('customise').open = true;
     }
   }
@@ -116,7 +116,7 @@ export class ConfigManager {
     });
 
     // Notify the user that settings have been loaded
-    document.getElementById('output').innerHTML = 'Timer loaded from QR. (See "Create timer" for settings)';
+    document.getElementById('output').innerHTML = 'Timer loaded from QR. (See "Customise timer" for settings)';
 
     document.getElementById('customise').open = true;
   }
