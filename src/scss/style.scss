@@ -21,7 +21,7 @@ h1 {
   margin: 1em 0;
 }
 
-button {
+button, label[for="uploadQR"] {
   border-radius: 9999px;
   background: none;
   padding: 0.5em 1em;
