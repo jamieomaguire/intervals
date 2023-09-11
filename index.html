@@ -11,9 +11,19 @@
   <!-- Timer customisation -->
   <details>
     <summary>Create timer</summary>
+    <!-- Sets and rest between -->
+    <fieldset>
+      <label for="sets">Sets:</label>
+      <input type="number" name="sets" id="sets" value="1">
+    </fieldset>
+    <fieldset>
+      <label for="restBetweenSets">Rest between sets (seconds):</label>
+      <input type="number" name="restBetweenSets" id="restBetweenSets" value="0">
+    </fieldset>
+    
     <!-- Input fields for countdown and rounds -->
     <fieldset>
-      <label for="countdown">Start countdown (seconds):</label>
+      <label for="countdown">Countdown (seconds):</label>
       <input type="number" name="countdown" id="countdown" value="0">
     </fieldset>
     <fieldset>

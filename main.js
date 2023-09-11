@@ -13,6 +13,10 @@ let rounds;
 let currentRound = 1;
 let countdownDuration = 0;
 let inCountdown = false;
+let sets;
+let currentSet = 1;
+let restBetweenSetsDuration = 0;
+let inRestBetweenSets = false;
 
 const canvas = document.getElementById('timerCanvas');
 const ctx = canvas.getContext('2d');
@@ -24,31 +28,31 @@ window.devicePixelRatio = 2;
 let canvasWidth, canvasHeight;
 
 function resizeCanvas() {
-    let viewportWidth = window.innerWidth;
+  let viewportWidth = window.innerWidth;
 
-    // Check if the device is mobile
-    if (viewportWidth <= 768) {  // Assuming 768px as the breakpoint for mobile
-        canvasWidth = viewportWidth - 16;
-    } else {
-        canvasWidth = Math.min(0.7 * viewportWidth, viewportWidth);
-    }
+  // Check if the device is mobile
+  if (viewportWidth <= 768) {  // Assuming 768px as the breakpoint for mobile
+    canvasWidth = viewportWidth - 16;
+  } else {
+    canvasWidth = Math.min(0.7 * viewportWidth, viewportWidth);
+  }
 
-    canvasHeight = (3/4) * canvasWidth;
+  canvasHeight = (3 / 4) * canvasWidth;
 
-    canvas.style.width = canvasWidth + "px";
-    canvas.style.height = canvasHeight + "px";
+  canvas.style.width = canvasWidth + "px";
+  canvas.style.height = canvasHeight + "px";
 
-    const scale = window.devicePixelRatio;
-    canvas.width = canvasWidth * scale;
-    canvas.height = canvasHeight * scale;
+  const scale = window.devicePixelRatio;
+  canvas.width = canvasWidth * scale;
+  canvas.height = canvasHeight * scale;
 
-    ctx.scale(scale, scale);
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
+  ctx.scale(scale, scale);
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'center';
 
-    // Update the x and y values based on the new canvas dimensions
-    window.x = canvasWidth / 2;
-    window.y = canvasHeight / 2;
+  // Update the x and y values based on the new canvas dimensions
+  window.x = canvasWidth / 2;
+  window.y = canvasHeight / 2;
 }
 
 resizeCanvas();
@@ -74,6 +78,8 @@ window.addEventListener('DOMContentLoaded', function () {
     intervals = data.intervals;
     rounds = data.rounds;
     countdownDuration = data.countdownDuration;
+    sets = data.sets;
+    restBetweenSetsDuration = data.restBetweenSetsDuration;
     loadFromSettings();
     document.getElementById('output').innerHTML = 'Timer loaded from URL. (See "Create timer" for settings)';
     drawTime(countdownDuration, '', false);
@@ -83,39 +89,36 @@ window.addEventListener('DOMContentLoaded', function () {
 function adjustFontSize(ctx, maxFontSize, textArray, maxWidth) {
   let fontSize = maxFontSize;
   ctx.font = `${fontSize}px Arial`;
-  
+
   const combinedWidth = textArray.reduce((acc, text) => acc + ctx.measureText(text).width, 0);
-  
+
   while (combinedWidth > maxWidth && fontSize > 10) {
-      fontSize--;
-      ctx.font = `${fontSize}px Arial`;
+    fontSize--;
+    ctx.font = `${fontSize}px Arial`;
   }
-  
+
   return fontSize;
 }
 
 function drawTime(time, intervalName = '', displayRound = true) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
+
   const minutes = Math.floor(time / 60000);
   const seconds = Math.floor((time % 60000) / 1000);
   const milliseconds = time % 1000;
 
-  // Pad minutes to be at least two digits
   const minutesText = `${minutes.toString().padStart(2, '0')}:`;
   const secondsText = `${seconds.toString().padStart(2, '0')}.`;
   const milliText = milliseconds.toString().slice(0, 2).padStart(2, '0');
 
-  const baseFontSize = canvasWidth * 0.1; 
-  const maxFontSize = 1.8 * baseFontSize; 
+  const baseFontSize = canvasWidth * 0.1;
+  const maxFontSize = 1.8 * baseFontSize;
 
   const fontSize = adjustFontSize(ctx, maxFontSize, [minutesText, secondsText, milliText], canvasWidth);
-  
-  // Set alignment for timer text
+
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  
-  // Calculate the maximum widths for positioning
+
   const maxMinutesWidth = ctx.measureText("59:").width;
   const maxSecondsWidth = ctx.measureText("59.").width;
 
@@ -125,22 +128,30 @@ function drawTime(time, intervalName = '', displayRound = true) {
   ctx.fillText(secondsText, startX + maxMinutesWidth, window.y);
   ctx.fillText(milliText, startX + maxMinutesWidth + maxSecondsWidth, window.y);
 
-  const bottomTextFontSize = 1.2 * baseFontSize;
-  const bottomTextMargin = 10;   
+  const bottomTextFontSize = 0.7 * baseFontSize;
+  const bottomTextMargin = 10;
 
   // Display Name on bottom left
   ctx.font = `${bottomTextFontSize}px Arial`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'bottom';
   ctx.fillText(intervalName, bottomTextMargin, canvasHeight - bottomTextMargin);
-  
+
   // Display current round on bottom right
   if (displayRound) {
-      ctx.textAlign = 'right';
-      const roundText = `${currentRound}/${rounds}`;
-      ctx.fillText(roundText, canvasWidth - bottomTextMargin, canvasHeight - bottomTextMargin);
+    ctx.textAlign = 'right';
+    const roundText = `${currentRound}/${rounds}`;
+    ctx.fillText(roundText, canvasWidth - bottomTextMargin, canvasHeight - bottomTextMargin);
   }
+
+  // Display current set in the top left
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.font = `${0.7 * baseFontSize}px Arial`;  // Adjust font size for set display as needed
+  const setText = `Set: ${currentSet}/${sets}`;
+  ctx.fillText(setText, bottomTextMargin, bottomTextMargin);  // Display set text in the top left corner
 }
+
 
 /** 
  * Animation function to handle timer countdown and transitions
@@ -163,8 +174,21 @@ function animate(currentTime) {
       return;
     }
     drawTime(remainingTime, '', false);
+  } else if (inRestBetweenSets) {
+    let remainingRestTime = restBetweenSetsDuration - elapsed;
+    if (remainingRestTime <= 0) {
+      inRestBetweenSets = false;
+      currentIntervalIndex = 0;  // Reset the interval index
+      canvas.style.backgroundColor = intervals[0].color;
+      startTime = null;
+      animate(currentTime);
+      return;
+    }
+    drawTime(remainingRestTime, "Resting", true);  // You can change "Resting" to any appropriate text.
   } else {
     let currentInterval = intervals[currentIntervalIndex];
+
+    console.log(currentInterval)
     let remainingTime = currentInterval.duration - elapsed;
 
     if (remainingTime <= 0) {
@@ -172,16 +196,31 @@ function animate(currentTime) {
 
       if (currentIntervalIndex >= intervals.length) {
         currentRound++;
-        currentIntervalIndex = 0;
-      }
 
-      if (currentRound > rounds) {
-        timerStopped = true;
-        currentIntervalIndex = intervals.length - 1;
-        canvas.style.backgroundColor = 'white';
-        currentRound = rounds; // Correcting the round display
-        drawTime(0, '', false);
-        return;
+        if (currentRound > rounds) {
+          currentSet++;
+          currentRound = 1;
+
+          if (currentSet > sets) {
+            timerStopped = true;
+            currentIntervalIndex = intervals.length - 1;
+            canvas.style.backgroundColor = 'white';
+            currentSet = sets; // Correcting the set display
+            drawTime(0, '', false);
+            return;
+          }
+
+          if (restBetweenSetsDuration > 0) {
+            inRestBetweenSets = true;
+            canvas.style.backgroundColor = 'grey'; // Or any color to indicate rest
+            startTime = null;
+            elapsed = 0;
+            animate(currentTime);
+            return;
+          }
+        }
+
+        currentIntervalIndex = 0;
       }
 
       currentInterval = intervals[currentIntervalIndex];
@@ -203,11 +242,13 @@ function animate(currentTime) {
   }
 }
 
+
 /** 
  * Starts the timer after capturing user inputs 
  */
 function startTimer() {
   captureInputs();
+  console.log(sets)
   if (timerStopped && intervals.length > 0) {
     timerStopped = false;
     currentIntervalIndex = 0;
@@ -249,6 +290,9 @@ function captureInputs() {
     }
   });
 
+  sets = parseInt(document.getElementById('sets').value) || 1;
+  restBetweenSetsDuration = parseInt(document.getElementById('restBetweenSets').value) * 1000;
+
   countdownDuration = parseInt(document.getElementById('countdown').value) * 1000;
   rounds = parseInt(document.getElementById('rounds').value) || 1;
 }
@@ -274,9 +318,13 @@ function saveToURL() {
   const settings = {
     intervals: intervals,
     rounds: rounds,
-    countdownDuration: countdownDuration
+    countdownDuration: countdownDuration,
+    sets: sets,
+    restBetweenSetsDuration: restBetweenSetsDuration
   };
+
   const serialized = JSON.stringify(settings);
+  console.log(serialized)
   const compressed = LZString.compressToEncodedURIComponent(serialized);
 
   if (compressed.length <= 2000) {
@@ -297,7 +345,9 @@ function saveToQR() {
   const settings = {
     intervals: intervals,
     rounds: rounds,
-    countdownDuration: countdownDuration
+    countdownDuration: countdownDuration,
+    sets: sets,
+    restBetweenSetsDuration: restBetweenSetsDuration
   };
   const serialized = JSON.stringify(settings);
 
@@ -327,9 +377,11 @@ function scanQR() {
       intervals = data.intervals;
       rounds = data.rounds;
       countdownDuration = data.countdownDuration;
+      sets = data.sets;
+      restBetweenSetsDuration: data.restBetweenSetsDuration;
       loadFromSettings();
       document.getElementById('output').innerHTML = 'Timer loaded from QR scan. (See "Create timer" for settings)';
-    drawTime(countdownDuration, '', false);
+      drawTime(countdownDuration, '', false);
       console.log(qrScanner)
       qrScanner.stop();
     },
@@ -343,6 +395,8 @@ function loadFromSettings() {
   // Populate the fields on the page based on the scanned settings
   document.getElementById('countdown').value = countdownDuration / 1000;
   document.getElementById('rounds').value = rounds;
+  document.getElementById('sets').value = sets;
+  document.getElementById('restBetweenSets').value = restBetweenSetsDuration / 1000;
 
   const container = document.getElementById('intervalContainer');
   container.innerHTML = '';
@@ -375,7 +429,7 @@ document.getElementById('uploadQR').addEventListener('change', async function ()
       countdownDuration = data.countdownDuration;
       loadFromSettings();
       document.getElementById('output').innerHTML = 'Timer loaded from QR upload. (See "Create timer" for settings)';
-    drawTime(countdownDuration, '', false);
+      drawTime(countdownDuration, '', false);
     } catch (err) {
       console.error('Failed to decode QR code from image:', err);
     }
