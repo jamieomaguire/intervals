@@ -53,6 +53,7 @@ export class Timer {
 
     this.x = this.canvasWidth / 2;
     this.y = this.canvasHeight / 2;
+    this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
   }
 
   adjustFontSize(ctx, maxFontSize, textArray, maxWidth) {
