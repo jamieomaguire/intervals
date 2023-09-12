@@ -140,3 +140,10 @@ summary ~ fieldset > input {
 .interval-color {
   grid-area: color;
 }
+
+#qrCode {
+  padding: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
