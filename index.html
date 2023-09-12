@@ -4,16 +4,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Canvas-based Timer with Intervals</title>
+  <title>Interval timer</title>
 </head>
 
 <body>
+  <header>
+    <img src="./logo.png" height="40" alt="">
+  </header>
+
+  <!-- Timer -->
+  <div class="timer">
+    <canvas class="timer__canvas" id="timerCanvas"></canvas>
+    <button class="timer__start" id="startTimer">Start</button>
+    <button class="timer__stop" id="stopTimer">Stop</button>
+  </div>
+
+  <p id="output" class="output"></p>
+
   <!-- Timer customisation -->
-  <details>
-    <summary>Create timer</summary>
+  <details id="customise">
+    <summary>Customise timer</summary>
+    <!-- Sets and rest between -->
+    <fieldset>
+      <label for="sets">Sets:</label>
+      <input type="number" name="sets" id="sets" value="1">
+    </fieldset>
+    <fieldset>
+      <label for="restBetweenSets">Rest between sets (seconds):</label>
+      <input type="number" name="restBetweenSets" id="restBetweenSets" value="0">
+    </fieldset>
+
     <!-- Input fields for countdown and rounds -->
     <fieldset>
-      <label for="countdown">Start countdown (seconds):</label>
+      <label for="countdown">Countdown (seconds):</label>
       <input type="number" name="countdown" id="countdown" value="0">
     </fieldset>
     <fieldset>
@@ -37,9 +60,7 @@
 
   <!-- Load timer -->
   <details>
-    <summary>
-      Load timer
-    </summary>
+    <summary>Load a timer</summary>
     <p>You can load a timer either by scanning a QR code using your camera, or directly uploading one you've saved!</p>
     <p>Note: Scanning QR codes displayed on a screen can be inconsistent depending on camera quality and lighting.</p>
     <br>
@@ -52,22 +73,15 @@
 
   <!-- Save and share -->
   <details>
-    <summary>Save and share your timer</summary>
-    <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to get immediate access!</p>
-    <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p>
+    <summary>Save and share</summary>
+    <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to
+      get immediate access!</p>
+    <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
+      upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p>
     <button id="createURL">Save as URL</button>
     <button id="saveToQR">Save as QR</button>
     <div id="qrCode"></div>
   </details>
-
-  <p id="output"></p>
-
-  <!-- Timer -->
-  <div class="timer">
-    <canvas class="timer__canvas" id="timerCanvas"></canvas>
-    <button class="timer__start" id="startTimer">Start</button>
-    <button class="timer__stop" id="stopTimer">Stop</button>
-  </div>
 
   <script type="module" src="/main.js"></script>
 </body>
