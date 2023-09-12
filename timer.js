@@ -53,6 +53,8 @@ export class Timer {
 
     this.x = this.canvasWidth / 2;
     this.y = this.canvasHeight / 2;
+
+    // Prevent resize from clearing the canvas
     this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
   }
 
