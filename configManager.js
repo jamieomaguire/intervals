@@ -36,8 +36,8 @@ export class ConfigManager {
     newInterval.className = 'intervalFieldset';
     newInterval.innerHTML = `
           <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-          <input type="text" placeholder="Name" class="interval-name">
-          <input type="number" placeholder="Seconds" class="interval-duration">
+          <input type="text" placeholder="Name" class="interval-name" minlength="1">
+          <input type="number" placeholder="Seconds" class="interval-duration" min="1">
           <input type="color" class="interval-color">
       `;
     container.appendChild(newInterval);
@@ -79,6 +79,7 @@ export class ConfigManager {
       this.sets = data.sets;
       this.restBetweenSetsDuration = data.restBetweenSetsDuration;
       this.populateFields();
+      document.getElementById('output').classList.remove('output--error');
       document.getElementById('output').innerHTML = 'Timer loaded from URL. (See "Customise timer" for settings)';
       document.getElementById('customise').open = true;
     }
@@ -107,8 +108,8 @@ export class ConfigManager {
       newInterval.className = 'intervalFieldset';
       newInterval.innerHTML = `
                     <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-                    <input type="text" placeholder="Name" class="interval-name" value="${interval.name}">
-                    <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}">
+                    <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
+                    <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
                     <input type="color" class="interval-color" value="${interval.color}">
                 `;
 
@@ -116,6 +117,7 @@ export class ConfigManager {
     });
 
     // Notify the user that settings have been loaded
+    document.getElementById('output').classList.remove('output--error');
     document.getElementById('output').innerHTML = 'Timer loaded from QR. (See "Customise timer" for settings)';
 
     document.getElementById('customise').open = true;
@@ -135,8 +137,8 @@ export class ConfigManager {
       newInterval.className = 'intervalFieldset';
       newInterval.innerHTML = `
               <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-              <input type="text" placeholder="Name" class="interval-name" value="${interval.name}">
-              <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}">
+              <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
+              <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
               <input type="color" class="interval-color" value="${interval.color}">
           `;
 

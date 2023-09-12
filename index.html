@@ -21,35 +21,37 @@
 
   <p id="output" class="output"></p>
 
+  <p class="instructions">Start customising your timer and then press 'Start' to begin the workout.</p>
+
   <!-- Timer customisation -->
   <details id="customise">
     <summary>Customise timer</summary>
     <!-- Sets and rest between -->
     <fieldset>
       <label for="sets">Sets:</label>
-      <input type="number" name="sets" id="sets" value="1">
+      <input type="number" name="sets" id="sets" value="1" min="1">
     </fieldset>
     <fieldset>
       <label for="restBetweenSets">Rest between sets (seconds):</label>
-      <input type="number" name="restBetweenSets" id="restBetweenSets" value="0">
+      <input type="number" name="restBetweenSets" id="restBetweenSets" value="0" min="0">
     </fieldset>
 
     <!-- Input fields for countdown and rounds -->
     <fieldset>
       <label for="countdown">Countdown (seconds):</label>
-      <input type="number" name="countdown" id="countdown" value="0">
+      <input type="number" name="countdown" id="countdown" value="0" min="0">
     </fieldset>
     <fieldset>
       <label for="rounds">Rounds:</label>
-      <input type="number" name="rounds" id="rounds" value="1">
+      <input type="number" name="rounds" id="rounds" value="1" min="1">
     </fieldset>
 
     <!-- Container to hold interval input fields -->
     <div class="intervals" id="intervalContainer">
       <fieldset class="intervalFieldset">
         <label>Interval 1: </label>
-        <input type="text" placeholder="Name" class="interval-name">
-        <input type="number" placeholder="Seconds" class="interval-duration">
+        <input type="text" placeholder="Name" class="interval-name" minlength="1">
+        <input type="number" placeholder="Seconds" class="interval-duration" min="1">
         <input type="color" class="interval-color">
       </fieldset>
     </div>

@@ -37,8 +37,21 @@ button, label[for="uploadQR"] {
 }
 
 .output {
-  margin-top: 1em;
+  margin: 1.5em;
   color: green;
+}
+
+.instructions {
+  margin: 1.5em;
+}
+
+.output, .instructions {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.output--error {
+  color: red;
 }
 
 .timer {
@@ -126,9 +139,4 @@ summary ~ fieldset > input {
 
 .interval-color {
   grid-area: color;
-}
-
-#output {
-  padding-inline-start: 1em;
-  padding-inline-end: 1em;
 }
