@@ -235,19 +235,29 @@ export class Timer {
   }
 
   startTimer() {
+    // Capture the latest form input values
+    this.configManager.captureInputs();
+    
     this.audio = new Audio('./timer.mp3');
     this.audio.setAttribute('playsinline', '');
     this.audio.preload = 'auto';
-
-    // Capture the latest form input values
-    this.configManager.captureInputs();
-
+    
     this.timerStopped = true;
     this.currentIntervalIndex = 0;
     this.currentRound = 1;
     this.startTime = null;
-
+    
     this.intervals = this.configManager.capturedIntervals;
+    const outputEl = document.getElementById('output');
+
+    if (!this.intervals.length) {
+      outputEl.innerHTML = 'Please create a timer first';
+      outputEl.classList.add('output--error');
+
+      return;
+    } else {
+      outputEl.innerHTML = '';
+    }
 
     this.rounds = this.configManager.capturedRounds;
     this.countdownDuration = this.configManager.capturedCountdownDuration;
