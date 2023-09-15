@@ -10,6 +10,14 @@ export class ConfigManager {
     this.restBetweenSetsDuration = 0;
   }
 
+  get successColour() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'lightgreen' : 'green';
+  }
+
+  get errorColour() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'tomato' : 'red';
+  }
+
   captureInputs() {
     const intervalEls = document.querySelectorAll('.intervalFieldset');
     this.intervals = [];
@@ -35,35 +43,76 @@ export class ConfigManager {
     const newInterval = document.createElement('fieldset');
     newInterval.className = 'intervalFieldset';
     newInterval.innerHTML = `
-          <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-          <input type="text" placeholder="Name" class="interval-name" minlength="1">
-          <input type="number" placeholder="Seconds" class="interval-duration" min="1">
-          <input type="color" class="interval-color">
-      `;
+      <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
+      <input type="text" placeholder="Name" class="interval-name" minlength="1">
+      <input type="number" placeholder="Seconds" class="interval-duration" min="1">
+      <input type="color" class="interval-color">
+      <button class="deleteInterval">Delete interval</button>
+    `;
+    newInterval.querySelector('.deleteInterval').addEventListener('click', function () {
+      container.removeChild(newInterval);
+    });
     container.appendChild(newInterval);
   }
 
+
   saveToURL() {
-    this.captureInputs();
-    const settings = {
-      intervals: this.intervals,
-      rounds: this.rounds,
-      countdownDuration: this.countdownDuration,
-      sets: this.sets,
-      restBetweenSetsDuration: this.restBetweenSetsDuration
-    };
+    try {
+      this.captureInputs();
+      const settings = {
+        intervals: this.intervals,
+        rounds: this.rounds,
+        countdownDuration: this.countdownDuration,
+        sets: this.sets,
+        restBetweenSetsDuration: this.restBetweenSetsDuration
+      };
 
-    const serialized = JSON.stringify(settings);
-    const compressed = LZString.compressToEncodedURIComponent(serialized);
+      const serialized = JSON.stringify(settings);
+      const compressed = LZString.compressToEncodedURIComponent(serialized);
 
-    if (compressed.length <= 2000) {
-      const newUrl = new URL(window.location);
-      newUrl.searchParams.set('config', compressed);
-      window.history.pushState(null, '', newUrl);
-    } else {
-      console.warn('URL character length is above 2000. Consider other methods of saving configuration.');
+      // Get the #save element and any existing message element within it
+      const saveElement = document.querySelector('#save');
+      let messageElement = saveElement.querySelector('.save-message');
+
+      // If there's no existing message, create one
+      if (!messageElement) {
+        messageElement = document.createElement('p');
+        messageElement.classList.add('save-message');
+        saveElement.appendChild(messageElement);
+      }
+
+      if (compressed.length <= 2000) {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('config', compressed);
+        window.history.pushState(null, '', newUrl);
+
+        // Set a success message
+        messageElement.textContent = 'Timer saved to URL successfully!';
+        messageElement.style.color = this.successColour;
+      } else {
+        // Set an error message
+        messageElement.textContent = 'URL character length is above 2000. Consider other methods of saving configuration.';
+        messageElement.style.color = this.errorColour;
+      }
+    } catch (error) {
+      console.error(error);
+
+      const saveElement = document.querySelector('#save');
+      let messageElement = saveElement.querySelector('.save-message');
+
+      // If there's no existing message, create one
+      if (!messageElement) {
+        messageElement = document.createElement('p');
+        messageElement.classList.add('save-message');
+        saveElement.appendChild(messageElement);
+      }
+
+      // Set the error message
+      messageElement.textContent = 'Failed to save the timer.';
+      messageElement.style.color = this.errorColour;
     }
   }
+
 
   loadFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -85,43 +134,43 @@ export class ConfigManager {
     }
   }
 
-  loadFromSettings(settings) {
-    this.intervals = settings.intervals;
-    this.rounds = settings.rounds;
-    this.countdownDuration = settings.countdownDuration;
-    this.sets = settings.sets;
-    this.restBetweenSetsDuration = settings.restBetweenSetsDuration;
-    
-    // Load the values into the appropriate input fields based on the provided settings
-    document.getElementById('rounds').value = settings.rounds || '';
-    document.getElementById('countdown').value = settings.countdownDuration / 1000 || ''; // converting to seconds
-    document.getElementById('sets').value = settings.sets || '';
-    document.getElementById('restBetweenSets').value = settings.restBetweenSetsDuration / 1000 || ''; // converting to seconds
+  // loadFromSettings(settings) {
+  //   this.intervals = settings.intervals;
+  //   this.rounds = settings.rounds;
+  //   this.countdownDuration = settings.countdownDuration;
+  //   this.sets = settings.sets;
+  //   this.restBetweenSetsDuration = settings.restBetweenSetsDuration;
 
-    const container = document.getElementById('intervalContainer');
+  //   // Load the values into the appropriate input fields based on the provided settings
+  //   document.getElementById('rounds').value = settings.rounds || '';
+  //   document.getElementById('countdown').value = settings.countdownDuration / 1000 || ''; // converting to seconds
+  //   document.getElementById('sets').value = settings.sets || '';
+  //   document.getElementById('restBetweenSets').value = settings.restBetweenSetsDuration / 1000 || ''; // converting to seconds
 
-    // Clear out existing intervals
-    container.innerHTML = '';
+  //   const container = document.getElementById('intervalContainer');
 
-    settings.intervals.forEach(interval => {
-      const newInterval = document.createElement('fieldset');
-      newInterval.className = 'intervalFieldset';
-      newInterval.innerHTML = `
-                    <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-                    <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
-                    <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
-                    <input type="color" class="interval-color" value="${interval.color}">
-                `;
+  //   // Clear out existing intervals
+  //   container.innerHTML = '';
 
-      container.appendChild(newInterval);
-    });
+  //   settings.intervals.forEach(interval => {
+  //     const newInterval = document.createElement('fieldset');
+  //     newInterval.className = 'intervalFieldset';
+  //     newInterval.innerHTML = `
+  //                   <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
+  //                   <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
+  //                   <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
+  //                   <input type="color" class="interval-color" value="${interval.color}">
+  //               `;
 
-    // Notify the user that settings have been loaded
-    document.getElementById('output').classList.remove('output--error');
-    document.getElementById('output').innerHTML = 'Timer loaded from QR. (See "Customise timer" for settings)';
+  //     container.appendChild(newInterval);
+  //   });
 
-    document.getElementById('customise').open = true;
-  }
+  //   // Notify the user that settings have been loaded
+  //   document.getElementById('output').classList.remove('output--error');
+  //   document.getElementById('output').innerHTML = 'Timer loaded from QR. (See "Customise timer" for settings)';
+
+  //   document.getElementById('customise').open = true;
+  // }
 
   populateFields() {
     document.getElementById('countdown').value = this.countdownDuration / 1000;
@@ -136,14 +185,17 @@ export class ConfigManager {
       const newInterval = document.createElement('fieldset');
       newInterval.className = 'intervalFieldset';
       newInterval.innerHTML = `
-              <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-              <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
-              <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
-              <input type="color" class="interval-color" value="${interval.color}">
-          `;
-
+          <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
+          <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
+          <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
+          <input type="color" class="interval-color" value="${interval.color}">
+          <button class="deleteInterval">Delete interval</button>
+      `;
+      newInterval.querySelector('.deleteInterval').addEventListener('click', function() {
+        container.removeChild(newInterval);
+      });
       container.appendChild(newInterval);
-    });
+    });    
   }
 
   get capturedIntervals() {

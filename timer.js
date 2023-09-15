@@ -16,8 +16,14 @@ export class Timer {
     this.inRestBetweenSets = false;
     this.x = 0;
     this.y = 0;
+    // Canvas sizing params
+    this.aspectRatio = { width: 4, height: 3.5 }; 
+    this.baseFontScale = 0.1;
+    this.maxFontScale = 1.8;
+    this.maxCanvasWidth = 600;  // Maximum width for the canvas on larger screens
 
     this.canvas = document.getElementById('timerCanvas');
+    this.canvas.style.backgroundColor = this.defaultCanvasColor;
     this.ctx = this.canvas.getContext('2d');
 
     window.devicePixelRatio = 2;
@@ -30,20 +36,25 @@ export class Timer {
     this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
   }
 
+  get defaultCanvasColor() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ccc' : 'white';
+  }
+
   resizeCanvas() {
-    let viewportWidth = window.innerWidth;
+    const viewportWidth = window.innerWidth;
+    const scale = window.devicePixelRatio;
+
     if (viewportWidth <= 768) {
       this.canvasWidth = viewportWidth - 16;
     } else {
-      this.canvasWidth = Math.min(0.7 * viewportWidth, viewportWidth);
+      this.canvasWidth = Math.min(0.7 * viewportWidth, this.maxCanvasWidth); // Set an upper limit on the canvas width
     }
 
-    this.canvasHeight = (3 / 4) * this.canvasWidth;
+    this.canvasHeight = (this.aspectRatio.height / this.aspectRatio.width) * this.canvasWidth;
 
-    this.canvas.style.width = this.canvasWidth + "px";
-    this.canvas.style.height = this.canvasHeight + "px";
+    this.canvas.style.width = `${this.canvasWidth}px`;
+    this.canvas.style.height = `${this.canvasHeight}px`;
 
-    const scale = window.devicePixelRatio;
     this.canvas.width = this.canvasWidth * scale;
     this.canvas.height = this.canvasHeight * scale;
 
@@ -54,7 +65,6 @@ export class Timer {
     this.x = this.canvasWidth / 2;
     this.y = this.canvasHeight / 2;
 
-    // Prevent resize from clearing the canvas
     this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
   }
 
@@ -83,8 +93,8 @@ export class Timer {
     const secondsText = `${seconds.toString().padStart(2, '0')}.`;
     const milliText = milliseconds.toString().slice(0, 2).padStart(2, '0');
 
-    const baseFontSize = this.canvasWidth * 0.1;
-    const maxFontSize = 1.8 * baseFontSize;
+    const baseFontSize = this.canvasWidth * this.baseFontScale;
+    const maxFontSize = this.maxFontScale * baseFontSize;
 
     const fontSize = this.adjustFontSize(this.ctx, maxFontSize, [minutesText, secondsText, milliText], this.canvasWidth);
 
@@ -100,7 +110,7 @@ export class Timer {
     this.ctx.fillText(secondsText, startX + maxMinutesWidth, this.y);
     this.ctx.fillText(milliText, startX + maxMinutesWidth + maxSecondsWidth, this.y);
 
-    const bottomTextFontSize = 0.7 * baseFontSize;
+    const bottomTextFontSize = 1 * baseFontSize;
     const bottomTextMargin = 10;
 
     // Display Name on bottom left
@@ -115,7 +125,7 @@ export class Timer {
       if (this.inRestBetweenSets) {
         this.ctx.textAlign = 'left';
         this.ctx.textBaseline = 'top';
-        this.ctx.font = `${0.7 * baseFontSize}px Arial`;
+        this.ctx.font = `${1 * baseFontSize}px Arial`;
         const setText = `Up next: set ${this.currentSet}`;
         this.ctx.fillText(setText, bottomTextMargin, bottomTextMargin);
         displayRound = false;  // Do not display the current round during resting
@@ -123,7 +133,7 @@ export class Timer {
         // Display current set in the top left
         this.ctx.textAlign = 'left';
         this.ctx.textBaseline = 'top';
-        this.ctx.font = `${0.7 * baseFontSize}px Arial`;
+        this.ctx.font = `${1 * baseFontSize}px Arial`;
         const setText = `Set: ${this.currentSet}/${this.sets}`;
         this.ctx.fillText(setText, bottomTextMargin, bottomTextMargin);
       }
@@ -198,7 +208,7 @@ export class Timer {
               this.currentSet = 1;
               this.inRestBetweenSets = false;
 
-              this.canvas.style.backgroundColor = 'white';
+              this.canvas.style.backgroundColor = this.defaultCanvasColor;
               this.drawTime(0, '', false);
               return;
             }
@@ -229,7 +239,7 @@ export class Timer {
     if (!this.timerStopped) {
       requestAnimationFrame(this.animate.bind(this));
     } else {
-      this.canvas.style.backgroundColor = 'white';
+      this.canvas.style.backgroundColor = this.defaultCanvasColor;
       this.drawTime(0, '', false);
     }
   }
@@ -289,7 +299,7 @@ export class Timer {
     this.currentSet = 1;
     this.inRestBetweenSets = false;
 
-    this.canvas.style.backgroundColor = 'white';
+    this.canvas.style.backgroundColor = this.defaultCanvasColor;
     this.drawTime(0, '', false);
   }
 
