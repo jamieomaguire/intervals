@@ -26,11 +26,6 @@ header img {
   display: block;
 }
 
-h1 {
-  text-align: center;
-  margin: 1em 0;
-}
-
 .output {
   margin: 1.5em;
   color: green;
@@ -130,6 +125,50 @@ details {
   button,
   [for="uploadQR"] {
     margin: 15px 20px
+  }
+}
+
+details summary > * {
+  display: inline;
+}
+
+summary {
+  font-size: 1.2em;
+}
+
+summary > * {
+  margin-left: 0.5em;
+}
+
+.guide {
+  padding: 15px 20px;
+
+  p {
+    padding: 0;
+  }
+
+  >*+* {
+    margin-top: 1em;
+  }
+
+  dt {
+    font-weight: 700;
+  }
+
+  dd+dt {
+    margin-top: 1em;
+  }
+
+  dd {
+    margin-top: 0.5em;
+    padding-inline-start: 1em;
+  }
+
+  code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 0.25em 0.5em;
+    border-radius: 3px;
   }
 }
 

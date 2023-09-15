@@ -25,7 +25,7 @@
 
   <!-- Timer customisation -->
   <details id="customise">
-    <summary>1. Customise timer</summary>
+    <summary><span>1. Customise timer</span></summary>
     <div class="content">
       <!-- Countdown -->
       <fieldset>
@@ -66,19 +66,119 @@
 
   <!-- Save and share -->
   <details id="save">
-    <summary>2. Save</summary>
-    <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to
-      get immediate access!</p>
-    <button id="createURL">Save as URL</button>
-    <!-- <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
+    <summary><span>2. Save</span></summary>
+    <div class="content">
+      <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to
+        get immediate access!</p>
+      <button id="createURL">Save as URL</button>
+      <!-- <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
       upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p> -->
-    <!-- <button id="saveToQR">Save as QR</button>
+      <!-- <button id="saveToQR">Save as QR</button>
     <div id="qrCode"></div> -->
+    </div>
+  </details>
+
+  <details id="guide">
+    <summary><span>Guide</span></summary>
+    <div class="guide content">
+      <h1>User Guide</h1>
+      <p>Welcome to the Interval Timer App! This user-friendly tool allows you to customize your workout intervals,
+        countdowns, sets, and more. Below is a step-by-step guide to help you set up and use the timer.</p>
+
+      <h2>Glossary</h2>
+      <dl>
+        <dt>Countdown</dt>
+        <dd>It's the initial timer that starts before your workout begins. It gives you time to prepare before diving
+          into your exercises.</dd>
+
+        <dt>Sets</dt>
+        <dd>A set consists of multiple rounds of intervals. Once all rounds in a set are completed, there might be a
+          rest period before moving to the next set.</dd>
+
+        <dt>Rounds</dt>
+        <dd>Each round contains a sequence of intervals. Once all intervals in a round are finished, the next round
+          begins until all rounds in the set are completed.</dd>
+
+        <dt>Intervals</dt>
+        <dd>An interval is a specific duration of exercise or activity. For instance, you might have an interval for
+          jogging for 1 minute and another interval for walking for 30 seconds.</dd>
+
+        <dt>Rest Between Sets</dt>
+        <dd>After completing all rounds in a set, you might want to rest before starting the next set. This duration is
+          the rest between sets.</dd>
+      </dl>
+
+      <h2>Using the Timer</h2>
+      <ul>
+        <li><strong>Starting the Timer</strong>: Click on the <code>Start</code> button to begin the timer based on the
+          intervals and settings you've set up.</li>
+        <li><strong>Stopping the Timer</strong>: Click on the <code>Stop</code> button to halt the timer, resetting it
+          to its initial state.</li>
+      </ul>
+
+      <h2>Customizing Your Timer</h2>
+      <p>Click on the dropdown labeled <code>1. Customise timer</code> to begin customizing your timer.</p>
+
+      <h3>Setting up a Countdown</h3>
+      <ol>
+        <li>Look for the field labeled <code>Countdown (seconds):</code>.</li>
+        <li>Input the number of seconds you'd like the timer to count down from before starting the intervals.</li>
+      </ol>
+
+      <h3>Configuring Sets and Rests</h3>
+      <ol>
+        <li>Find the field labeled <code>Sets:</code>.</li>
+        <li>Input the number of sets you'd like to complete.</li>
+        <li>In the <code>Rest between sets (seconds):</code> field, input the duration of the rest you'd like between
+          each set.</li>
+      </ol>
+
+      <h3>Configuring Rounds</h3>
+      <ol>
+        <li>Find the field labeled <code>Rounds:</code>.</li>
+        <li>Input the number of rounds you'd like to complete per set.</li>
+      </ol>
+
+      <h3>Setting up Intervals</h3>
+      <ol>
+        <li>In the <code>Interval</code> section, provide a name for the interval in the <code>Name</code> input field.
+        </li>
+        <li>Input the duration of the interval in seconds.</li>
+        <li>Choose a color for the interval using the color picker. This color will be used as a background when the
+          interval is active.</li>
+        <li>To add more intervals, click on the <code>+ Add Interval</code> button. This will create a new set of fields
+          for another interval.</li>
+        <li>Repeat the above steps for each new interval.</li>
+      </ol>
+
+      <h2>Saving and Sharing Your Timer Configuration</h2>
+      <p>Click on the dropdown labeled <code>2. Save</code> to see options for saving your timer.</p>
+      <ul>
+        <li><strong>Save as URL</strong>: Click on the <code>Save as URL</code> button to save your timer settings in
+          the URL. You can bookmark this URL or share it with others. When you or anyone else opens this URL, the timer
+          will be pre-configured with the settings you saved.</li>
+      </ul>
+
+      <h2>Loading a Timer</h2>
+      <p>If you have a URL with pre-configured timer settings, simply paste it into your browser's address bar and hit
+        Enter. The timer will load with the settings embedded in the URL.</p>
+
+      <h2>Tips</h2>
+      <ul>
+        <li>For a clearer understanding of the remaining time, the timer displays minutes, seconds, and milliseconds.
+        </li>
+        <li>The current round and set are displayed on the bottom right and top left of the timer, respectively.</li>
+        <li>The name of the current interval appears on the bottom left of the timer.</li>
+        <li>Should any issues or errors arise while setting up the timer, a message displays below the timer.</li>
+      </ul>
+
+      <p>Enjoy your workout! 🏋️‍♀️🏃‍♂️🧘‍♀️</p>
+    </div>
   </details>
 
   <!-- Load timer -->
   <!-- <details id="load">
-    <summary>(Optional) Load from QR code</summary>
+    <summary><span>(Optional) Load from QR code</span></summary>
     <p>You can load a timer either by scanning a QR code using your camera, or directly uploading one you've saved!</p>
     <p>Note: Scanning QR codes displayed on a screen can be inconsistent depending on camera quality and lighting.</p>
     <br>
