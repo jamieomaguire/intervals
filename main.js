@@ -23,4 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // document.getElementById('saveToQR').addEventListener('click', qrHandler.saveToQR.bind(qrHandler));
     // document.getElementById('scanQR').addEventListener('click', qrHandler.scanQR.bind(qrHandler));
     // qrHandler.handleQRUpload();   
+
+    document.querySelectorAll('details').forEach(details => {
+      let clicked = false;
+    
+      details.addEventListener('click', () => {
+        clicked = true;
+      });
+    
+      details.addEventListener('toggle', function() {
+        if (clicked) {
+          this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          clicked = false;  // Reset the flag
+        }
+      });
+    });
 });
