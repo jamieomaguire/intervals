@@ -52,18 +52,28 @@ export class ConfigManager {
       sets: this.sets,
       restBetweenSetsDuration: this.restBetweenSetsDuration
     };
-
+  
     const serialized = JSON.stringify(settings);
     const compressed = LZString.compressToEncodedURIComponent(serialized);
-
+  
     if (compressed.length <= 2000) {
       const newUrl = new URL(window.location);
       newUrl.searchParams.set('config', compressed);
       window.history.pushState(null, '', newUrl);
+  
+      // Create a new paragraph element
+      const message = document.createElement('p');
+      message.textContent = 'Timer saved to URL successfully!';
+      message.style.color = 'green';
+  
+      // Append the message to the #save element
+      const saveElement = document.querySelector('#save');
+      saveElement.appendChild(message);
     } else {
       console.warn('URL character length is above 2000. Consider other methods of saving configuration.');
     }
   }
+  
 
   loadFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
