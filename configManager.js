@@ -44,36 +44,62 @@ export class ConfigManager {
   }
 
   saveToURL() {
-    this.captureInputs();
-    const settings = {
-      intervals: this.intervals,
-      rounds: this.rounds,
-      countdownDuration: this.countdownDuration,
-      sets: this.sets,
-      restBetweenSetsDuration: this.restBetweenSetsDuration
-    };
-  
-    const serialized = JSON.stringify(settings);
-    const compressed = LZString.compressToEncodedURIComponent(serialized);
-  
-    if (compressed.length <= 2000) {
-      const newUrl = new URL(window.location);
-      newUrl.searchParams.set('config', compressed);
-      window.history.pushState(null, '', newUrl);
-  
-      // Create a new paragraph element
-      const message = document.createElement('p');
-      message.textContent = 'Timer saved to URL successfully!';
-      message.style.color = 'green';
-  
-      // Append the message to the #save element
+    try {
+      this.captureInputs();
+      const settings = {
+        intervals: this.intervals,
+        rounds: this.rounds,
+        countdownDuration: this.countdownDuration,
+        sets: this.sets,
+        restBetweenSetsDuration: this.restBetweenSetsDuration
+      };
+
+      const serialized = JSON.stringify(settings);
+      const compressed = LZString.compressToEncodedURIComponent(serialized);
+
+      // Get the #save element and any existing message element within it
       const saveElement = document.querySelector('#save');
-      saveElement.appendChild(message);
-    } else {
-      console.warn('URL character length is above 2000. Consider other methods of saving configuration.');
+      let messageElement = saveElement.querySelector('.save-message');
+
+      // If there's no existing message, create one
+      if (!messageElement) {
+        messageElement = document.createElement('p');
+        messageElement.classList.add('save-message');
+        saveElement.appendChild(messageElement);
+      }
+
+      if (compressed.length <= 2000) {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('config', compressed);
+        window.history.pushState(null, '', newUrl);
+
+        // Set a success message
+        messageElement.textContent = 'Timer saved to URL successfully!';
+        messageElement.style.color = 'green';
+      } else {
+        // Set an error message
+        messageElement.textContent = 'URL character length is above 2000. Consider other methods of saving configuration.';
+        messageElement.style.color = 'red';
+      }
+    } catch (error) {
+      console.error(error);
+
+      const saveElement = document.querySelector('#save');
+      let messageElement = saveElement.querySelector('.save-message');
+
+      // If there's no existing message, create one
+      if (!messageElement) {
+        messageElement = document.createElement('p');
+        messageElement.classList.add('save-message');
+        saveElement.appendChild(messageElement);
+      }
+
+      // Set the error message
+      messageElement.textContent = 'Failed to save the timer.';
+      messageElement.style.color = 'red';
     }
   }
-  
+
 
   loadFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -101,7 +127,7 @@ export class ConfigManager {
   //   this.countdownDuration = settings.countdownDuration;
   //   this.sets = settings.sets;
   //   this.restBetweenSetsDuration = settings.restBetweenSetsDuration;
-    
+
   //   // Load the values into the appropriate input fields based on the provided settings
   //   document.getElementById('rounds').value = settings.rounds || '';
   //   document.getElementById('countdown').value = settings.countdownDuration / 1000 || ''; // converting to seconds
