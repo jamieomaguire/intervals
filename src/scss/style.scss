@@ -1,5 +1,10 @@
 @use './reset';
 
+$font-family: 'Arial', sans-serif;
+$primary-color: #1a73e8;
+$secondary-color: #ef6c00;
+$bg-color: #f5f5f5;
+
 body {
   overscroll-behavior-y: contain;
 }
@@ -24,16 +29,6 @@ header img {
 h1 {
   text-align: center;
   margin: 1em 0;
-}
-
-button, label[for="uploadQR"] {
-  border-radius: 9999px;
-  background: none;
-  padding: 0.5em 1em;
-  border: none;
-  cursor: pointer;
-  color: #eee;
-  background-color: #222;
 }
 
 .output {
@@ -80,70 +75,75 @@ button, label[for="uploadQR"] {
   grid-area: stop;
 }
 
-summary {
-  font-size: 1.5em;
-  // background: green;
-  padding: 1em;
-  cursor: pointer;
-}
-
-summary ~ * {
-  margin-inline-start: 1.8em;
-  padding-inline-end: 1em;
-}
-
-summary ~ * + * {
-  margin-top: 1em;
-}
-
-fieldset {
-  padding: 0;
-  border: none;
-}
-
-summary ~ fieldset {
-  display: flex;
-  flex-direction: column;
-}
-
-summary ~ fieldset > input {
-  width: min-content;
-}
-
-.intervals > * + * {
-  margin-top: 1em;
-}
-
-.intervals fieldset {
-  display: grid;
-  grid-template-areas: 
-  'label . .'
-  'name duration color';
-
-  grid-template-columns: repeat(3, minmax(min-content, 100px));
-
-  gap: 0.25em;
-}
-
-.intervals fieldset input {
-  max-width: 80px;
-}
-
-.interval-name {
-  grid-area: name;
-}
-
-.interval-duration {
-  grid-area: duration;
-}
-
-.interval-color {
-  grid-area: color;
-}
-
 #qrCode {
   padding: 1.5em;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+// 
+details {
+  margin: 20px;
+  border: 1px solid #ddd;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  summary {
+    padding: 15px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  p {
+    padding: 15px 20px;
+  }
+
+  fieldset {
+    padding: 15px 20px;
+    border: none;
+    margin: 0;
+
+    // Improve layout for mobile
+    input[type="text"], input[type="number"], input[type="color"] {
+      display: block;
+    }
+  }
+
+  label, input {
+    margin: 5px 0;
+  }
+
+  button, [for="uploadQR"] {
+    margin: 15px 20px
+  }
+}
+
+button, [for="uploadQR"] {
+  cursor: pointer;
+  padding: 10px;
+  border: none;
+  background-color: $primary-color;
+  color: white;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: $secondary-color;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+video {
+  width: calc(100% - 30px);
+  margin: 15px auto;
 }

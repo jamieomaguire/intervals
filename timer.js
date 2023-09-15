@@ -17,7 +17,7 @@ export class Timer {
     this.x = 0;
     this.y = 0;
     // Canvas sizing params
-    this.aspectRatio = { width: 4, height: 4 }; 
+    this.aspectRatio = { width: 4, height: 3.5 }; 
     this.baseFontScale = 0.1;
     this.maxFontScale = 1.8;
     this.maxCanvasWidth = 600;  // Maximum width for the canvas on larger screens
