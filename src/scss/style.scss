@@ -40,7 +40,8 @@ h1 {
   margin: 1.5em;
 }
 
-.output, .instructions {
+.output,
+.instructions {
   margin-top: 1em;
   margin-bottom: 1em;
 }
@@ -52,9 +53,9 @@ h1 {
 .timer {
   margin-top: 0.5em;
   display: grid;
-  grid-template-areas: 
-  'timer timer'
-  'start stop';
+  grid-template-areas:
+    'timer timer'
+    'start stop';
   grid-template-rows: 1fr min-content;
   grid-template-columns: min-content min-content;
   gap: 1em;
@@ -63,7 +64,7 @@ h1 {
 
 .timer__canvas {
   grid-area: timer;
-  box-shadow:  0px 8px 8px 0px rgba(0, 0, 0, 0.04),0px 8px 20px -3px rgba(0, 0, 0, 0.1),0px 4px 8px -2px rgba(0, 0, 0, 0.06);
+  box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.04), 0px 8px 20px -3px rgba(0, 0, 0, 0.1), 0px 4px 8px -2px rgba(0, 0, 0, 0.06);
   background-color: white;
 }
 
@@ -110,7 +111,9 @@ details {
     margin: 0;
 
     // Improve layout for mobile
-    input[type="text"], input[type="number"], input[type="color"] {
+    input[type="text"],
+    input[type="number"],
+    input[type="color"] {
       display: block;
     }
   }
@@ -119,17 +122,20 @@ details {
     font-weight: 700;
   }
 
-  label, input {
+  label,
+  input {
     margin: 5px 0;
   }
 
-  button, [for="uploadQR"] {
+  button,
+  [for="uploadQR"] {
     margin: 15px 20px
   }
 }
 
 button {
   cursor: pointer;
+  user-select: none;
   font-weight: 700;
   padding: 10px;
   border: none;
@@ -138,8 +144,10 @@ button {
   border-radius: 5px;
   transition: background-color 0.2s, transform 0.1s; // Added transform transition
 
-  &:hover {
-    background-color: $secondary-color;
+  @media (hover: hover) {
+    &:hover {
+      background-color: $secondary-color;
+    }
   }
 
   &:active {
