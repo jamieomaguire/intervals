@@ -26,39 +26,42 @@
   <!-- Timer customisation -->
   <details id="customise">
     <summary>1. Customise timer</summary>
-    <!-- Countdown -->
-    <fieldset>
-      <label for="countdown">Countdown (seconds):</label>
-      <input type="number" name="countdown" id="countdown" value="0" min="0">
-    </fieldset>
-    <!-- Sets and rest between -->
-    <fieldset>
-      <label for="sets">Sets:</label>
-      <input type="number" name="sets" id="sets" value="1" min="1">
-    </fieldset>
-    <fieldset>
-      <label for="restBetweenSets">Rest between sets (seconds):</label>
-      <input type="number" name="restBetweenSets" id="restBetweenSets" value="0" min="0">
-    </fieldset>
-
-    <!-- Input fields for rounds -->
-    <fieldset>
-      <label for="rounds">Rounds:</label>
-      <input type="number" name="rounds" id="rounds" value="1" min="1">
-    </fieldset>
-
-    <!-- Container to hold interval input fields -->
-    <div class="intervals" id="intervalContainer">
-      <fieldset class="intervalFieldset">
-        <label>Interval 1: </label>
-        <input type="text" placeholder="Name" class="interval-name" minlength="1">
-        <input type="number" placeholder="Seconds" class="interval-duration" min="1">
-        <input type="color" class="interval-color">
+    <div class="content">
+      <!-- Countdown -->
+      <fieldset>
+        <label for="countdown">Countdown (seconds):</label>
+        <input type="number" name="countdown" id="countdown" value="0" min="0">
       </fieldset>
+      <!-- Sets and rest between -->
+      <fieldset>
+        <label for="sets">Sets:</label>
+        <input type="number" name="sets" id="sets" value="1" min="1">
+      </fieldset>
+      <fieldset>
+        <label for="restBetweenSets">Rest between sets (seconds):</label>
+        <input type="number" name="restBetweenSets" id="restBetweenSets" value="0" min="0">
+      </fieldset>
+
+      <!-- Input fields for rounds -->
+      <fieldset>
+        <label for="rounds">Rounds:</label>
+        <input type="number" name="rounds" id="rounds" value="1" min="1">
+      </fieldset>
+
+      <!-- Container to hold interval input fields -->
+      <div class="intervals" id="intervalContainer">
+        <fieldset class="intervalFieldset">
+          <label>Interval 1: </label>
+          <input type="text" placeholder="Name" class="interval-name" minlength="1">
+          <input type="number" placeholder="Seconds" class="interval-duration" min="1">
+          <input type="color" class="interval-color">
+        </fieldset>
+      </div>
+
+      <!-- Buttons to add intervals and control the timer -->
+      <button id="addInterval">+ Add Interval</button>
     </div>
 
-    <!-- Buttons to add intervals and control the timer -->
-    <button id="addInterval">+ Add Interval</button>
   </details>
 
   <!-- Save and share -->
@@ -66,15 +69,15 @@
     <summary>2. Save</summary>
     <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to
       get immediate access!</p>
-    <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
-      upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p>
     <button id="createURL">Save as URL</button>
-    <button id="saveToQR">Save as QR</button>
-    <div id="qrCode"></div>
+    <!-- <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
+      upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p> -->
+    <!-- <button id="saveToQR">Save as QR</button>
+    <div id="qrCode"></div> -->
   </details>
 
   <!-- Load timer -->
-  <details id="load">
+  <!-- <details id="load">
     <summary>(Optional) Load from QR code</summary>
     <p>You can load a timer either by scanning a QR code using your camera, or directly uploading one you've saved!</p>
     <p>Note: Scanning QR codes displayed on a screen can be inconsistent depending on camera quality and lighting.</p>
@@ -84,7 +87,7 @@
     <br>
     <button id="scanQR">Scan QR</button>
     <video style="display: none;" id="preview"></video>
-  </details>
+  </details> -->
 
   <script type="module" src="/main.js"></script>
 </body>

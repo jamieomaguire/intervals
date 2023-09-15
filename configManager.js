@@ -95,43 +95,43 @@ export class ConfigManager {
     }
   }
 
-  loadFromSettings(settings) {
-    this.intervals = settings.intervals;
-    this.rounds = settings.rounds;
-    this.countdownDuration = settings.countdownDuration;
-    this.sets = settings.sets;
-    this.restBetweenSetsDuration = settings.restBetweenSetsDuration;
+  // loadFromSettings(settings) {
+  //   this.intervals = settings.intervals;
+  //   this.rounds = settings.rounds;
+  //   this.countdownDuration = settings.countdownDuration;
+  //   this.sets = settings.sets;
+  //   this.restBetweenSetsDuration = settings.restBetweenSetsDuration;
     
-    // Load the values into the appropriate input fields based on the provided settings
-    document.getElementById('rounds').value = settings.rounds || '';
-    document.getElementById('countdown').value = settings.countdownDuration / 1000 || ''; // converting to seconds
-    document.getElementById('sets').value = settings.sets || '';
-    document.getElementById('restBetweenSets').value = settings.restBetweenSetsDuration / 1000 || ''; // converting to seconds
+  //   // Load the values into the appropriate input fields based on the provided settings
+  //   document.getElementById('rounds').value = settings.rounds || '';
+  //   document.getElementById('countdown').value = settings.countdownDuration / 1000 || ''; // converting to seconds
+  //   document.getElementById('sets').value = settings.sets || '';
+  //   document.getElementById('restBetweenSets').value = settings.restBetweenSetsDuration / 1000 || ''; // converting to seconds
 
-    const container = document.getElementById('intervalContainer');
+  //   const container = document.getElementById('intervalContainer');
 
-    // Clear out existing intervals
-    container.innerHTML = '';
+  //   // Clear out existing intervals
+  //   container.innerHTML = '';
 
-    settings.intervals.forEach(interval => {
-      const newInterval = document.createElement('fieldset');
-      newInterval.className = 'intervalFieldset';
-      newInterval.innerHTML = `
-                    <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-                    <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
-                    <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
-                    <input type="color" class="interval-color" value="${interval.color}">
-                `;
+  //   settings.intervals.forEach(interval => {
+  //     const newInterval = document.createElement('fieldset');
+  //     newInterval.className = 'intervalFieldset';
+  //     newInterval.innerHTML = `
+  //                   <label>Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
+  //                   <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
+  //                   <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
+  //                   <input type="color" class="interval-color" value="${interval.color}">
+  //               `;
 
-      container.appendChild(newInterval);
-    });
+  //     container.appendChild(newInterval);
+  //   });
 
-    // Notify the user that settings have been loaded
-    document.getElementById('output').classList.remove('output--error');
-    document.getElementById('output').innerHTML = 'Timer loaded from QR. (See "Customise timer" for settings)';
+  //   // Notify the user that settings have been loaded
+  //   document.getElementById('output').classList.remove('output--error');
+  //   document.getElementById('output').innerHTML = 'Timer loaded from QR. (See "Customise timer" for settings)';
 
-    document.getElementById('customise').open = true;
-  }
+  //   document.getElementById('customise').open = true;
+  // }
 
   populateFields() {
     document.getElementById('countdown').value = this.countdownDuration / 1000;
