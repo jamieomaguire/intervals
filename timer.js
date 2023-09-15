@@ -17,7 +17,7 @@ export class Timer {
     this.x = 0;
     this.y = 0;
     // Canvas sizing params
-    this.aspectRatio = { width: 4, height: 3.5 }; 
+    this.aspectRatio = { width: 4, height: 3.5 };
     this.baseFontScale = 0.1;
     this.maxFontScale = 1.8;
     this.maxCanvasWidth = 600;  // Maximum width for the canvas on larger screens
@@ -31,13 +31,20 @@ export class Timer {
     this.resizeCanvas();
 
     window.addEventListener('resize', this.resizeCanvas.bind(this));
+    document.documentElement.addEventListener('themeChange', this.updateCanvasColorBasedOnTheme.bind(this));
 
     // Render the initial time on the canvas
     this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
   }
 
   get defaultCanvasColor() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ccc' : 'white';
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? '#ccc' : 'white';
+  }
+
+  updateCanvasColorBasedOnTheme() {
+    this.canvas.style.backgroundColor = this.defaultCanvasColor;
+    // Re-draw the current time to ensure the timer looks correct in the new theme
+    this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
   }
 
   resizeCanvas() {
@@ -247,16 +254,16 @@ export class Timer {
   startTimer() {
     // Capture the latest form input values
     this.configManager.captureInputs();
-    
+
     this.audio = new Audio('./timer.mp3');
     this.audio.setAttribute('playsinline', '');
     this.audio.preload = 'auto';
-    
+
     this.timerStopped = true;
     this.currentIntervalIndex = 0;
     this.currentRound = 1;
     this.startTime = null;
-    
+
     this.intervals = this.configManager.capturedIntervals;
     const outputEl = document.getElementById('output');
 

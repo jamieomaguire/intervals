@@ -9,10 +9,8 @@
 
 <body ontouchstart="">
   <header>
-    <picture>
-      <source srcset="./logo-light.png" media="(prefers-color-scheme: light)">
-      <img src="./logo-dark.png" height="40" alt="Timeout - The interval timer app">
-    </picture>
+    <img id="logo" src="./logo-light.png" height="40" alt="Timeout - The interval timer app">
+    <button id="themeToggle" class="theme-btn"><span>&#9790;</span></button>
   </header>
 
   <!-- Timer -->
@@ -72,9 +70,8 @@
   <details id="save">
     <summary><span>2. Save</span></summary>
     <div class="content">
-      <p>If you save the timer as a URL, you can bookmark it to load immediately next time or send to others for them to
-        get immediate access!</p>
-      <button id="createURL">Save as URL</button>
+      <p>Save timers as URLs! Bookmark the URL for quick access later or share it with others for instant access. Just click "save".</p>
+      <button id="createURL">Save</button>
       <!-- <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
       upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p> -->
       <!-- <button id="saveToQR">Save as QR</button>
@@ -86,11 +83,13 @@
     <summary><span>Pre-made timers</span></summary>
     <div class="content premade">
       <a href="?config=N4IglgdgLgpgTgNwIYBsDOIBcBtUEkC2MWIA6gPZwDWIANCACYCucSUY5EWATAAz%2B96AY3IpKJAMQAWAKwAzOQGYAHCAC%2BtPIWKYQAJRhoodRizYcumAIwDBIEWLiSFUgOxv1AXXpxyTCAwYmMrCftAM5ADuEAAiZuycWDYC9GgwUEFSPoZQAELpkTAwEADK6WhxrAmWMrZqQA" class="card">
-        Tabata
+        <span class="card__title">Tabatas</span>
+        <span class="card__description">A traditional tabata-style workout. This consists of 20 second work intervals followed by 10 seconds of rest.</span>
       </a>
 
       <a href="?config=N4IglgdgLgpgTgNwIYBsDOIBcBtUEkC2MWIA8hCADQgAmArnElGAPYWYDsADD9QMYsULOCQDEAVhoAzKeIBMIAL6U8hYpjIyqtBk1bsAzDy79BwsTPnylAXWpwWdCDQyYAjCZACnUGiwDuEAAiusxsWB7G1GgwUK4G9jBoUABCsf4wMBAAyrFoIYxh7G4AHMZcikA" class="card">
-        7/3 Hangboard repeaters
+        <span class="card__title">7/3 Hangboard repeaters</span>
+        <span class="card__description">A classic hangboard workout for improving the strength and conditioning of your fingers. Popular amongst climbers, this style of workout consists of 7 second work intervals followed by 3 seconds of rest.</span>
       </a>
     </div>
   </details>

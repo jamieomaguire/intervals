@@ -11,11 +11,11 @@ export class ConfigManager {
   }
 
   get successColour() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'lightgreen' : 'green';
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'lightgreen' : 'green';
   }
 
   get errorColour() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'tomato' : 'red';
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'tomato' : 'red';
   }
 
   captureInputs() {
@@ -87,12 +87,12 @@ export class ConfigManager {
         window.history.pushState(null, '', newUrl);
 
         // Set a success message
-        messageElement.textContent = 'Timer saved to URL successfully!';
-        messageElement.style.color = this.successColour;
+        messageElement.textContent = 'Timer saved to the URL successfully! (bookmark to revisit)';
+        messageElement.classList.remove('save-message--error');
       } else {
         // Set an error message
         messageElement.textContent = 'URL character length is above 2000. Consider other methods of saving configuration.';
-        messageElement.style.color = this.errorColour;
+        messageElement.classList.add('save-message--error');
       }
     } catch (error) {
       console.error(error);
@@ -104,12 +104,13 @@ export class ConfigManager {
       if (!messageElement) {
         messageElement = document.createElement('p');
         messageElement.classList.add('save-message');
-        saveElement.appendChild(messageElement);
       }
-
+      
       // Set the error message
+      messageElement.classList.add('save-message--error');
       messageElement.textContent = 'Failed to save the timer.';
-      messageElement.style.color = this.errorColour;
+
+      saveElement.appendChild(messageElement);
     }
   }
 

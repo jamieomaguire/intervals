@@ -7,9 +7,9 @@ html {
 }
 
 :root {
-  --primary-color: #1a73e8;
-  --primary-color-hover: #145cb8;
-  --secondary-color: #ef6c00;
+  --primary-color: #00796B; // Rich Teal
+  --primary-color-hover: #005644; // Darker Teal
+  --secondary-color: #FFC107; // Mustard Yellow
   --destructive-color: #e81a31;
   --destructive-color-hover: #c01527;
   --bg-color: #f5f5f5;
@@ -23,13 +23,14 @@ html {
   --header-bg-color: white;
   --details-bg-color: white;
   --success-color: green;
+  --save-message-color: green;
+  --save-message-color-error: red;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary-color: #4a8fe8;
-    --primary-color-hover: #6a9ff8;
-    --secondary-color: #ff8c30;
+:root[data-theme="dark"] {
+    --primary-color: #009688; // Lighter Teal
+    --primary-color-hover: #00796B; // Rich Teal
+    --secondary-color: #FFD54F; // Lighter Mustard Yellow
     --destructive-color: #ea3a51;
     --destructive-color-hover: #fc5a71;
     --bg-color: #222;
@@ -43,8 +44,9 @@ html {
     --header-bg-color: #333;
     --details-bg-color: #333;
     --success-color: lightgreen;
+    --save-message-color: lightgreen;
+    --save-message-color-error: tomato;
   }
-}
 
 body {
   overscroll-behavior-y: contain;
@@ -53,11 +55,45 @@ body {
   color: var(--text-color);
 }
 
+
 header {
   padding: 1em;
+  background-color: var(--header-bg-color);
   border-bottom: 1px solid var(--border-color);
-  background: var(--header-bg-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .theme-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    font-size: 1.8em;
+    border-radius: 5px;
+    height: 48px;
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--primary-color-hover);
+      }
+    }
+  }
 }
+
+.save-message {
+  color: var(--save-message-color);
+
+  &--error {
+    color: var(--save-message-color-error);
+  }
+}
+
 
 header img {
   display: block;
@@ -127,6 +163,7 @@ details summary {
   padding: 15px 20px;
   cursor: pointer;
   font-weight: bold;
+
   &:focus {
     outline: none;
   }
@@ -215,6 +252,7 @@ summary>* {
 }
 
 button {
+  text-transform: uppercase;
   cursor: pointer;
   user-select: none;
   font-weight: 700;
@@ -272,16 +310,25 @@ input[type="color"] {
   border-radius: 5px;
   padding: 15px 20px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  transition: transform 0.2s;
+
+  &__title {
+    font-size: 1.5em;
+    font-weight: 700;
+  }
 
   @media (hover: hover) {
     &:hover {
       background-color: var(--card-bg-color-hover);
+      transform: scale(1.05);
     }
   }
 }
+
 
 .premade {
   padding: 15px 20px;
