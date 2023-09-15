@@ -10,6 +10,14 @@ export class ConfigManager {
     this.restBetweenSetsDuration = 0;
   }
 
+  get successColour() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'lightgreen' : 'green';
+  }
+
+  get errorColour() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'tomato' : 'red';
+  }
+
   captureInputs() {
     const intervalEls = document.querySelectorAll('.intervalFieldset');
     this.intervals = [];
@@ -80,11 +88,11 @@ export class ConfigManager {
 
         // Set a success message
         messageElement.textContent = 'Timer saved to URL successfully!';
-        messageElement.style.color = 'green';
+        messageElement.style.color = this.successColour;
       } else {
         // Set an error message
         messageElement.textContent = 'URL character length is above 2000. Consider other methods of saving configuration.';
-        messageElement.style.color = 'red';
+        messageElement.style.color = this.errorColour;
       }
     } catch (error) {
       console.error(error);
@@ -101,7 +109,7 @@ export class ConfigManager {
 
       // Set the error message
       messageElement.textContent = 'Failed to save the timer.';
-      messageElement.style.color = 'red';
+      messageElement.style.color = this.errorColour;
     }
   }
 

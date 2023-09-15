@@ -23,6 +23,7 @@ export class Timer {
     this.maxCanvasWidth = 600;  // Maximum width for the canvas on larger screens
 
     this.canvas = document.getElementById('timerCanvas');
+    this.canvas.style.backgroundColor = this.defaultCanvasColor;
     this.ctx = this.canvas.getContext('2d');
 
     window.devicePixelRatio = 2;
@@ -33,6 +34,10 @@ export class Timer {
 
     // Render the initial time on the canvas
     this.drawTime(this.configManager.capturedCountdownDuration ?? 0, '', false);
+  }
+
+  get defaultCanvasColor() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ccc' : 'white';
   }
 
   resizeCanvas() {
@@ -203,7 +208,7 @@ export class Timer {
               this.currentSet = 1;
               this.inRestBetweenSets = false;
 
-              this.canvas.style.backgroundColor = 'white';
+              this.canvas.style.backgroundColor = this.defaultCanvasColor;
               this.drawTime(0, '', false);
               return;
             }
@@ -234,7 +239,7 @@ export class Timer {
     if (!this.timerStopped) {
       requestAnimationFrame(this.animate.bind(this));
     } else {
-      this.canvas.style.backgroundColor = 'white';
+      this.canvas.style.backgroundColor = this.defaultCanvasColor;
       this.drawTime(0, '', false);
     }
   }
@@ -294,7 +299,7 @@ export class Timer {
     this.currentSet = 1;
     this.inRestBetweenSets = false;
 
-    this.canvas.style.backgroundColor = 'white';
+    this.canvas.style.backgroundColor = this.defaultCanvasColor;
     this.drawTime(0, '', false);
   }
 

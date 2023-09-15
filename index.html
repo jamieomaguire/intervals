@@ -9,7 +9,10 @@
 
 <body ontouchstart="">
   <header>
-    <img src="./logo.png" height="40" alt="">
+    <picture>
+      <source srcset="./logo-light.png" media="(prefers-color-scheme: light)">
+      <img src="./logo-dark.png" height="40" alt="Timeout - The interval timer app">
+    </picture>
   </header>
 
   <!-- Timer -->
@@ -21,7 +24,7 @@
 
   <p id="output" class="output"></p>
 
-  <p class="instructions">Start customising your timer and then press 'Start' to begin the workout.</p>
+  <p class="instructions">Set your timer and hit 'Start' for your workout.</p>
 
   <!-- Timer customisation -->
   <details id="customise">
@@ -214,7 +217,8 @@
   </details> -->
 
   <footer>
-    <p>Created with	&hearts; by <a href="https://www.jamieomaguire.com/">Jamie Maguire</a>
+    <p>Created with	&hearts; by <a href="https://www.jamieomaguire.com/">Jamie Maguire</a></p>
+    <p class="copyright">&copy; Copyright 2023 Jamie Maguire</p>
   </footer>
 
   <script type="module" src="/main.js"></script>

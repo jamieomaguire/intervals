@@ -1,26 +1,62 @@
 @use './reset';
 
 $font-family: 'Arial', sans-serif;
-$primary-color: #1a73e8;
-$secondary-color: #ef6c00;
-$destructive-color: #e81a31;
-$bg-color: #f5f5f5;
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --primary-color: #1a73e8;
+  --primary-color-hover: #145cb8;
+  --secondary-color: #ef6c00;
+  --destructive-color: #e81a31;
+  --destructive-color-hover: #c01527;
+  --bg-color: #f5f5f5;
+  --text-color: #222;
+  --card-bg-color: #222;
+  --card-bg-color-hover: #333;
+  --card-text-color: #eee;
+  --code-bg-color: #eee;
+  --summary-hover-color: #eee;
+  --border-color: #ccc;
+  --header-bg-color: white;
+  --details-bg-color: white;
+  --success-color: green;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #4a8fe8;
+    --primary-color-hover: #6a9ff8;
+    --secondary-color: #ff8c30;
+    --destructive-color: #ea3a51;
+    --destructive-color-hover: #fc5a71;
+    --bg-color: #222;
+    --text-color: #eee;
+    --card-bg-color: #555;
+    --card-bg-color-hover: #444;
+    --card-text-color: #ddd;
+    --code-bg-color: #555;
+    --summary-hover-color: #444;
+    --border-color: #444;
+    --header-bg-color: #333;
+    --details-bg-color: #333;
+    --success-color: lightgreen;
+  }
+}
 
 body {
   overscroll-behavior-y: contain;
-}
-
-
-body {
-  font-family: sans-serif;
-  background-color: #eee;
-  color: #222;
+  font-family: $font-family;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 header {
   padding: 1em;
-  border-bottom: 1px solid #ccc;
-  background: white;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--header-bg-color);
 }
 
 header img {
@@ -29,7 +65,7 @@ header img {
 
 .output {
   margin: 1.5em;
-  color: green;
+  color: var(--success-color);
 }
 
 .instructions {
@@ -61,7 +97,7 @@ header img {
 .timer__canvas {
   grid-area: timer;
   box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.04), 0px 8px 20px -3px rgba(0, 0, 0, 0.1), 0px 4px 8px -2px rgba(0, 0, 0, 0.06);
-  background-color: white;
+  background-color: var(--header-bg-color);
 }
 
 .timer__start {
@@ -81,52 +117,57 @@ header img {
 
 details {
   margin: 20px;
-  border: 1px solid #ddd;
-  background-color: white;
+  border: 1px solid var(--border-color);
+  background-color: var(--details-bg-color);
   border-radius: 5px;
   box-shadow: 0px, 2px, 2px, 0px rgba(0, 0, 0, .03) 0px, 3px, 1px, -2px rgba(0, 0, 0, .07) 0px, 1px, 5px, 0px rgba(0, 0, 0, .06);
+}
 
-  summary {
-    padding: 15px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
+details summary {
+  padding: 15px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  &:focus {
+    outline: none;
+  }
 
-    &:focus {
-      outline: none;
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--summary-hover-color);
     }
   }
+}
 
-  p {
-    padding: 15px 20px;
+details[open] summary {
+  border-bottom: 1px solid var(--border-color);
+}
+
+details p, fieldset {
+  padding: 15px 20px;
+}
+
+fieldset {
+  border: none;
+  margin: 0;
+
+  input[type="text"],
+  input[type="number"],
+  input[type="color"] {
+    display: block;
   }
+}
 
-  fieldset {
-    padding: 15px 20px;
-    border: none;
-    margin: 0;
+label {
+  font-weight: 700;
+}
 
-    // Improve layout for mobile
-    input[type="text"],
-    input[type="number"],
-    input[type="color"] {
-      display: block;
-    }
-  }
+label,
+input {
+  margin: 5px 0;
+}
 
-  label {
-    font-weight: 700;
-  }
-
-  label,
-  input {
-    margin: 5px 0;
-  }
-
-  button,
-  [for="uploadQR"] {
-    margin: 15px 20px
-  }
+details button {
+  margin: 15px 20px;
 }
 
 details summary>* {
@@ -167,7 +208,7 @@ summary>* {
 
   code {
     font-family: monospace;
-    background-color: #eee;
+    background-color: var(--code-bg-color);
     padding: 0.25em 0.5em;
     border-radius: 3px;
   }
@@ -179,19 +220,19 @@ button {
   font-weight: 700;
   padding: 10px;
   border: none;
-  background-color: $primary-color;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 5px;
-  transition: background-color 0.2s, transform 0.1s; // Added transform transition
+  transition: background-color 0.2s, transform 0.1s;
 
   @media (hover: hover) {
     &:hover {
-      background-color: darken($primary-color, 10%);
+      background-color: var(--primary-color-hover);
     }
   }
 
   &:active {
-    transform: scale(0.95); // Button press feedback
+    transform: scale(0.95);
   }
 
   &:focus {
@@ -200,13 +241,13 @@ button {
 }
 
 .deleteInterval {
-  background-color: $destructive-color;
+  background-color: var(--destructive-color);
   margin: 10px 0;
   padding: 5px 10px;
 
   @media (hover: hover) {
     &:hover {
-      background-color: darken($destructive-color, 10%);
+      background-color: var(--destructive-color-hover);
     }
   }
 }
@@ -217,7 +258,7 @@ video {
 }
 
 input[type="color"] {
-  border: 2px solid #ddd;
+  border: 2px solid var(--border-color);
   border-radius: 5px;
   background: none;
   width: 40px;
@@ -226,19 +267,19 @@ input[type="color"] {
 }
 
 .card {
-  background-color: #222;
-  color: #eee;
+  background-color: var(--card-bg-color);
+  color: var(--card-text-color);
   border-radius: 5px;
   padding: 15px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-}
 
-@media (hover: hover) {
-  .card:hover {
-    background-color: darken(#222, 10%);
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--card-bg-color-hover);
+    }
   }
 }
 
@@ -251,13 +292,20 @@ input[type="color"] {
 
 hr {
   border: none;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--border-color);
   margin: 20px 0;
 }
 
-
 footer {
   padding: 15px 20px;
-  border-top: 1px solid #ccc;
-  background: white;
+  border-top: 1px solid var(--border-color);
+  background: var(--header-bg-color);
+
+  a {
+    color: currentColor;
+  }
+}
+
+.copyright {
+  font-size: 0.75em;
 }
