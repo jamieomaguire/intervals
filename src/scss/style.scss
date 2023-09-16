@@ -169,10 +169,6 @@ details summary {
   cursor: pointer;
   font-weight: bold;
 
-  &:focus {
-    outline: none;
-  }
-
   @media (hover: hover) {
     &:hover {
       background-color: var(--summary-hover-color);
@@ -276,10 +272,6 @@ button {
 
   &:active {
     transform: scale(0.95);
-  }
-
-  &:focus {
-    outline: none;
   }
 }
 
