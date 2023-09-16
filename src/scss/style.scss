@@ -252,7 +252,7 @@ summary>* {
   }
 }
 
-button {
+.btn {
   text-transform: uppercase;
   cursor: pointer;
   user-select: none;
@@ -275,16 +275,29 @@ button {
   }
 }
 
-.deleteInterval {
-  background-color: var(--destructive-color);
-  margin: 10px 0;
+.btn--ghost {
+  background: none;
+  color: var(--text-color);
+  border: none;
   padding: 5px 10px;
 
   @media (hover: hover) {
     &:hover {
-      background-color: var(--destructive-color-hover);
+      background-color: var(--text-color);
+      color: var(--bg-color);
     }
   }
+}
+
+.deleteInterval {
+  // background-color: var(--destructive-color);
+  margin: 10px 0;
+
+  // @media (hover: hover) {
+  //   &:hover {
+  //     background-color: var(--destructive-color-hover);
+  //   }
+  // }
 }
 
 video {
@@ -330,7 +343,7 @@ input[type="color"] {
 .premade {
   padding: 15px 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 20px;
 }
 

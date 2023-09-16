@@ -47,7 +47,7 @@ export class ConfigManager {
       <input type="text" placeholder="Name" class="interval-name" minlength="1">
       <input type="number" placeholder="Seconds" class="interval-duration" min="1">
       <input type="color" class="interval-color">
-      <button class="deleteInterval">Delete interval</button>
+      <button class="deleteInterval btn btn--ghost">Delete</button>
     `;
     newInterval.querySelector('.deleteInterval').addEventListener('click', function () {
       container.removeChild(newInterval);
@@ -190,7 +190,7 @@ export class ConfigManager {
           <input type="text" placeholder="Name" class="interval-name" value="${interval.name}" minlength="1">
           <input type="number" placeholder="Seconds" class="interval-duration" value="${interval.duration / 1000}" min="1">
           <input type="color" class="interval-color" value="${interval.color}">
-          <button class="deleteInterval">Delete interval</button>
+          <button class="deleteInterval btn btn--ghost">Delete</button>
       `;
       newInterval.querySelector('.deleteInterval').addEventListener('click', function() {
         container.removeChild(newInterval);

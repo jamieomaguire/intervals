@@ -16,8 +16,8 @@
   <!-- Timer -->
   <div class="timer">
     <canvas class="timer__canvas" id="timerCanvas"></canvas>
-    <button class="timer__start" id="startTimer">Start</button>
-    <button class="timer__stop" id="stopTimer">Stop</button>
+    <button class="timer__start btn" id="startTimer">Start</button>
+    <button class="timer__stop btn" id="stopTimer">Stop</button>
   </div>
 
   <p id="output" class="output"></p>
@@ -56,12 +56,12 @@
           <input type="text" placeholder="Name" class="interval-name" minlength="1">
           <input type="number" placeholder="Seconds" class="interval-duration" min="1">
           <input type="color" class="interval-color">
-          <button class="deleteInterval">Delete interval</button>
+          <button class="deleteInterval btn btn--ghost">Delete</button>
         </fieldset>
       </div>
 
       <!-- Buttons to add intervals and control the timer -->
-      <button id="addInterval">+ Add Interval</button>
+      <button id="addInterval" class="btn">+ Add Interval</button>
     </div>
 
   </details>
@@ -71,7 +71,7 @@
     <summary><span>2. Save</span></summary>
     <div class="content">
       <p>Save timers as URLs! Bookmark the URL for quick access later or share it with others for instant access. Just click "save".</p>
-      <button id="createURL">Save</button>
+      <button id="createURL" class="btn">Save</button>
       <!-- <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
       upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p> -->
       <!-- <button id="saveToQR">Save as QR</button>
@@ -166,7 +166,7 @@
           interval is active.</li>
         <li>To add more intervals, click on the <code>+ Add Interval</code> button. This will create a new set of fields
           for another interval.</li>
-        <li>If you want to delete an interval, click the <code>Delete interval</code> button. This will remove the interval from your list.</li>
+        <li>If you want to delete an interval, click the <code>Delete</code> button. This will remove the interval from your list.</li>
         <li>Repeat the above steps for each new interval.</li>
       </ol>
 
