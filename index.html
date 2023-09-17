@@ -32,29 +32,29 @@
 
         <!-- Countdown -->
         <fieldset class="c-formField c-formField--countdown">
-          <label for="countdown">
-            <span>Countdown</span>
+          <label for="countdown" class="c-formField-inputContainer">
+            <span class="c-formField-label">Countdown</span>
           <input type="number" name="countdown" id="countdown" min="0" placeholder="In seconds">
           </label>
         </fieldset>
         <!-- Sets and rest between -->
         <fieldset class="c-formField c-formField--sets">
-          <label for="sets">
-            <span>Sets</span>
+          <label for="sets" class="c-formField-inputContainer">
+            <span class="c-formField-label">Sets</span>
             <input type="number" name="sets" id="sets" min="1" placeholder="How many?">
           </label>
         </fieldset>
         <fieldset class="c-formField c-formField--setsRest">
-          <label for="restBetweenSets">
-            <span>Rest between sets</span>
+          <label for="restBetweenSets" class="c-formField-inputContainer">
+            <span class="c-formField-label">Rest between sets</span>
             <input type="number" name="restBetweenSets" id="restBetweenSets" min="0" placeholder="In seconds">
           </label>
         </fieldset>
   
         <!-- Rounds -->
         <fieldset class="c-formField c-formField--rounds">
-          <label for="rounds">
-            <span>Rounds</span>
+          <label for="rounds" class="c-formField-inputContainer">
+            <span class="c-formField-label">Rounds</span>
             <input type="number" name="rounds" id="rounds" min="1" placeholder="How many rounds?">
           </label>
         </fieldset>
@@ -62,12 +62,18 @@
 
       <!-- Container to hold interval input fields -->
       <div class="intervals" id="intervalContainer">
-        <fieldset class="intervalFieldset">
-          <label>Interval 1: </label>
-          <input type="text" placeholder="Name" class="interval-name" minlength="1">
-          <input type="number" placeholder="Seconds" class="interval-duration" min="1">
-          <input type="color" class="interval-color">
-          <button class="deleteInterval btn btn--ghost">Delete</button>
+        <fieldset class="intervalFieldset c-formField c-formField--interval">
+          <label class="c-formField-intervalLabel c-formField-label c-formField-label--large">Interval 1: </label>
+          <div class="c-formField-intervalName">
+            <label class="c-formField-label" for="intervalName">Name:</label>
+            <input type="text" name="intervalName" placeholder="'Crimp', 'Rest', etc" minlength="1">
+          </div>
+          <div class="c-formField-intervalDuration">
+            <label class="c-formField-label" for="intervalDuration">Duration:</label>
+            <input class="c-formField-intervalDuration" type="number" placeholder="In seconds" min="1">
+          </div>
+          <input class="c-formField-intervalColor" type="color" value="#00A36C">
+          <button class="deleteInterval btn btn--ghost c-formField-intervalDelete">Delete</button>
         </fieldset>
       </div>
 
