@@ -77,7 +77,7 @@ export class ConfigManager {
       const compressed = LZString.compressToEncodedURIComponent(serialized);
 
       // Get the #save element and any existing message element within it
-      const saveElement = document.querySelector('#save');
+      const saveElement = document.querySelector('#customise');
       let messageElement = saveElement.querySelector('.save-message');
 
       // If there's no existing message, create one
@@ -103,7 +103,7 @@ export class ConfigManager {
     } catch (error) {
       console.error(error);
 
-      const saveElement = document.querySelector('#save');
+      const saveElement = document.querySelector('#customise');
       let messageElement = saveElement.querySelector('.save-message');
 
       // If there's no existing message, create one
