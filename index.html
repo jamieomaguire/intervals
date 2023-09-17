@@ -78,22 +78,12 @@
       </div>
 
       <!-- Buttons to add intervals and control the timer -->
-      <button id="addInterval" class="btn">+ Add Interval</button>
+      <div class="content__buttons">
+        <button id="addInterval" class="btn btn-outline">+ Add Interval</button>
+        <button id="createURL" class="btn save">Save timer</button>
+      </div>
     </div>
 
-  </details>
-
-  <!-- Save and share -->
-  <details id="save" class="c-accordion">
-    <summary><span>2. Save</span></summary>
-    <div class="content">
-      <p>Save timers as URLs! Bookmark the URL for quick access later or share it with others for instant access. Just click "save".</p>
-      <button id="createURL" class="btn">Save</button>
-      <!-- <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
-      upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p> -->
-      <!-- <button id="saveToQR">Save as QR</button>
-    <div id="qrCode"></div> -->
-    </div>
   </details>
 
   <details id="premade" class="c-accordion">
@@ -190,12 +180,9 @@
       <hr>
 
       <h2>Saving Your Timer</h2>
-      <p>Click on the dropdown labeled <code>2. Save</code> to see options for saving your timer.</p>
-      <ul>
-        <li><strong>Save as URL</strong>: Click on the <code>Save as URL</code> button to save your timer settings in
-          the URL. You can bookmark this URL or share it with others. When you or anyone else opens this URL, the timer
-          will be pre-configured with the settings you saved.</li>
-      </ul>
+      <p>Click on the <code>Save timer</code> button under <code>1. Customise Timer</code>. This will save your timer settings in
+        the URL. You can bookmark this URL or share it with others. When you or anyone else opens this URL, the timer
+        will be pre-configured with the settings you saved.</p>
 
       <hr>
 

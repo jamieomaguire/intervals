@@ -209,7 +209,7 @@ fieldset {
 // }
 
 details button {
-  margin: 15px 20px;
+  // margin: 15px 20px;
 }
 
 details summary>* {
@@ -283,7 +283,22 @@ summary>* {
   background: none;
   color: var(--text-color);
   border: none;
+  font-size: 0.8em;
   padding: 5px 10px;
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--text-color);
+      color: var(--bg-color);
+    }
+  }
+}
+
+.btn-outline {
+  background: none;
+  border: 2px solid #222;
+  color: #222;
+  font-size: 0.8em;
 
   @media (hover: hover) {
     &:hover {
@@ -295,7 +310,7 @@ summary>* {
 
 .deleteInterval {
   // background-color: var(--destructive-color);
-  margin: 10px 0;
+  // margin: 10px 0;
 
   // @media (hover: hover) {
   //   &:hover {
@@ -369,6 +384,17 @@ footer {
 
 .copyright {
   font-size: 0.75em;
+}
+
+.content__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 15px 20px;
+}
+
+.save {
+  min-width: 60px;
 }
 
 // Overhaul
@@ -451,7 +477,6 @@ footer {
     
     gap: 8px;
     padding: 0.8em 1em;
-    padding-bottom: 0;
 
     &:focus-within {
       outline: 1px solid blue;
@@ -462,11 +487,24 @@ footer {
     }
 
     .c-formField-intervalColor {
-      border: none;
-      background: none;
-      width: 100%;
-      height: 100%;
+      height: 50px;
+      width: 50px;
+      justify-self: center;
       cursor: pointer;
+      border: none;
+      outline: none;
+      background: none;
+      -webkit-appearance: none;
+      padding: 0;
+
+      &::-webkit-color-swatch-wrapper {
+        padding: 0;
+      }
+
+      &::-webkit-color-swatch {
+        border: none;
+        border-radius: 50%;
+      }
     }
   }
 
@@ -516,8 +554,6 @@ footer {
   border-bottom: 1px solid #ccc;
 }
 
-
-// accordion
 .c-accordion {
   margin: 20px;
   border: 0;
