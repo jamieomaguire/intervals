@@ -28,26 +28,37 @@
   <details id="customise">
     <summary><span>1. Customise timer</span></summary>
     <div class="content">
-      <!-- Countdown -->
-      <fieldset>
-        <label for="countdown">Countdown (seconds):</label>
-        <input type="number" name="countdown" id="countdown" value="0" min="0">
-      </fieldset>
-      <!-- Sets and rest between -->
-      <fieldset>
-        <label for="sets">Sets:</label>
-        <input type="number" name="sets" id="sets" value="1" min="1">
-      </fieldset>
-      <fieldset>
-        <label for="restBetweenSets">Rest between sets (seconds):</label>
-        <input type="number" name="restBetweenSets" id="restBetweenSets" value="0" min="0">
-      </fieldset>
+      <div class="c-formInputs">
 
-      <!-- Input fields for rounds -->
-      <fieldset>
-        <label for="rounds">Rounds:</label>
-        <input type="number" name="rounds" id="rounds" value="1" min="1">
-      </fieldset>
+        <!-- Countdown -->
+        <fieldset class="c-formField c-formField--countdown">
+          <label for="countdown">
+            <span>Countdown</span>
+          <input type="number" name="countdown" id="countdown" value="0" min="0" placeholder="In seconds">
+          </label>
+        </fieldset>
+        <!-- Sets and rest between -->
+        <fieldset class="c-formField c-formField--sets">
+          <label for="sets">
+            <span>Sets</span>
+            <input type="number" name="sets" id="sets" value="1" min="1" placeholder="How many sets?">
+          </label>
+        </fieldset>
+        <fieldset class="c-formField c-formField--setsRest">
+          <label for="restBetweenSets">
+            <span>Rest between sets</span>
+            <input type="number" name="restBetweenSets" id="restBetweenSets" value="0" min="0" placeholder="In seconds">
+          </label>
+        </fieldset>
+  
+        <!-- Rounds -->
+        <fieldset class="c-formField c-formField--rounds">
+          <label for="rounds">
+            <span>Rounds</span>
+            <input type="number" name="rounds" id="rounds" value="1" min="1" placeholder="How many rounds?">
+          </label>
+        </fieldset>
+      </div>
 
       <!-- Container to hold interval input fields -->
       <div class="intervals" id="intervalContainer">

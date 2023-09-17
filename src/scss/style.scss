@@ -30,27 +30,27 @@ html {
 }
 
 :root[data-theme="dark"] {
-    --primary-color: #009688; // Lighter Teal
-    --primary-color-hover: #00796B; // Rich Teal
-    --secondary-color: #FFD54F; // Lighter Mustard Yellow
-    --destructive-color: #ea3a51;
-    --destructive-color-hover: #fc5a71;
-    --bg-color: #222;
-    --text-color: #eee;
-    --card-bg-color: #555;
-    --card-bg-color-hover: #444;
-    --card-text-color: #ddd;
-    --code-bg-color: #555;
-    --summary-hover-color: #444;
-    --border-color: #444;
-    --header-bg-color: #333;
-    --details-bg-color: #333;
-    --success-color: lightgreen;
-    --save-message-color: lightgreen;
-    --save-message-color-error: tomato;
-    --toggle-color: #eee;
-    --toggle-hover-color: #444;
-  }
+  --primary-color: #009688; // Lighter Teal
+  --primary-color-hover: #00796B; // Rich Teal
+  --secondary-color: #FFD54F; // Lighter Mustard Yellow
+  --destructive-color: #ea3a51;
+  --destructive-color-hover: #fc5a71;
+  --bg-color: #222;
+  --text-color: #eee;
+  --card-bg-color: #555;
+  --card-bg-color-hover: #444;
+  --card-text-color: #ddd;
+  --code-bg-color: #555;
+  --summary-hover-color: #444;
+  --border-color: #444;
+  --header-bg-color: #333;
+  --details-bg-color: #333;
+  --success-color: lightgreen;
+  --save-message-color: lightgreen;
+  --save-message-color-error: tomato;
+  --toggle-color: #eee;
+  --toggle-hover-color: #444;
+}
 
 body {
   overscroll-behavior-y: contain;
@@ -180,7 +180,11 @@ details[open] summary {
   border-bottom: 1px solid var(--border-color);
 }
 
-details p, fieldset {
+// fieldset {
+//   padding: 15px 20px;
+// }
+
+details p {
   padding: 15px 20px;
 }
 
@@ -189,20 +193,20 @@ fieldset {
   margin: 0;
 
   input[type="text"],
-  input[type="number"],
+  // input[type="number"],
   input[type="color"] {
     display: block;
   }
 }
 
-label {
-  font-weight: 700;
-}
+// label {
+//   font-weight: 700;
+// }
 
-label,
-input {
-  margin: 5px 0;
-}
+// label,
+// input {
+//   margin: 5px 0;
+// }
 
 details button {
   margin: 15px 20px;
@@ -365,4 +369,85 @@ footer {
 
 .copyright {
   font-size: 0.75em;
+}
+
+// Overhaul
+.c-formInputs {
+  display: grid;
+  grid-template-areas: 
+  "countdown countdown"
+  "sets setrest"
+  "rounds rounds";
+  grid-template-columns: minmax(100px, min-content) 1fr;
+}
+
+.c-formField {
+  border: none;
+  padding: 0;
+
+  label {
+    padding: 0.8em 1em;
+    display: flex;
+    gap: 0.5em;
+    flex-direction: column;
+    cursor: text;
+    color: #555;
+    font-size: 0.8em;
+    font-weight: 700;
+
+    &:focus-within {
+      outline: 2px solid blue;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // remove number input arrows
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"] {
+    border: 0;
+    background-color: transparent;
+    color: #444;
+    font-size: 1.25em;
+    font-weight: 400;
+    font-family: inherit;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.c-formField--countdown {
+  grid-area: countdown;
+  border-bottom: 1px solid #ccc;
+}
+
+.c-formField--sets {
+  grid-area: sets;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.c-formField--setsRest {
+  grid-area: setrest;
+  border-bottom: 1px solid #ccc;
+}
+
+.c-formField--rounds {
+  grid-area: rounds;
+  border-bottom: 1px solid #ccc;
 }
