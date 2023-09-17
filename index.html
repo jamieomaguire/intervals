@@ -10,14 +10,14 @@
 <body ontouchstart="">
   <header>
     <img id="logo" src="./logo-light.png" height="40" alt="Timeout - The interval timer app">
-    <button id="themeToggle" class="theme-btn"><span>&#9790;</span></button>
+    <!-- <button id="themeToggle" class="theme-btn"><span>&#9790;</span></button> -->
   </header>
 
   <!-- Timer -->
   <div class="timer">
     <canvas class="timer__canvas" id="timerCanvas"></canvas>
-    <button class="timer__start" id="startTimer">Start</button>
-    <button class="timer__stop" id="stopTimer">Stop</button>
+    <button class="timer__start btn" id="startTimer">Start</button>
+    <button class="timer__stop btn" id="stopTimer">Stop</button>
   </div>
 
   <p id="output" class="output"></p>
@@ -25,61 +25,68 @@
   <p class="instructions">Set your timer and hit 'Start' for your workout.</p>
 
   <!-- Timer customisation -->
-  <details id="customise">
+  <details id="customise" class="c-accordion">
     <summary><span>1. Customise timer</span></summary>
     <div class="content">
-      <!-- Countdown -->
-      <fieldset>
-        <label for="countdown">Countdown (seconds):</label>
-        <input type="number" name="countdown" id="countdown" value="0" min="0">
-      </fieldset>
-      <!-- Sets and rest between -->
-      <fieldset>
-        <label for="sets">Sets:</label>
-        <input type="number" name="sets" id="sets" value="1" min="1">
-      </fieldset>
-      <fieldset>
-        <label for="restBetweenSets">Rest between sets (seconds):</label>
-        <input type="number" name="restBetweenSets" id="restBetweenSets" value="0" min="0">
-      </fieldset>
+      <div class="c-formInputs">
 
-      <!-- Input fields for rounds -->
-      <fieldset>
-        <label for="rounds">Rounds:</label>
-        <input type="number" name="rounds" id="rounds" value="1" min="1">
-      </fieldset>
+        <!-- Countdown -->
+        <fieldset class="c-formField c-formField--countdown">
+          <label for="countdown" class="c-formField-inputContainer">
+            <span class="c-formField-label">Countdown</span>
+          <input type="number" name="countdown" id="countdown" min="0" placeholder="In seconds">
+          </label>
+        </fieldset>
+        <!-- Sets and rest between -->
+        <fieldset class="c-formField c-formField--sets">
+          <label for="sets" class="c-formField-inputContainer">
+            <span class="c-formField-label">Sets</span>
+            <input type="number" name="sets" id="sets" min="1" placeholder="How many?">
+          </label>
+        </fieldset>
+        <fieldset class="c-formField c-formField--setsRest">
+          <label for="restBetweenSets" class="c-formField-inputContainer">
+            <span class="c-formField-label">Rest between sets</span>
+            <input type="number" name="restBetweenSets" id="restBetweenSets" min="0" placeholder="In seconds">
+          </label>
+        </fieldset>
+  
+        <!-- Rounds -->
+        <fieldset class="c-formField c-formField--rounds">
+          <label for="rounds" class="c-formField-inputContainer">
+            <span class="c-formField-label">Rounds</span>
+            <input type="number" name="rounds" id="rounds" min="1" placeholder="How many?">
+          </label>
+        </fieldset>
+      </div>
 
       <!-- Container to hold interval input fields -->
       <div class="intervals" id="intervalContainer">
-        <fieldset class="intervalFieldset">
-          <label>Interval 1: </label>
-          <input type="text" placeholder="Name" class="interval-name" minlength="1">
-          <input type="number" placeholder="Seconds" class="interval-duration" min="1">
-          <input type="color" class="interval-color">
-          <button class="deleteInterval">Delete interval</button>
+        <fieldset class="intervalFieldset c-formField c-formField--interval">
+          <label class="c-formField-intervalLabel c-formField-label c-formField-label--large">Interval 1: </label>
+          <div class="c-formField-intervalName">
+            <label class="c-formField-label" for="intervalName">Name:</label>
+            <input type="text" name="intervalName" placeholder="'Crimp', 'Rest', etc" minlength="1">
+          </div>
+          <div class="c-formField-intervalDuration">
+            <label class="c-formField-label" for="intervalDuration">Duration:</label>
+            <input class="c-formField-intervalDuration" name="intervalDuration" type="number" placeholder="In seconds" min="1">
+          </div>
+          <input class="c-formField-intervalColor" type="color" value="#00A36C">
+          <button class="deleteInterval btn btn--ghost c-formField-intervalDelete">Delete</button>
         </fieldset>
       </div>
 
       <!-- Buttons to add intervals and control the timer -->
-      <button id="addInterval">+ Add Interval</button>
+      <div class="content__buttons">
+        <button id="addInterval" class="btn btn-outline">+ Add Interval</button>
+        <button id="createURL" class="btn save">Save timer</button>
+      </div>
     </div>
 
   </details>
 
-  <!-- Save and share -->
-  <details id="save">
-    <summary><span>2. Save</span></summary>
-    <div class="content">
-      <p>Save timers as URLs! Bookmark the URL for quick access later or share it with others for instant access. Just click "save".</p>
-      <button id="createURL">Save</button>
-      <!-- <p>If your timer is too large to store in the URL, it will automatically be stored as a QR code. Others can scan or
-      upload this QR code using the "Upload QR Code" button found in the "Load timer" section.</p> -->
-      <!-- <button id="saveToQR">Save as QR</button>
-    <div id="qrCode"></div> -->
-    </div>
-  </details>
-
-  <details id="premade">
+  <details id="premade" class="c-accordion">
     <summary><span>Pre-made timers</span></summary>
     <div class="content premade">
       <a href="?config=N4IglgdgLgpgTgNwIYBsDOIBcBtUEkC2MWIA6gPZwDWIANCACYCucSUY5EWATAAz%2B96AY3IpKJAMQAWAKwAzOQGYAHCAC%2BtPIWKYQAJRhoodRizYcumAIwDBIEWLiSFUgOxv1AXXpxyTCAwYmMrCftAM5ADuEAAiZuycWDYC9GgwUEFSPoZQAELpkTAwEADK6WhxrAmWMrZqQA" class="card">
@@ -94,7 +101,7 @@
     </div>
   </details>
 
-  <details id="guide">
+  <details id="guide" class="c-accordion">
     <summary><span>Guide</span></summary>
     <div class="guide content">
       <h1>User Guide</h1>
@@ -166,19 +173,16 @@
           interval is active.</li>
         <li>To add more intervals, click on the <code>+ Add Interval</code> button. This will create a new set of fields
           for another interval.</li>
-        <li>If you want to delete an interval, click the <code>Delete interval</code> button. This will remove the interval from your list.</li>
+        <li>If you want to delete an interval, click the <code>Delete</code> button. This will remove the interval from your list.</li>
         <li>Repeat the above steps for each new interval.</li>
       </ol>
 
       <hr>
 
       <h2>Saving Your Timer</h2>
-      <p>Click on the dropdown labeled <code>2. Save</code> to see options for saving your timer.</p>
-      <ul>
-        <li><strong>Save as URL</strong>: Click on the <code>Save as URL</code> button to save your timer settings in
-          the URL. You can bookmark this URL or share it with others. When you or anyone else opens this URL, the timer
-          will be pre-configured with the settings you saved.</li>
-      </ul>
+      <p>Click on the <code>Save timer</code> button under <code>1. Customise Timer</code>. This will save your timer settings in
+        the URL. You can bookmark this URL or share it with others. When you or anyone else opens this URL, the timer
+        will be pre-configured with the settings you saved.</p>
 
       <hr>
 
