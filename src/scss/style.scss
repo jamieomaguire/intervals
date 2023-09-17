@@ -7,7 +7,7 @@ html {
 }
 
 :root {
-  --primary-color: #00796B; // Rich Teal
+  --primary-color: hsl(173.1,100%,23.7%); // Rich Teal
   --primary-color-hover: #005644; // Darker Teal
   --secondary-color: #FFC107; // Mustard Yellow
   --destructive-color: #e81a31;
@@ -295,15 +295,15 @@ summary>* {
 }
 
 .btn-outline {
-  background: none;
-  border: 2px solid #222;
-  color: #222;
+  background-color: hsl(173.1,60%,90.7%);
+  border: none;
+  color: hsl(173.1,100%,23.7%);
   font-size: 0.8em;
 
   @media (hover: hover) {
     &:hover {
-      background-color: var(--text-color);
-      color: var(--bg-color);
+      background-color: hsl(173.1,60%,65.7%);
+      color: hsl(173.1,100%,13.7%);
     }
   }
 }
