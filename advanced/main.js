@@ -16,6 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Update the visibility of the Save button based on the number of sets
+  function updateSaveButtonVisibility() {
+    const sets = setsContainer.querySelectorAll('.set');
+    if (sets.length === 0) {
+      saveBtn.style.display = 'none';
+    } else {
+      saveBtn.style.display = 'block';
+    }
+  }
+
+
   addSetBtn.addEventListener('click', () => {
     const setTemplate = document.getElementById('setTemplate').content.cloneNode(true);
     const setId = setsContainer.children.length + 1;
@@ -61,9 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteSetBtn.addEventListener('click', () => {
       setsContainer.removeChild(deleteSetBtn.parentElement);
       updateSetNumbers(); // Update set numbers after deleting a set
+      updateSaveButtonVisibility();
     });
 
     setsContainer.appendChild(setTemplate);
+
+    // Show the Save button since we now have at least one set
+    saveBtn.style.display = 'block';
   });
 
   // Buttons
@@ -71,13 +86,48 @@ document.addEventListener('DOMContentLoaded', () => {
   const editBtn = document.getElementById('editBtn');
 
   saveBtn.addEventListener('click', () => {
-    // Convert to read-only mode and hide the form
+    // Clear any previous validation errors
+    const existingErrors = setsContainer.querySelectorAll('.validation-error');
+    existingErrors.forEach(errorDiv => errorDiv.remove());
 
+    // Track if all sets and intervals are valid
+    let isValid = true;
+
+    // Validation for intervals
+    const intervals = setsContainer.querySelectorAll('.interval');
+    for (let interval of intervals) {
+      const name = interval.querySelector('.name-input').value.trim();
+      const duration = interval.querySelector('.duration-input').value.trim();
+
+      if (!name || !duration) {
+        isValid = false;
+        const errorMessage = document.createElement('div');
+        errorMessage.classList.add('validation-error');
+        errorMessage.textContent = 'Please ensure this interval has both a name and a duration.';
+        interval.appendChild(errorMessage);
+      }
+    }
+
+    // Validation to ensure each set has at least one interval
+    const sets = setsContainer.querySelectorAll('.set');
+    for (let set of sets) {
+      const setIntervals = set.querySelectorAll('.interval');
+      if (setIntervals.length === 0) {
+        isValid = false;
+        const errorMessage = document.createElement('div');
+        errorMessage.classList.add('validation-error');
+        errorMessage.textContent = 'Please add at least one interval to this set.';
+        set.appendChild(errorMessage);
+      }
+    }
+
+    if (!isValid) return; // If not valid, stop the function execution
+
+    // Convert to read-only mode and hide the form
     // Create a container for read-only data
     const readOnlyContainer = document.createElement('div');
     readOnlyContainer.id = 'readOnlyContainer';
 
-    const sets = setsContainer.querySelectorAll('.set');
     sets.forEach((set, index) => {
       // Extract data from the form
       const setId = index + 1;
@@ -130,9 +180,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Append the read-only container to the main container
     setsContainer.parentElement.appendChild(readOnlyContainer);
 
-    // Hide the form and Save button, show Edit button
+    // Hide the form, Save button, Add Set button, and show Edit button
     setsContainer.style.display = 'none';
     saveBtn.style.display = 'none';
+    addSetBtn.style.display = 'none';
     editBtn.style.display = 'block';
   });
 
@@ -143,9 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
       readOnlyContainer.remove();
     }
 
-    // Show the form, Save button, and hide Edit button
+    // Show the form, Save button, Add Set button, and hide Edit button
     setsContainer.style.display = 'block';
     editBtn.style.display = 'none';
+    addSetBtn.style.display = 'block';
     saveBtn.style.display = 'block';
   });
 
