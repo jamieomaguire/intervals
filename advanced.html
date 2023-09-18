@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="timer-mode">
+        <a href="/">Simple</a>
+        <a href="/advanced.html">Advanced</a>
+    </div>
+    <div class="set">
+        <h2>Set 1</h2>
+        <div class="round">
+            <h3>3 Rounds</h3>
+            <div class="interval">
+                <span class="name">Crimp</span>
+                <span class="duration">3 seconds</span>
+            </div>
+
+            <div class="interval">
+                <span class="name">Rest</span>
+                <span class="duration">7 seconds</span>
+            </div>
+
+            <div class="interval">
+                <span class="name">Rest</span>
+                <span class="duration">7 seconds</span>
+            </div>
+
+            <div class="interval">
+                <span class="name">Rest</span>
+                <span class="duration">7 seconds</span>
+            </div>
+
+            <div class="interval">
+                <span class="name">Rest</span>
+                <span class="duration">7 seconds</span>
+            </div>
+
+            <div class="interval">
+                <span class="name">Rest</span>
+                <span class="duration">7 seconds</span>
+            </div>
+
+            <div class="interval">
+                <span class="name">Rest</span>
+                <span class="duration">7 seconds</span>
+            </div>
+
+            <div class="interval">
+                <span class="name">Rest</span>
+                <span class="duration">7 seconds</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="interval rest" style="--bg-color: #333;">
+        <span class="name">Rest</span>
+        <span class="duration">60 seconds</span>
+    </div>
+
+    <div class="set">
+        <h2>Set 2</h2>
+        <div class="round">
+            <label class="rounds__number-input" for="set-2-rounds">
+                <span>Number of rounds: </span>
+                <input type="number" name="set-2-rounds" id="set-2-rounds" min="1">
+            </label>
+            <div class="interval">
+                <label for="set-2-interval-1-name" class="name interval__input">
+                    <span>Name: </span>
+                    <input type="text" name="set-2-interval-1-name" id="set-2-interval-1-name">
+                </label>
+                <label for="set-2-interval-1-duration" class="duration interval__input">
+                    <span>Duration: </span>
+                    <input type="number" name="set-2-interval-1-duration" id="set-2-interval-1-duration" min="1">
+                </label>
+            </div>
+
+            <button class="add">+ Add interval</button>
+        </div>
+    </div>
+
+    <button class="add">+ Add set</button>
+
+
+    <!-- <div class="interval" style="--bg-color: #333; --highlight: coral;">
+        <span class="name">Rest</span>
+        <span class="duration">60 seconds</span>
+    </div>
+
+    <div class="set">
+        <h2>Set 3</h2>
+        <div class="round">
+            <h3>3 Rounds</h3>
+            <div class="interval">
+                <span class="name">Crimp</span>
+                <span class="duration">3 seconds</span>
+            </div>
+
+            <div class="interval" style="--highlight: hotpink;">
+                <span class="name">Rest</span>
+                <span class="duration">7 seconds</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="interval" style="--bg-color: #333; --highlight: coral;">
+        <span class="name">Rest</span>
+        <span class="duration">60 seconds</span>
+    </div>
+
+    <div class="set">
+        <h2>Set 4</h2>
+        <div class="round">
+            <h3>3 Rounds</h3>
+            <div class="interval">
+                <span class="name">Crimp</span>
+                <span class="duration">7 seconds</span>
+            </div>
+
+            <div class="interval" style="--highlight: hotpink;">
+                <span class="name">Rest</span>
+                <span class="duration">3 seconds</span>
+            </div>
+        </div>
+    </div> -->
+    
+    <script type="module" src="./advanced.js"></script>
+</body>
+
+</html>

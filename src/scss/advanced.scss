@@ -1,0 +1,172 @@
+@use './fullReset';
+
+* {
+    box-sizing: border-box;
+    color: inherit;
+}
+
+:root {
+    --root-bg-color: #222;
+    --root-color: #eee;
+    --set-bg-color: #333;
+    --set-accent-bg-color: #444;
+    --interval-bg-color: #444;
+}
+
+$colors: (
+    1: tomato,
+    2: hotpink,
+    3: aqua,
+    4: lightcoral,
+    5: lightgreen,
+    6: plum,
+    7: goldenrod
+);
+
+
+body {
+    font-family: sans-serif;
+    background-color: var(--root-bg-color);
+    color: var(--root-color);
+    padding: 1em;
+
+    >*+* {
+        margin-top: 1em;
+    }
+
+    >*+.rest {
+        margin-top: 1.75em;
+        margin-bottom: 1.75em;
+    }
+}
+
+.set {
+    background-color: var(--set-bg-color);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+
+    >h2 {
+        font-size: 1.2em;
+        font-weight: 700;
+        background: var(--set-accent-bg-color);
+        padding: 1rem;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+    }
+}
+
+.round {
+    font-size: 1rem;
+    padding: 1em;
+    flex-direction: column;
+
+    >*+* {
+        margin-top: 1em;
+    }
+
+    // form styles
+    .rounds__number-input {
+        >input {
+            background: none;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid var(--root-color);
+            padding: 0.25em;
+            font-size: 1em;
+            color: var(--root-color);
+            margin-left: 8px;
+            max-width: 40px;
+        }
+
+    }
+
+    .add {
+        height: 40px;
+    }
+}
+
+.interval {
+    font-size: 0.95rem;
+    padding: 1em;
+    background-color: var(--interval-bg-color);
+    border-radius: 8px;
+    position: relative;
+
+    >.name,
+    .duration {
+        display: block;
+    }
+
+    >.duration {
+        margin-top: 8px;
+        font-size: 0.85rem;
+    }
+
+    &:before {
+        content: '';
+        width: 4px;
+        position: absolute;
+        left: 0;
+        background-color: var(--highlight, lightgreen);
+        top: 0;
+        bottom: 0;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    // Automate the color of the interval highlight
+    @for $i from 1 through 7 {
+        // Use the nth-child formula to target every 7th child starting from the current index
+        &:nth-child(7n + #{$i}) {
+            &:not(.rest):before {
+                background-color: map-get($colors, $i);
+            }
+        }
+    }
+
+    >.interval__input {
+        >input {
+            background: none;
+            border: none;
+            border-radius: none;
+            border-bottom: 1px solid var(--root-color);
+            padding: 0.25em;
+            font-size: 1em;
+            color: var(--root-color);
+            max-width: 80px;
+            margin-left: 8px;
+            -webkit-appearance: none;
+            -webkit-border-radius: 0;
+        }
+    }
+}
+
+.rest {
+    &:before {
+        background-color: coral;
+    }
+}
+
+
+// Controls
+
+.timer-mode {
+    text-align: center;
+    padding: 1em;
+
+    >a {
+        font-size: 1.4em;
+        font-weight: 300;
+        background: none;
+        cursor: pointer;
+        margin: 0 0.5em;
+    }
+}
+
+.add {
+    color: var(--root-bg-color);
+    font-size: 1em;
+    font-weight: 700;
+    background-color: var(--root-color);
+    height: 48px;
+}
