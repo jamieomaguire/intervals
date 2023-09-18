@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sets.forEach((set, index) => {
       const setId = index + 1;
       set.querySelector('.set-number').textContent = setId;
-      set.setAttribute('data-id', `set-${setId}`);
+      set.setAttribute('data-testid', `set-${setId}`);
       set.querySelector('.rounds-input').setAttribute('data-testid', `set-${setId}-rounds`);
       set.querySelector('.rest-input').setAttribute('data-testid', `set-${setId}-rest`);
       set.querySelector('.addIntervalBtn').setAttribute('data-testid', `set-${setId}-add-interval`);
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const setTemplate = document.getElementById('setTemplate').content.cloneNode(true);
     const setId = setsContainer.children.length + 1;
     setTemplate.querySelector('.set-number').textContent = setId;
-    setTemplate.querySelector('.set').setAttribute('data-id', `set-${setId}`);
+    setTemplate.querySelector('.set').setAttribute('data-testid', `set-${setId}`);
     setTemplate.querySelector('.rounds-input').setAttribute('data-testid', `set-${setId}-rounds`);
     setTemplate.querySelector('.rest-input').setAttribute('data-testid', `set-${setId}-rest`);
     setTemplate.querySelector('.addIntervalBtn').setAttribute('data-testid', `set-${setId}-add-interval`);
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Set unique identifier for the interval
       const intervalDiv = intervalTemplate.querySelector('.interval');
-      intervalDiv.setAttribute('data-id', `set-${setId}-interval-${intervalIndex}`);
+      intervalDiv.setAttribute('data-testid', `set-${setId}-interval-${intervalIndex}`);
       deleteIntervalBtn.setAttribute('data-testid', `set-${setId}-interval-${intervalIndex}-delete-interval`);
 
       // Set unique names and data-testid for form fields within the interval
@@ -136,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Create a Set div
       const setDiv = document.createElement('div');
       setDiv.classList.add('set');
+      setDiv.setAttribute('data-testid', `readonly-set-${setId}`);
       const setHeader = document.createElement('h2');
       setHeader.textContent = `Set ${setId}`;
       setDiv.appendChild(setHeader);
@@ -143,9 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const roundDiv = document.createElement('div');
       roundDiv.classList.add('round');
       roundDiv.textContent = `${rounds} Rounds`;
+      roundDiv.setAttribute('data-testid', `readonly-set-${setId}-rounds`);
 
       const intervals = set.querySelectorAll('.interval');
-      intervals.forEach(interval => {
+      intervals.forEach((interval, intervalIndex) => {
         const name = interval.querySelector('.name-input').value;
         const duration = interval.querySelector('.duration-input').value;
 
@@ -158,6 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="name">${name}</span>
             <span class="duration">${duration} seconds</span>
             `;
+
+        // Adding data-testid for the readonly interval name and duration
+        const intervalId = `readonly-set-${setId}-interval-${intervalIndex + 1}`;
+        intervalDiv.setAttribute('data-testid', intervalId);
+        intervalDiv.querySelector('.name').setAttribute('data-testid', `${intervalId}-name`);
+        intervalDiv.querySelector('.duration').setAttribute('data-testid', `${intervalId}-duration`);
 
         roundDiv.appendChild(intervalDiv);
       });
@@ -174,6 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="name">Rest</span>
         <span class="duration">${restDuration} seconds</span>
         `;
+
+      // Adding data-testid for the readonly rest duration
+      restDiv.setAttribute('data-testid', `readonly-set-${setId}-rest`);
       readOnlyContainer.appendChild(restDiv);
     });
 
@@ -186,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addSetBtn.style.display = 'none';
     editBtn.style.display = 'block';
   });
+
 
   editBtn.addEventListener('click', () => {
     // Convert back to form mode
