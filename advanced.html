@@ -148,6 +148,12 @@
                 `;
                 
                 round.insertBefore(document.createRange().createContextualFragment(template), event.target);
+
+                // add the highlight color as a data attribute based on this order: 1: tomato, 2: hotpink, 3: aqua, 4: lightcoral, 5: lightgreen, 6: plum, 7: goldenrod
+                const highlightColors = ['tomato', 'hotpink', 'aqua', 'lightcoral', 'lightgreen', 'plum', 'goldenrod'];
+                const highlightColor = highlightColors[intervalCount % highlightColors.length];
+                const interval = round.querySelector('.interval:last-of-type');
+                interval.dataset.highlight = highlightColor;
             }
         });
     </script>

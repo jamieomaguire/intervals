@@ -13,17 +13,6 @@
     --interval-bg-color: #444;
 }
 
-$colors: (
-    1: tomato,
-    2: hotpink,
-    3: aqua,
-    4: lightcoral,
-    5: lightgreen,
-    6: plum,
-    7: goldenrod
-);
-
-
 body {
     font-family: sans-serif;
     background-color: var(--root-bg-color);
@@ -100,6 +89,27 @@ body {
     }
 }
 
+$colors: (
+    1: tomato,
+    2: hotpink,
+    3: aqua,
+    4: lightcoral,
+    5: lightgreen,
+    6: plum,
+    7: goldenrod
+);
+
+.round {
+    .interval {
+        @for $i from 1 through 7 {
+            // Adjusting for the 2 unrelated elements
+            &:nth-child(7n + #{$i + 2}):not(.rest) {
+                --highlight: #{map-get($colors, $i)};
+            }
+        }
+    }
+}
+
 .interval {
     font-size: 0.95rem;
     padding: 1em;
@@ -122,21 +132,11 @@ body {
         width: 4px;
         position: absolute;
         left: 0;
-        background-color: var(--highlight, lightgreen);
+        background-color: var(--highlight);
         top: 0;
         bottom: 0;
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
-    }
-
-    // Automate the color of the interval highlight
-    @for $i from 1 through 7 {
-        // Use the nth-child formula to target every 7th child starting from the current index
-        &:nth-child(7n + #{$i}) {
-            &:not(.rest):before {
-                background-color: map-get($colors, $i);
-            }
-        }
     }
 
     >.interval__input {
