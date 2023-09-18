@@ -7,12 +7,15 @@
     <title>Document</title>
 </head>
 
-<body>
+<body ontouchstart="">
     <div class="timer-mode">
         <a href="/">Simple</a>
         <a href="/advanced.html">Advanced</a>
     </div>
-    <div class="set">
+
+    <button id="start"  class="add">Start timer</button>
+
+    <!-- <div class="set">
         <h2>Set 1</h2>
         <div class="round">
             <h3>3 Rounds</h3>
@@ -61,31 +64,93 @@
     <div class="interval rest" style="--bg-color: #333;">
         <span class="name">Rest</span>
         <span class="duration">60 seconds</span>
-    </div>
+    </div> -->
 
-    <div class="set">
-        <h2>Set 2</h2>
-        <div class="round">
-            <label class="rounds__number-input" for="set-2-rounds">
-                <span>Number of rounds: </span>
-                <input type="number" name="set-2-rounds" id="set-2-rounds" min="1">
-            </label>
-            <div class="interval">
-                <label for="set-2-interval-1-name" class="name interval__input">
-                    <span>Name: </span>
-                    <input type="text" name="set-2-interval-1-name" id="set-2-interval-1-name">
+    <div id="sets" class="sets">
+        <!-- <div class="set">
+            <h2>Set 1</h2>
+            <div class="round">
+                <label class="rounds__number-input" for="set-2-rounds">
+                    <span>Number of rounds: </span>
+                    <input type="number" name="set-2-rounds" id="set-2-rounds" min="1">
                 </label>
-                <label for="set-2-interval-1-duration" class="duration interval__input">
-                    <span>Duration: </span>
-                    <input type="number" name="set-2-interval-1-duration" id="set-2-interval-1-duration" min="1">
-                </label>
+                <div class="interval">
+                    <label for="set-2-interval-1-name" class="name interval__input">
+                        <span>Name: </span>
+                        <input type="text" name="set-2-interval-1-name" id="set-2-interval-1-name">
+                    </label>
+                    <label for="set-2-interval-1-duration" class="duration interval__input">
+                        <span>Duration: </span>
+                        <input type="number" name="set-2-interval-1-duration" id="set-2-interval-1-duration" min="1">
+                    </label>
+                </div>
+    
+                <button class="add">+ Add interval</button>
             </div>
-
-            <button class="add">+ Add interval</button>
-        </div>
+        </div> -->
     </div>
 
-    <button class="add">+ Add set</button>
+    <button id="add-set"  class="add">+ Add set</button>
+
+    <script>
+        const getSetCount = () => document.querySelectorAll('.set').length;
+
+        const createSetTemplate = () => {
+            const setCount = getSetCount();
+            const uniqueIdTemplate = `set-${setCount + 1}`;
+            const template = `
+                <h2>Set ${setCount + 1}</h2>
+                <div class="round">
+                    <label class="rounds__number-input" for="${uniqueIdTemplate}-rounds">
+                        <span>Number of rounds: </span>
+                        <input type="number" name="${uniqueIdTemplate}-rounds" id="${uniqueIdTemplate}-rounds" min="1">
+                    </label>
+                    <label class="rest__number-input" for="${uniqueIdTemplate}-rest">
+                        <span>Rest after set: </span>
+                        <input type="number" name="${uniqueIdTemplate}-rest" id="${uniqueIdTemplate}-rest" min="1">
+                    </label>
+                    <button id="${uniqueIdTemplate}-add-interval" class="add">+ Add interval</button>
+                </div>
+            `;
+
+            return template;
+        }
+
+        const addSetButton = document.querySelector('#add-set');
+
+        addSetButton.addEventListener('click', () => {
+            const setCount = getSetCount();
+            const set = document.createElement('DIV');
+            set.id = `set-${setCount + 1}`;
+            set.classList.add('set');
+            set.innerHTML = createSetTemplate();
+            document.querySelector('#sets').appendChild(set)
+        });
+
+        document.addEventListener('click', () => {
+            const eventId = event.target.id;
+            if (event.target.id.includes('add-interval')) {
+                const set = event.target.closest('.set');
+                const round = set.querySelector('.round');
+                const intervalCount = round.querySelectorAll('.interval').length;
+                const uniqueIdTemplate = `set-${set.id.split('-')[1]}-interval-${intervalCount + 1}`;
+                const template = `
+                    <div class="interval">
+                        <label for="${uniqueIdTemplate}-name" class="name interval__input">
+                            <span>Name: </span>
+                            <input type="text" name="${uniqueIdTemplate}-name" id="${uniqueIdTemplate}-name">
+                        </label>
+                        <label for="${uniqueIdTemplate}-duration" class="duration interval__input">
+                            <span>Duration: </span>
+                            <input type="number" name="${uniqueIdTemplate}-duration" id="${uniqueIdTemplate}-duration" min="1">
+                        </label>
+                    </div>
+                `;
+                
+                round.insertBefore(document.createRange().createContextualFragment(template), event.target);
+            }
+        });
+    </script>
 
 
     <!-- <div class="interval" style="--bg-color: #333; --highlight: coral;">

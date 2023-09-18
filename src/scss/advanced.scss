@@ -29,7 +29,14 @@ body {
     background-color: var(--root-bg-color);
     color: var(--root-color);
     padding: 1em;
+    touch-action: manipulation; // disable ios double tap zoom
 
+    >*+* {
+        margin-top: 1em;
+    }
+}
+
+.sets {
     >*+* {
         margin-top: 1em;
     }
@@ -58,14 +65,16 @@ body {
 .round {
     font-size: 1rem;
     padding: 1em;
-    flex-direction: column;
 
     >*+* {
         margin-top: 1em;
     }
 
     // form styles
-    .rounds__number-input {
+    .rounds__number-input,
+    .rest__number-input {
+        display: block;
+
         >input {
             background: none;
             border-radius: 0;
@@ -81,7 +90,13 @@ body {
     }
 
     .add {
-        height: 40px;
+        // height: 40px;
+        display: block;
+        background: none;
+        font-weight: 400;
+        color: var(--root-color);
+        margin-top: 2em;
+        border: 1px solid var(--root-color);
     }
 }
 
@@ -168,5 +183,8 @@ body {
     font-size: 1em;
     font-weight: 700;
     background-color: var(--root-color);
-    height: 48px;
+    // height: 50px;
+    cursor: pointer;
+    border: none;
+    padding: 0.5em 1em;
 }
