@@ -1,3 +1,7 @@
+import { Set } from './set';
+import { Interval } from './interval';
+import LZString from 'lz-string';
+
 document.addEventListener('DOMContentLoaded', () => {
 
   const setsContainer = document.getElementById('setsContainer');
@@ -121,7 +125,35 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    if (!isValid) return; // If not valid, stop the function execution
+    if (!isValid) return;
+
+    // Create a collection to store all sets
+    const allSets = [];
+
+    // Loop through each set in the form
+    sets.forEach((setElement) => {
+      const rounds = parseInt(setElement.querySelector('.rounds-input').value, 10);
+      const set = new Set(rounds);
+
+      // Loop through each interval in the set
+      const intervals = setElement.querySelectorAll('.interval');
+      intervals.forEach((intervalElement) => {
+        const name = intervalElement.querySelector('.name-input').value;
+        const duration = parseInt(intervalElement.querySelector('.duration-input').value, 10);
+        const interval = new Interval(name, duration);
+        set.addInterval(interval);
+      });
+
+      // Set the rest duration for the set
+      const rest = parseInt(setElement.querySelector('.rest-input').value, 10);
+      set.setRest(rest);
+
+      // Add the set to the collection
+      allSets.push(set);
+    });
+
+    // Convert the allSets collection to JSON
+    const serializedData = JSON.stringify(allSets.map(s => s.toJSON()));
 
     // Convert to read-only mode and hide the form
     // Create a container for read-only data
@@ -198,6 +230,9 @@ document.addEventListener('DOMContentLoaded', () => {
     saveBtn.style.display = 'none';
     addSetBtn.style.display = 'none';
     editBtn.style.display = 'block';
+
+    const compressed = LZString.compressToEncodedURIComponent(serializedData);
+    console.log(compressed); // This logs the serialized form data.
   });
 
 
