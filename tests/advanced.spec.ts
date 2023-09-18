@@ -123,5 +123,28 @@ test.describe('Workout Configuration', () => {
         const errorMessage = await page.locator('.validation-error').textContent();
         expect(errorMessage).toBe('Please ensure this interval has both a name and a duration.');
     });
+
+    test('should display "Rest" element only if there is a rest duration', async ({ page }) => {
+        // Add a set and an interval
+        await page.click('#addSetBtn');
+        await page.getByTestId('set-1-add-interval').click();
+        await page.getByTestId('set-1-interval-1-name').fill('Work');
+        await page.getByTestId('set-1-interval-1-duration').fill('30');
+        await page.getByTestId('set-1-rest').fill('0');
+    
+        // Save and check that there's no "Rest" element displayed
+        await page.click('#saveBtn');
+        const restElementExistsInitially = await page.locator('[data-testid="readonly-set-1-rest"]').isVisible();
+        expect(restElementExistsInitially).toBe(false);
+    
+        // Edit, add rest duration, and save again
+        await page.click('#editBtn');
+        await page.getByTestId('set-1-rest').fill('10');
+        await page.click('#saveBtn');
+    
+        // Check if the "Rest" element is now displayed
+        const restElementExistsAfterAddingRest = await page.locator('[data-testid="readonly-set-1-rest"]').isVisible();
+        expect(restElementExistsAfterAddingRest).toBe(true);
+    });    
 });
 

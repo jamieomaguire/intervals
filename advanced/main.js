@@ -173,19 +173,21 @@ document.addEventListener('DOMContentLoaded', () => {
       setDiv.appendChild(roundDiv);
       readOnlyContainer.appendChild(setDiv);
 
-      // Add rest for the set below the set
+      // Add rest for the set below the set only if there's a rest duration specified
       const restDuration = set.querySelector('.rest-input').value;
-      const restDiv = document.createElement('div');
-      restDiv.classList.add('interval');
-      restDiv.style = "--bg-color: #333; --highlight: coral;";
-      restDiv.innerHTML = `
-        <span class="name">Rest</span>
-        <span class="duration">${restDuration} seconds</span>
-        `;
+      if (restDuration && parseInt(restDuration) > 0) {
+        const restDiv = document.createElement('div');
+        restDiv.classList.add('interval');
+        restDiv.style = "--bg-color: #333; --highlight: coral;";
+        restDiv.innerHTML = `
+          <span class="name">Rest</span>
+          <span class="duration">${restDuration} seconds</span>
+          `;
 
-      // Adding data-testid for the readonly rest duration
-      restDiv.setAttribute('data-testid', `readonly-set-${setId}-rest`);
-      readOnlyContainer.appendChild(restDiv);
+        // Adding data-testid for the readonly rest duration
+        restDiv.setAttribute('data-testid', `readonly-set-${setId}-rest`);
+        readOnlyContainer.appendChild(restDiv);
+      }
     });
 
     // Append the read-only container to the main container
