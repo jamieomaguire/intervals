@@ -7,6 +7,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@playwright/test": "^1.38.0",
+    "@types/node": "^20.6.2",
     "sass": "^1.66.1",
     "vite": "4.4.9"
   },
