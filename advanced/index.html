@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interval Timer Configuration</title>
+</head>
+
+<body>
+    <div class="workout-config">
+        <button id="saveBtn">Save</button>
+        <button id="editBtn" style="display: none;">Edit</button>
+        <!-- Button to add a new set -->
+        <button id="addSetBtn">Add Set</button>
+
+        <!-- Container to hold all sets -->
+        <div id="setsContainer"></div>
+
+    </div>
+
+    <!-- Template for a new set -->
+    <template id="setTemplate">
+        <div class="set">
+            <h2>Set <span class="set-number"></span></h2>
+            <button class="deleteSetBtn">Delete Set</button>
+
+            <label>
+                Number of Rounds:
+                <input type="number" class="rounds-input" min="1" value="1">
+            </label>
+
+            <!-- Button to add a new interval -->
+            <button class="addIntervalBtn">Add Interval</button>
+
+            <!-- Container to hold all intervals of a set -->
+            <div class="intervalsContainer"></div>
+
+            <label>
+                Rest after this set (seconds):
+                <input type="number" class="rest-input" min="0" value="0">
+            </label>
+        </div>
+    </template>
+
+    <!-- Template for a new interval -->
+    <template id="intervalTemplate">
+        <div class="interval">
+            <label>
+                Name:
+                <input type="text" class="name-input" placeholder="e.g. Rest, Work">
+            </label>
+            <label>
+                Duration (seconds):
+                <input type="number" class="duration-input" min="1" value="30">
+            </label>
+            <button class="deleteIntervalBtn">Delete Interval</button>
+        </div>
+    </template>
+
+    <script type="module" src="./main.js"></script>
+</body>
+
+</html>

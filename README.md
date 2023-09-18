@@ -16,7 +16,6 @@ An interval is the smallest unit in this hierarchy. It has:
 
 - A name (e.g., "Work", "Rest", "High Intensity", "Low Intensity").
 - A duration (e.g., 30 seconds, 1 minute).
-- A color (optional) for visual indication on the canvas.
 
 ### Illustrative Example:
 
