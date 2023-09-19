@@ -233,6 +233,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const compressed = LZString.compressToEncodedURIComponent(serializedData);
     console.log(compressed); // This logs the serialized form data.
+
+    try {
+      // Update the URL with the config parameter
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('config', compressed);
+
+      // Check if the URL has exceeded the maximum length (usually around 2000 characters for most browsers)
+      if (newUrl.href.length > 2000) {
+        throw new Error('URL length exceeded.');
+      }
+
+      // If you're okay with updating the URL in the user's browser:
+      window.history.pushState({}, '', newUrl.href);
+
+    } catch (error) {
+      console.error(error);
+
+      // Display an error message under the save button
+      const errorMessage = document.createElement('div');
+      errorMessage.classList.add('validation-error');
+      errorMessage.textContent = 'An error occurred while saving the timer configuration.';
+      saveBtn.parentElement.insertBefore(errorMessage, saveBtn.nextSibling);
+    }
   });
 
 
@@ -249,5 +272,56 @@ document.addEventListener('DOMContentLoaded', () => {
     addSetBtn.style.display = 'block';
     saveBtn.style.display = 'block';
   });
+
+  // Function to load configuration from URL and populate the form
+  function loadConfigFromURL() {
+    const url = new URL(window.location.href);
+    const config = url.searchParams.get('config');
+
+    if (!config) return; // If no config parameter, exit the function
+
+    try {
+      // Decompress the config data
+      const decompressed = LZString.decompressFromEncodedURIComponent(config);
+      const data = JSON.parse(decompressed);
+
+      // Populate the form with the data
+      data.forEach(setData => {
+        console.log(setData)
+        // Click the 'addSetBtn' to add a new set
+        addSetBtn.click();
+
+        // Get the last set element (the one we just added)
+        const setElement = setsContainer.lastElementChild;
+
+        // Set rounds and rest values
+        setElement.querySelector('.rounds-input').value = setData.rounds;
+        if (setData.rest) {
+          setElement.querySelector('.rest-input').value = setData.rest;
+        }
+
+        // Add intervals to the set
+        setData.intervals.forEach(intervalData => {
+          console.log(intervalData)
+          setElement.querySelector('.addIntervalBtn').click();
+
+          // Get the last interval element (the one we just added)
+          const intervalElement = setElement.querySelector('.intervalsContainer').lastElementChild;
+
+          intervalElement.querySelector('.name-input').value = intervalData.name;
+          intervalElement.querySelector('.duration-input').value = intervalData.duration;
+        });
+      });
+
+      // Now, simulate the Save button click to convert to read-only mode
+      saveBtn.click();
+
+    } catch (error) {
+      console.error("Error decoding and populating form with config data: ", error);
+    }
+  }
+
+  // Call the function to check and load the config from the URL on page load
+  loadConfigFromURL();
 
 });

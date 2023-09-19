@@ -131,20 +131,54 @@ test.describe('Workout Configuration', () => {
         await page.getByTestId('set-1-interval-1-name').fill('Work');
         await page.getByTestId('set-1-interval-1-duration').fill('30');
         await page.getByTestId('set-1-rest').fill('0');
-    
+
         // Save and check that there's no "Rest" element displayed
         await page.click('#saveBtn');
         const restElementExistsInitially = await page.locator('[data-testid="readonly-set-1-rest"]').isVisible();
         expect(restElementExistsInitially).toBe(false);
-    
+
         // Edit, add rest duration, and save again
         await page.click('#editBtn');
         await page.getByTestId('set-1-rest').fill('10');
         await page.click('#saveBtn');
-    
+
         // Check if the "Rest" element is now displayed
         const restElementExistsAfterAddingRest = await page.locator('[data-testid="readonly-set-1-rest"]').isVisible();
         expect(restElementExistsAfterAddingRest).toBe(true);
-    });    
+    });
+
+    test('should save and load configuration from URL', async ({ page }) => {
+        // Ensure the page is in default state
+        const isFormVisibleInitially = await page.isVisible('#setsContainer');
+        const isReadOnlyVisibleInitially = await page.isVisible('#readOnlyContainer');
+        expect(isFormVisibleInitially).toBe(true);
+        expect(isReadOnlyVisibleInitially).toBe(false);
+
+        // Add a set and interval
+        await page.click('#addSetBtn');
+        await page.click('[data-testid="set-1-add-interval"]');
+        await page.fill('[data-testid="set-1-interval-1-name"]', 'Work');
+        await page.fill('[data-testid="set-1-interval-1-duration"]', '30');
+        await page.click('#saveBtn');
+
+        // Check if configuration is saved in the URL
+        const currentURL = await page.url();
+        const urlSearchParams = new URL(currentURL).searchParams;
+        const config = urlSearchParams.get('config');
+        expect(config).not.toBeNull();
+
+        // Open a new page with the stored URL
+        await page.goto(currentURL);
+
+        // Check if the configuration is loaded correctly in read-only mode
+        const isFormVisibleAfterLoad = await page.isVisible('#setsContainer');
+        const isReadOnlyVisibleAfterLoad = await page.isVisible('#readOnlyContainer');
+        expect(isFormVisibleAfterLoad).toBe(false);
+        expect(isReadOnlyVisibleAfterLoad).toBe(true);
+        const intervalName = await page.textContent('[data-testid="readonly-set-1-interval-1-name"]');
+        const intervalDuration = await page.textContent('[data-testid="readonly-set-1-interval-1-duration"]');
+        expect(intervalName).toBe('Work');
+        expect(intervalDuration).toBe('30 seconds');
+    });
 });
 
