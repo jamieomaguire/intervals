@@ -328,25 +328,26 @@ document.addEventListener('DOMContentLoaded', () => {
   loadConfigFromURL();
 
   // timer stuff
+  let isWorkoutRunning = false;
   let currentSet = 0;
   let currentRound = 0;
   let currentInterval = 0;
   let lastTime = 0;
   let countdown = 0;
   let inRestPeriod = false;
+  let isInitialCountdown = true;
+  let initialCountdown = 10 * 1000; // 10 seconds in milliseconds
 
   const canvas = document.getElementById("timerCanvas");
   const ctx = canvas.getContext("2d");
+  window.devicePixelRatio = 2;
+  const scale = window.devicePixelRatio;
+
+  // ctx.scale(scale, scale);
   ctx.font = "30px Arial";
 
   function drawCountdown(time) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // let minutes = Math.floor(time / (60 * 1000));
-    // let seconds = Math.floor((time - (minutes * 60 * 1000)) / 1000);
-    // let milliseconds = time % 1000;
-
-    // ctx.fillText(`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`, 10, 50);
 
     const minutes = Math.floor(time / 60000);
     const seconds = Math.floor((time % 60000) / 1000);
@@ -371,10 +372,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.fillText(milliText, startX + maxMinutesWidth + maxSecondsWidth, y);
   }
 
-  let isInitialCountdown = true;
-  let initialCountdown = 10 * 1000; // 10 seconds in milliseconds
-
   function loop(timestamp) {
+    if (!isWorkoutRunning) {
+      return;
+    }
+
     if (!lastTime) lastTime = timestamp;
     let deltaTime = timestamp - lastTime;
 
@@ -441,9 +443,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Call this function to start the countdown and workout.
   function startWorkout() {
+    if (isWorkoutRunning) {
+      return;
+    }
+    
+    isWorkoutRunning = true;
     isInitialCountdown = true;
     initialCountdown = 10 * 1000;
     requestAnimationFrame(loop);
+  }
+
+  function stopWorkout() {
+    isWorkoutRunning = false;
+    isInitialCountdown = true;
+    currentSet = 0;
+    currentRound = 0;
+    currentInterval = 0;
+    lastTime = 0;
+    countdown = 0;
+
+    drawCountdown(0);
   }
 
   const startBtn = document.getElementById('startTimerBtn');
@@ -452,5 +471,11 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('workout', workout)
 
     startWorkout();
+  });
+
+  const stopBtn = document.getElementById('stopTimerBtn');
+
+  stopBtn.addEventListener('click', () => {
+    stopWorkout();
   });
 });
