@@ -1,4 +1,4 @@
-import { Set } from './set';
+import { WorkoutSet } from './workoutSet';
 import { Interval } from './interval';
 import LZString from 'lz-string';
 
@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addSetBtn = document.getElementById('addSetBtn');
   const canvasEl = document.getElementById('timer');
 
+  let workout = {};
   function updateSetNumbers() {
     const sets = setsContainer.querySelectorAll('.set');
     sets.forEach((set, index) => {
@@ -133,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Loop through each set in the form
     sets.forEach((setElement) => {
       const rounds = parseInt(setElement.querySelector('.rounds-input').value, 10);
-      const set = new Set(rounds);
+      const set = new WorkoutSet(rounds);
 
       // Loop through each interval in the set
       const intervals = setElement.querySelectorAll('.interval');
@@ -155,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Convert the allSets collection to JSON
     const serializedData = JSON.stringify(allSets.map(s => s.toJSON()));
 
+    workout = allSets;
     // Convert to read-only mode and hide the form
     // Create a container for read-only data
     const readOnlyContainer = document.createElement('div');
@@ -290,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Populate the form with the data
       data.forEach(setData => {
         console.log(setData)
-        // Click the 'addSetBtn' to add a new set
+        // Click the 'addSetBtn' to add a new WorkoutSet
         addSetBtn.click();
 
         // Get the last set element (the one we just added)
@@ -324,4 +326,131 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Call the function to check and load the config from the URL on page load
   loadConfigFromURL();
+
+  // timer stuff
+  let currentSet = 0;
+  let currentRound = 0;
+  let currentInterval = 0;
+  let lastTime = 0;
+  let countdown = 0;
+  let inRestPeriod = false;
+
+  const canvas = document.getElementById("timerCanvas");
+  const ctx = canvas.getContext("2d");
+  ctx.font = "30px Arial";
+
+  function drawCountdown(time) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // let minutes = Math.floor(time / (60 * 1000));
+    // let seconds = Math.floor((time - (minutes * 60 * 1000)) / 1000);
+    // let milliseconds = time % 1000;
+
+    // ctx.fillText(`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`, 10, 50);
+
+    const minutes = Math.floor(time / 60000);
+    const seconds = Math.floor((time % 60000) / 1000);
+    const milliseconds = time % 1000;
+
+    const minutesText = `${minutes.toString().padStart(2, '0')}:`;
+    const secondsText = `${seconds.toString().padStart(2, '0')}.`;
+    const milliText = milliseconds.toString().slice(0, 2).padStart(2, '0');
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+
+    const maxMinutesWidth = ctx.measureText("59:").width;
+    const maxSecondsWidth = ctx.measureText("59.").width;
+    const startX = x - (maxMinutesWidth + maxSecondsWidth + ctx.measureText("99").width) / 2;
+
+    ctx.fillText(minutesText, startX, y);
+    ctx.fillText(secondsText, startX + maxMinutesWidth, y);
+    ctx.fillText(milliText, startX + maxMinutesWidth + maxSecondsWidth, y);
+  }
+
+  let isInitialCountdown = true;
+  let initialCountdown = 10 * 1000; // 10 seconds in milliseconds
+
+  function loop(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    let deltaTime = timestamp - lastTime;
+
+    // Handle the initial countdown.
+    if (isInitialCountdown) {
+      initialCountdown -= deltaTime;
+
+      if (initialCountdown <= 0) {
+        isInitialCountdown = false;
+        drawCountdown(0); // Clear the last countdown value
+
+        // Initialize the timer for the first interval of the main workout.
+        countdown = workout[currentSet].intervals[currentInterval].duration * 1000;
+      } else {
+        drawCountdown(initialCountdown);
+        lastTime = timestamp;
+        requestAnimationFrame(loop);
+        return;
+      }
+    }
+
+    // Main workout timer logic
+    countdown -= deltaTime;
+
+    if (countdown <= 0) {
+      // If end of current interval
+      currentInterval++;
+
+      // If end of all intervals for this round
+      if (currentInterval >= workout[currentSet].intervals.length) {
+        currentRound++;
+
+        // If end of all rounds for this set
+        if (currentRound >= workout[currentSet].rounds) {
+          currentSet++;
+          currentRound = 0;
+
+          // If end of all sets
+          if (currentSet >= workout.length) {
+            console.log("Workout complete!");
+            return;
+          } else {
+            // Initialize rest period between sets
+            countdown = workout[currentSet - 1].rest * 1000;
+            drawCountdown(countdown);
+            lastTime = timestamp;
+            requestAnimationFrame(loop);
+            return;
+          }
+        }
+
+        // Initialize next round
+        currentInterval = 0;
+      }
+
+      // Set the countdown for the next interval
+      countdown = workout[currentSet].intervals[currentInterval].duration * 1000;
+    }
+
+    drawCountdown(countdown);
+    lastTime = timestamp;
+    requestAnimationFrame(loop);
+  }
+
+  // Call this function to start the countdown and workout.
+  function startWorkout() {
+    isInitialCountdown = true;
+    initialCountdown = 10 * 1000;
+    requestAnimationFrame(loop);
+  }
+
+  const startBtn = document.getElementById('startTimerBtn');
+
+  startBtn.addEventListener('click', () => {
+    console.log('workout', workout)
+
+    startWorkout();
+  });
 });

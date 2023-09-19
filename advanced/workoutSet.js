@@ -1,4 +1,4 @@
-export class Set {
+export class WorkoutSet {
   constructor(rounds) {
       this.rounds = rounds;
       this.intervals = [];
