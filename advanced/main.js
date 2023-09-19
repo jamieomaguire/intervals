@@ -3,9 +3,9 @@ import { Interval } from './interval';
 import LZString from 'lz-string';
 
 document.addEventListener('DOMContentLoaded', () => {
-
   const setsContainer = document.getElementById('setsContainer');
   const addSetBtn = document.getElementById('addSetBtn');
+  const canvasEl = document.getElementById('timer');
 
   function updateSetNumbers() {
     const sets = setsContainer.querySelectorAll('.set');
@@ -230,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveBtn.style.display = 'none';
     addSetBtn.style.display = 'none';
     editBtn.style.display = 'block';
+    canvasEl.style.display = 'block';
 
     const compressed = LZString.compressToEncodedURIComponent(serializedData);
     console.log(compressed); // This logs the serialized form data.
@@ -271,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     editBtn.style.display = 'none';
     addSetBtn.style.display = 'block';
     saveBtn.style.display = 'block';
+    canvasEl.style.display = 'none';
   });
 
   // Function to load configuration from URL and populate the form
@@ -315,7 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Now, simulate the Save button click to convert to read-only mode
       saveBtn.click();
-
     } catch (error) {
       console.error("Error decoding and populating form with config data: ", error);
     }
@@ -323,5 +324,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Call the function to check and load the config from the URL on page load
   loadConfigFromURL();
-
 });

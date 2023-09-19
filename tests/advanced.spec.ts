@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { it } from 'node:test';
 
 test.describe('Workout Configuration', () => {
     test.beforeEach(async ({ page }) => {
@@ -179,6 +180,66 @@ test.describe('Workout Configuration', () => {
         const intervalDuration = await page.textContent('[data-testid="readonly-set-1-interval-1-duration"]');
         expect(intervalName).toBe('Work');
         expect(intervalDuration).toBe('30 seconds');
+    });
+
+    test('should display the timer when the form is saved', async ({ page }) => {
+        // Add a set and interval
+        await page.click('#addSetBtn');
+        await page.click('[data-testid="set-1-add-interval"]');
+        await page.fill('[data-testid="set-1-interval-1-name"]', 'Work');
+        await page.fill('[data-testid="set-1-interval-1-duration"]', '30');
+        await page.click('#saveBtn');
+
+        // Check if the timer is displayed
+        const isTimerVisible = await page.isVisible('#timer');
+        expect(isTimerVisible).toBe(true);
+    });
+
+    test('should display the timer when the form is loaded from URL', async ({ page }) => {
+        // Add a set and interval
+        await page.click('#addSetBtn');
+        await page.click('[data-testid="set-1-add-interval"]');
+        await page.fill('[data-testid="set-1-interval-1-name"]', 'Work');
+        await page.fill('[data-testid="set-1-interval-1-duration"]', '30');
+        await page.click('#saveBtn');
+
+        // Open a new page with the current URL
+        const currentURL = await page.url();
+        page.goto(currentURL);
+
+        // Check if the timer is displayed
+        await page.waitForTimeout(500); // Add a minor delay to ensure clientJS has run
+        const isTimerVisible = await page.isVisible('#timer');
+        expect(isTimerVisible).toBe(true);
+    });
+
+    test('should not display the timer when the edit button is clicked', async ({ page }) => {
+        // Add a set and interval
+        await page.click('#addSetBtn');
+        await page.click('[data-testid="set-1-add-interval"]');
+        await page.fill('[data-testid="set-1-interval-1-name"]', 'Work');
+        await page.fill('[data-testid="set-1-interval-1-duration"]', '30');
+        await page.click('#saveBtn');
+
+        // Check if the timer is displayed
+        const isTimerVisibleInitially = await page.isVisible('#timer');
+        expect(isTimerVisibleInitially).toBe(true);
+
+        // Click edit button and check if the timer is no longer visible
+        await page.click('#editBtn');
+        const isTimerVisibleAfterEdit = await page.isVisible('#timer');
+        expect(isTimerVisibleAfterEdit).toBe(false);
+    });
+
+    test('should not display the timer when no timer is loaded from URL', async ({ page }) => {
+        // Open a new page with the current URL
+        const currentURL = await page.url();
+        page.goto(currentURL);
+
+        // Check if the timer is displayed
+        await page.waitForTimeout(500); // Add a minor delay to ensure clientJS has run
+        const isTimerVisible = await page.isVisible('#timer');
+        expect(isTimerVisible).toBe(false);
     });
 });
 
