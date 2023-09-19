@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Display an error message under the save button
       const errorMessage = document.createElement('div');
       errorMessage.classList.add('validation-error');
-      errorMessage.textContent = 'An error occurred while saving the timer configuration.';
+      errorMessage.textContent = 'The configuration is too long to be stored in the URL. Please reduce the number of sets or intervals.';
       saveBtn.parentElement.insertBefore(errorMessage, saveBtn.nextSibling);
     }
   });
