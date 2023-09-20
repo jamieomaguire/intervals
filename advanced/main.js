@@ -1,6 +1,7 @@
 import { WorkoutSet } from './workoutSet';
 import { Interval } from './interval';
 import LZString from 'lz-string';
+import './advanced.scss';
 
 document.addEventListener('DOMContentLoaded', () => {
   const setsContainer = document.getElementById('setsContainer');
@@ -343,8 +344,30 @@ document.addEventListener('DOMContentLoaded', () => {
   window.devicePixelRatio = 2;
   const scale = window.devicePixelRatio;
 
-  // ctx.scale(scale, scale);
   ctx.font = "30px Arial";
+
+  function adjustTimerHeight() {
+    const timerElem = document.getElementById("timer");
+    timerElem.style.height = window.innerHeight + "px";
+  }
+
+  function resizeCanvas() {
+    canvas.width = canvas.offsetWidth * scale;
+    canvas.height = canvas.offsetHeight * scale;
+    ctx.scale(scale, scale);
+
+    // Adjust font size based on canvas height
+    const responsiveFontSize = canvas.height * 0.10; // 10% of canvas height
+    ctx.font = `${responsiveFontSize}px Arial`;
+  }
+
+
+  adjustTimerHeight();
+  resizeCanvas();
+  window.addEventListener('resize', () => {
+    adjustTimerHeight();
+    resizeCanvas();
+  });
 
   function drawCountdown(time) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -357,20 +380,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const secondsText = `${seconds.toString().padStart(2, '0')}.`;
     const milliText = milliseconds.toString().slice(0, 2).padStart(2, '0');
 
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
+    // Adjust font size based on canvas height
+    const responsiveFontSize = canvas.height * 0.10 / scale; // Adjusting for canvas scaling
+    ctx.font = `${responsiveFontSize}px Arial`;
 
-    let x = canvas.width / 2;
-    let y = canvas.height / 2;
+    const minutesWidth = ctx.measureText(minutesText).width;
+    const secondsWidth = ctx.measureText(secondsText).width;
+    const milliWidth = ctx.measureText(milliText).width;
+    const totalWidth = minutesWidth + secondsWidth + milliWidth;
 
     const maxMinutesWidth = ctx.measureText("59:").width;
     const maxSecondsWidth = ctx.measureText("59.").width;
-    const startX = x - (maxMinutesWidth + maxSecondsWidth + ctx.measureText("99").width) / 2;
+    const totalMaxWidth = maxMinutesWidth + maxSecondsWidth + ctx.measureText("99").width;
 
-    ctx.fillText(minutesText, startX, y);
-    ctx.fillText(secondsText, startX + maxMinutesWidth, y);
-    ctx.fillText(milliText, startX + maxMinutesWidth + maxSecondsWidth, y);
+    let x = (canvas.width - totalMaxWidth * scale) / 2; // Adjusting for canvas scaling
+    let y = canvas.height / 2;
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    ctx.fillText(minutesText, x / scale, y / scale); // Adjusting for canvas scaling
+    x += maxMinutesWidth * scale;  // Increment the x position by the max width of the minutesText
+    ctx.fillText(secondsText, x / scale, y / scale); // Adjusting for canvas scaling
+    x += maxSecondsWidth * scale;  // Increment the x position by the max width of the secondsText
+    ctx.fillText(milliText, x / scale, y / scale); // Adjusting for canvas scaling
   }
+
+
 
   function loop(timestamp) {
     if (!isWorkoutRunning) {
@@ -446,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isWorkoutRunning) {
       return;
     }
-    
+
     isWorkoutRunning = true;
     isInitialCountdown = true;
     initialCountdown = 10 * 1000;

@@ -1,0 +1,17 @@
+#timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    button {
+        margin-top: 1rem;
+    }
+}
+
+#timerCanvas {
+    width: 100%;
+        /* Adjusted height: 70vh for safety but will be updated by js */
+    height: 70vh; 
+    background-color: #f4f4f4;
+}
