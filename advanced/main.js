@@ -264,6 +264,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   editBtn.addEventListener('click', () => {
+    stopWorkout();
+    
     // Convert back to form mode
     const readOnlyContainer = document.getElementById('readOnlyContainer');
     if (readOnlyContainer) {
@@ -346,11 +348,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   ctx.font = "30px Arial";
 
-  function adjustTimerHeight() {
-    const timerElem = document.getElementById("timer");
-    timerElem.style.height = window.innerHeight + "px";
-  }
-
   function resizeCanvas() {
     canvas.width = canvas.offsetWidth * scale;
     canvas.height = canvas.offsetHeight * scale;
@@ -361,11 +358,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.font = `${responsiveFontSize}px Arial`;
   }
 
-
-  adjustTimerHeight();
   resizeCanvas();
   window.addEventListener('resize', () => {
-    adjustTimerHeight();
     resizeCanvas();
   });
 
