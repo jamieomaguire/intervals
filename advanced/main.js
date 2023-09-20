@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   editBtn.addEventListener('click', () => {
     stopWorkout();
-    
+
     // Convert back to form mode
     const readOnlyContainer = document.getElementById('readOnlyContainer');
     if (readOnlyContainer) {
@@ -356,6 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adjust font size based on canvas height
     const responsiveFontSize = canvas.height * 0.10; // 10% of canvas height
     ctx.font = `${responsiveFontSize}px Arial`;
+    drawCountdown(countdown);
   }
 
   resizeCanvas();
