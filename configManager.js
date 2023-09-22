@@ -39,28 +39,35 @@ export class ConfigManager {
   }
 
   addInterval() {
-    const container = document.getElementById('intervalContainer');
-    const newInterval = document.createElement('fieldset');
-    newInterval.classList.add('intervalFieldset', 'c-formField', 'c-formField--interval');
-    newInterval.innerHTML = `
-      <label class="c-formField-intervalLabel c-formField-label c-formField-label--large">Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
-      <div class="c-formField-intervalName">
-        <label class="c-formField-label" for="intervalName${container.querySelectorAll('.intervalFieldset').length + 1}">Name:</label>
-        <input type="text" id="intervalName${container.querySelectorAll('.intervalFieldset').length + 1}" placeholder="'Crimp', 'Rest', etc" minlength="1">
-      </div>
-      <div class="c-formField-intervalDuration">
-        <label class="c-formField-label" for="intervalDuration${container.querySelectorAll('.intervalFieldset').length + 1}">Duration:</label>
-        <input class="c-formField-intervalDuration" id="intervalDuration${container.querySelectorAll('.intervalFieldset').length + 1}" type="number" placeholder="In seconds" min="1">
-      </div>
-      <input class="c-formField-intervalColor" type="color" value="#00A36C">
-      <button class="deleteInterval btn btn--ghost c-formField-intervalDelete">Delete</button>
-    `;
-    newInterval.querySelector('.deleteInterval').addEventListener('click', function () {
-      container.removeChild(newInterval);
-    });
-    container.appendChild(newInterval);
-  }
+      const container = document.getElementById('intervalContainer');
+      const newInterval = document.createElement('fieldset');
+      newInterval.classList.add('intervalFieldset', 'c-formField', 'c-formField--interval');
 
+      // Define your placeholder colors here
+      const colors = ['#01FF70', '#FF4136', '#FF851B', '#FFFF00', '#39CCCC', '#F012BE', '#7FDBFF'];
+      const index = container.querySelectorAll('.intervalFieldset').length;
+      
+      // Cycle through the colors array
+      const color = colors[(index) % colors.length];
+
+      newInterval.innerHTML = `
+        <label class="c-formField-intervalLabel c-formField-label c-formField-label--large">Interval ${index + 1}: </label>
+        <div class="c-formField-intervalName">
+          <label class="c-formField-label" for="intervalName${index + 1}">Name:</label>
+          <input type="text" id="intervalName${index + 1}" placeholder="-" minlength="1">
+        </div>
+        <div class="c-formField-intervalDuration">
+          <label class="c-formField-label" for="intervalDuration${index + 1}">Duration:</label>
+          <input class="c-formField-intervalDuration" id="intervalDuration${index + 1}" type="number" placeholder="In seconds" min="1">
+        </div>
+        <input class="c-formField-intervalColor" type="color" value="${color}">
+        <button class="deleteInterval btn btn--ghost c-formField-intervalDelete">Delete</button>
+      `;
+      newInterval.querySelector('.deleteInterval').addEventListener('click', function () {
+          container.removeChild(newInterval);
+      });
+      container.appendChild(newInterval);
+  }
 
   saveToURL() {
     try {
@@ -195,7 +202,7 @@ export class ConfigManager {
           <label class="c-formField-intervalLabel c-formField-label c-formField-label--large">Interval ${container.querySelectorAll('.intervalFieldset').length + 1}: </label>
           <div class="c-formField-intervalName">
             <label class="c-formField-label" for="intervalName${container.querySelectorAll('.intervalFieldset').length + 1}">Name:</label>
-            <input type="text" id="intervalName${container.querySelectorAll('.intervalFieldset').length + 1}" value="${interval.name}" placeholder="'Crimp', 'Rest', etc" minlength="1">
+            <input type="text" id="intervalName${container.querySelectorAll('.intervalFieldset').length + 1}" value="${interval.name}" placeholder="-" minlength="1">
           </div>
           <div class="c-formField-intervalDuration">
             <label class="c-formField-label" for="intervalDuration${container.querySelectorAll('.intervalFieldset').length + 1}">Duration:</label>
