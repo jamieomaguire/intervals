@@ -41,7 +41,6 @@ Unmute timer`;
   const muteBtn = document.getElementById('muteTimer');
   muteBtn.addEventListener('click', (e) => {
     timer.toggleMuteTimer();
-    console.log(muteBtn.dataset)
     if (muteBtn.dataset.muted) {
       muteBtn.innerHTML = unMuteBtnCopy;
       delete muteBtn.dataset.muted

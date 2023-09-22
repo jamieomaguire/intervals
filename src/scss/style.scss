@@ -167,7 +167,7 @@ header img {
   }
 
   path {
-    fill: white;
+    fill: currentColor;
   }
 }
 
@@ -307,6 +307,11 @@ details button {
   border: none;
   font-size: 0.8em;
   padding: 5px 10px;
+
+  svg {
+    height: 24px;
+    width: 24px;
+  }
 
   @media (hover: hover) {
     &:hover {
