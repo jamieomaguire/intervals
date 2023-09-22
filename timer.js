@@ -16,6 +16,8 @@ export class Timer {
     this.inRestBetweenSets = false;
     this.x = 0;
     this.y = 0;
+    this.muted = false;
+
     // Canvas sizing params
     this.aspectRatio = { width: 4, height: 3.5 };
     this.baseFontScale = 0.1;
@@ -39,6 +41,10 @@ export class Timer {
 
   get defaultCanvasColor() {
     return document.documentElement.getAttribute('data-theme') === 'dark' ? '#ccc' : 'white';
+  }
+
+  toggleMuteTimer () {
+    this.muted = !this.muted;
   }
 
   updateCanvasColorBasedOnTheme() {
@@ -312,11 +318,15 @@ export class Timer {
 
   playAudio() {
     if (this.audio.paused) {
-      this.audio.play();
+      if (!this.muted) {
+        this.audio.play();
+      }
     } else {
       this.audio.pause();
       this.audio.currentTime = 0;
-      this.audio.play();
+      if (!this.muted) {
+        this.audio.play();
+      }
     }
   }
 }

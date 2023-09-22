@@ -17,8 +17,36 @@
   <!-- Timer -->
   <div class="timer">
     <canvas class="timer__canvas" id="timerCanvas"></canvas>
-    <button class="timer__start btn" id="startTimer">Start</button>
-    <button class="timer__stop btn" id="stopTimer">Stop</button>
+    <button class="timer__start btn btn--icon" id="startTimer">
+      <svg viewBox="-3 0 28 28" xmlns="http://www.w3.org/2000/svg">
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="Icon-Set-Filled" transform="translate(-419 -571)" fill="#000">
+            <path d="m440.415 583.554-18.997-12.243c-1.127-.607-2.418-.544-2.418 1.635v24.108c0 1.992 1.385 2.306 2.418 1.635l18.997-12.243a2.076 2.076 0 0 0 0-2.892" id="play"/>
+          </g>
+        </g>
+      </svg>
+      Start
+    </button>
+    <button class="timer__stop btn btn--icon" id="stopTimer">
+      <svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="Icon-Set-Filled" transform="translate(-520 -571)" fill="#000">
+            <path d="M546 571h-24a2 2 0 0 0-2 2v24a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2v-24a2 2 0 0 0-2-2" id="stop"/>
+          </g>
+        </g>
+      </svg>
+      Stop
+    </button>
+    <button class="timer__mute btn btn--ghost btn--icon" id="muteTimer" data-muted="true">
+      <svg viewBox="0 -3 30 30" xmlns="http://www.w3.org/2000/svg">
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="Icon-Set-Filled" transform="translate(-311 -573)" fill="#000">
+            <path d="m336.444 585 4.173-4.173c.45-.45.492-1.139.094-1.538-.399-.398-1.088-.356-1.538.094L335 583.556l-4.173-4.173c-.45-.45-1.139-.492-1.538-.094-.398.399-.356 1.088.094 1.538l4.173 4.173-4.173 4.173c-.45.45-.492 1.139-.094 1.538.399.398 1.088.356 1.538-.094l4.173-4.173 4.173 4.173c.45.45 1.139.492 1.538.094.398-.399.356-1.088-.094-1.538L336.444 585ZM325 573l-7 4.667v14.666l7 4.667a2 2 0 0 0 2-2v-20a2 2 0 0 0-2-2Zm-14 8v8a2 2 0 0 0 2 2h3v-12h-3a2 2 0 0 0-2 2Z" id="volume-muted"/>
+          </g>
+        </g>
+      </svg>
+      Mute timer
+    </button>
   </div>
 
   <p id="output" class="output"></p>
