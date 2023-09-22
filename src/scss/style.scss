@@ -53,6 +53,13 @@ html {
 // }
 
 body {
+  display: grid;
+  grid-template-areas:
+    'header'
+    'content'
+    'footer';
+
+  grid-template-rows: min-content 1fr min-content;
   overscroll-behavior-y: contain;
   font-family: $font-family;
   background-color: var(--bg-color);
@@ -68,6 +75,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  grid-area: header;
+}
+
+main {
+  grid-area: content;
 }
 
 .theme-btn {
@@ -400,6 +412,7 @@ hr {
 }
 
 footer {
+  grid-area: footer;
   padding: 15px 20px;
   border-top: 1px solid var(--border-color);
   background: var(--header-bg-color);
