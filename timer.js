@@ -1,6 +1,7 @@
 export class Timer {
   constructor(configManager) {
     this.configManager = configManager;
+    this.audio = null;
     this.startTime = null;
     this.elapsed = null;
     this.timerStopped = true;
@@ -16,6 +17,8 @@ export class Timer {
     this.inRestBetweenSets = false;
     this.x = 0;
     this.y = 0;
+    this.muted = false;
+
     // Canvas sizing params
     this.aspectRatio = { width: 4, height: 3.5 };
     this.baseFontScale = 0.1;
@@ -39,6 +42,10 @@ export class Timer {
 
   get defaultCanvasColor() {
     return document.documentElement.getAttribute('data-theme') === 'dark' ? '#ccc' : 'white';
+  }
+
+  toggleMuteTimer() {
+    this.muted = !this.muted;
   }
 
   updateCanvasColorBasedOnTheme() {
@@ -252,71 +259,82 @@ export class Timer {
   }
 
   startTimer() {
-    // Capture the latest form input values
-    this.configManager.captureInputs();
+    if (this.timerStopped) {
+      // Capture the latest form input values
+      this.configManager.captureInputs();
 
-    this.audio = new Audio('./timer.mp3');
-    this.audio.setAttribute('playsinline', '');
-    this.audio.preload = 'auto';
+      if (!this.audio) {
+        this.audio = new Audio('./timer.mp3');
+        this.audio.setAttribute('playsinline', '');
+        this.audio.preload = 'auto';
+      }
 
-    this.timerStopped = true;
-    this.currentIntervalIndex = 0;
-    this.currentRound = 1;
-    this.startTime = null;
-
-    this.intervals = this.configManager.capturedIntervals;
-    const outputEl = document.getElementById('output');
-
-    if (!this.intervals.length) {
-      outputEl.innerHTML = 'Please create a timer first';
-      outputEl.classList.add('output--error');
-
-      return;
-    } else {
-      outputEl.innerHTML = '';
-    }
-
-    this.rounds = this.configManager.capturedRounds;
-    this.countdownDuration = this.configManager.capturedCountdownDuration;
-    this.sets = this.configManager.capturedSets;
-    this.restBetweenSetsDuration = this.configManager.capturedRestBetweenSetsDuration;
-    if (this.timerStopped && this.intervals.length > 0) {
-      this.timerStopped = false;
       this.currentIntervalIndex = 0;
       this.currentRound = 1;
-      if (this.countdownDuration > 0) {
-        this.inCountdown = true;
-      } else {
-        this.canvas.style.backgroundColor = this.intervals[0].color;
-      }
       this.startTime = null;
-      requestAnimationFrame(this.animate.bind(this));
+
+      this.intervals = this.configManager.capturedIntervals;
+      const outputEl = document.getElementById('output');
+
+      if (!this.intervals.length) {
+        outputEl.innerHTML = 'Please create a timer first';
+        outputEl.classList.add('output--error');
+
+        return;
+      } else {
+        outputEl.innerHTML = '';
+      }
+
+      this.rounds = this.configManager.capturedRounds;
+      this.countdownDuration = this.configManager.capturedCountdownDuration;
+      this.sets = this.configManager.capturedSets;
+      this.restBetweenSetsDuration = this.configManager.capturedRestBetweenSetsDuration;
+
+      if (this.timerStopped && this.intervals.length > 0) {
+        this.timerStopped = false;
+        this.currentIntervalIndex = 0;
+        this.currentRound = 1;
+        if (this.countdownDuration > 0) {
+          this.inCountdown = true;
+        } else {
+          this.canvas.style.backgroundColor = this.intervals[0].color;
+        }
+        this.startTime = null;
+        requestAnimationFrame(this.animate.bind(this));
+      }
     }
+
   }
 
   stopTimer() {
-    this.timerStopped = true;
-
-    this.startTime = null;
-    this.elapsed = null;
-    this.timerStopped = true;
-    this.currentIntervalIndex = 0;
-    this.currentRound = 1;
-    this.inCountdown = false;
-    this.currentSet = 1;
-    this.inRestBetweenSets = false;
-
-    this.canvas.style.backgroundColor = this.defaultCanvasColor;
-    this.drawTime(0, '', false);
+    if (!this.timerStopped) {
+      this.timerStopped = true;
+  
+      this.startTime = null;
+      this.elapsed = null;
+      this.timerStopped = true;
+      this.currentIntervalIndex = 0;
+      this.currentRound = 1;
+      this.inCountdown = false;
+      this.currentSet = 1;
+      this.inRestBetweenSets = false;
+  
+      this.canvas.style.backgroundColor = this.defaultCanvasColor;
+      this.drawTime(0, '', false);
+    }
   }
 
   playAudio() {
     if (this.audio.paused) {
-      this.audio.play();
+      if (!this.muted) {
+        this.audio.play();
+      }
     } else {
       this.audio.pause();
       this.audio.currentTime = 0;
-      this.audio.play();
+      if (!this.muted) {
+        this.audio.play();
+      }
     }
   }
 }

@@ -7,7 +7,7 @@ html {
 }
 
 :root {
-  --primary-color: #00796B; // Rich Teal
+  --primary-color: hsl(173.1,100%,23.7%); // Rich Teal
   --primary-color-hover: #005644; // Darker Teal
   --secondary-color: #FFC107; // Mustard Yellow
   --destructive-color: #e81a31;
@@ -53,6 +53,13 @@ html {
 // }
 
 body {
+  display: grid;
+  grid-template-areas:
+    'header'
+    'content'
+    'footer';
+
+  grid-template-rows: min-content 1fr min-content;
   overscroll-behavior-y: contain;
   font-family: $font-family;
   background-color: var(--bg-color);
@@ -68,6 +75,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  grid-area: header;
+}
+
+main {
+  grid-area: content;
 }
 
 .theme-btn {
@@ -128,7 +140,8 @@ header img {
   display: grid;
   grid-template-areas:
     'timer timer'
-    'start stop';
+    'start stop'
+    'mute mute';
   grid-template-rows: 1fr min-content;
   grid-template-columns: min-content min-content;
   gap: 1em;
@@ -147,6 +160,27 @@ header img {
 
 .timer__stop {
   grid-area: stop;
+}
+
+.timer__mute {
+  grid-area: mute;
+  height: 40px;
+}
+
+.btn--icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    height: 28x;
+    width: 28px;
+    margin-inline-end: 8px;
+  }
+
+  path {
+    fill: currentColor;
+  }
 }
 
 #qrCode {
@@ -212,17 +246,17 @@ details button {
   // margin: 15px 20px;
 }
 
-details summary>* {
-  display: inline;
-}
+// details summary>* {
+//   display: inline;
+// }
 
-summary {
-  font-size: 1.2em;
-}
+// summary {
+//   font-size: 1.2em;
+// }
 
-summary>* {
-  margin-left: 0.5em;
-}
+// summary>* {
+//   margin-left: 0.25em;
+// }
 
 .guide {
   padding: 15px 20px;
@@ -286,6 +320,11 @@ summary>* {
   font-size: 0.8em;
   padding: 5px 10px;
 
+  svg {
+    height: 24px;
+    width: 24px;
+  }
+
   @media (hover: hover) {
     &:hover {
       background-color: var(--text-color);
@@ -295,15 +334,15 @@ summary>* {
 }
 
 .btn-outline {
-  background: none;
-  border: 2px solid #222;
-  color: #222;
+  background-color: hsl(173.1,60%,90.7%);
+  border: none;
+  color: hsl(173.1,100%,23.7%);
   font-size: 0.8em;
 
   @media (hover: hover) {
     &:hover {
-      background-color: var(--text-color);
-      color: var(--bg-color);
+      background-color: hsl(173.1,60%,65.7%);
+      color: hsl(173.1,100%,13.7%);
     }
   }
 }
@@ -373,6 +412,7 @@ hr {
 }
 
 footer {
+  grid-area: footer;
   padding: 15px 20px;
   border-top: 1px solid var(--border-color);
   background: var(--header-bg-color);
@@ -559,20 +599,31 @@ footer {
 }
 
 .c-accordion {
+  user-select: none;
   margin: 20px;
   border: 0;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.04), 0px 8px 12px -2px rgba(0, 0, 0, 0.06), 0px 4px 6px 0px rgba(0, 0, 0, 0.04);
   background-color: var(--details-bg-color);
   border-radius: 5px;
 
+  & summary > span {
+    margin-left: 0.25em;
+    letter-spacing: -0.025em;
+  }
+
   &[open] summary {
     border-bottom: 1px solid #ccc;
   }
 
   & summary {
+    font-size: 1.2em;
     padding: 15px 20px;
     cursor: pointer;
     font-weight: bold;
+
+    span {
+      user-select: none;
+    }
 
     @media (hover: hover) {
       &:hover {
