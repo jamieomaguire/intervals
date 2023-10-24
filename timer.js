@@ -269,7 +269,6 @@ export class Timer {
         this.audio.preload = 'auto';
       }
 
-      console.log(this.timerStopped)
       this.currentIntervalIndex = 0;
       this.currentRound = 1;
       this.startTime = null;
