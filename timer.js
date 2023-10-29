@@ -18,6 +18,7 @@ export class Timer {
     this.x = 0;
     this.y = 0;
     this.muted = false;
+    this.wakeLock = null;
 
     // Canvas sizing params
     this.aspectRatio = { width: 4, height: 3.5 };
@@ -260,6 +261,7 @@ export class Timer {
 
   startTimer() {
     if (this.timerStopped) {
+      this.requestWakeLock();
       // Capture the latest form input values
       this.configManager.captureInputs();
 
@@ -321,6 +323,7 @@ export class Timer {
   
       this.canvas.style.backgroundColor = this.defaultCanvasColor;
       this.drawTime(0, '', false);
+      this.releaseWakeLock();
     }
   }
 
@@ -335,6 +338,30 @@ export class Timer {
       if (!this.muted) {
         this.audio.play();
       }
+    }
+  }
+
+  async requestWakeLock() {
+    if (!('wakeLock' in navigator)) {
+      console.log('Wake Lock API not supported.');
+      return;
+    }
+    
+    try {
+      this.wakeLock = await navigator.wakeLock.request('screen');
+      this.wakeLock.addEventListener('release', () => {
+        console.log('Wake Lock was released');
+      });
+      console.log('Wake Lock is active');
+    } catch (err) {
+      console.error(`${err.name}, ${err.message}`);
+    }
+  }
+
+  releaseWakeLock() {
+    if (this.wakeLock) {
+      this.wakeLock.release();
+      this.wakeLock = null;
     }
   }
 }
