@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const timer = new Timer(configManager);
   // const qrHandler = new QRHandler(timer);
 
+  // Re-enable wakelock if the browser was minimised and a wake lock already existed
+  document.addEventListener('visibilitychange', async () => {
+    if (timer.wakeLock !== null && document.visibilityState === 'visible') {
+      await timer.requestWakeLock();
+    }
+  });
+
   // Event listeners for ConfigManager
   document.getElementById('addInterval').addEventListener('click', configManager.addInterval.bind(configManager));
   document.getElementById('createURL').addEventListener('click', configManager.saveToURL.bind(configManager));
